@@ -1,0 +1,278 @@
+/* Style général pour le tableau de bord */
+.vueg {
+  background-image: url('C:\Users\CHRIS-06\Desktop\Projet_Urban_pulse\Front_Urban_pulse\projet_frontend\public\image\blanc.jpg');
+  background-size: cover; /* Assurez-vous que l'image couvre toute la zone */
+  background-position: center; /* Centrer l'image d'arrière-plan */
+  height: 100vh; /* Assure que le tableau de bord occupe toute la hauteur de la fenêtre */
+  margin: 0; /* Évitez les marges supplémentaires autour du tableau de bord */
+}
+
+/* Conteneur principal du tableau de bord */
+.dashboard-gu {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Conteneur principal avec la sidebar et le contenu */
+.main-content-gu {
+  display: flex;
+  margin-top: 67px; /* Hauteur de la navbar */
+}
+
+/* Contenu principal, espace pour la sidebar */
+.content-gu {
+  flex-grow: 1;
+  padding: 20px;
+  margin-left: 250px; /* Largeur de la sidebar */
+  margin-top: 60px; /* Hauteur de la navbar */
+  overflow: auto; /* Permet le défilement si le contenu dépasse */
+  margin-top: 1px;
+}
+
+/* Styles pour le titre */
+.h1-gu {
+  background: linear-gradient(45deg, #d7dce6, #a2b2c1);
+  padding: 10px;
+  border-radius: 5px;
+  margin-left: 20px; 
+  margin-top: 15px;
+  width: 90.8%;
+  font-weight: bold; 
+  color: #534e4e;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Style de la grille */
+.affiche {
+  display: grid; /* Utiliser le grid layout */
+  grid-template-columns: repeat(3, 1fr); /* Créer trois colonnes de taille égale */
+  gap: 20px; /* Espacement entre les colonnes */
+  background-color: #f4f4f4;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  margin-left: 20px; 
+  margin-right: 57px;
+  font-family: Arial, sans-serif;
+  font-weight: bold; 
+  opacity: 0; /* Commence caché pour l'animation */
+  animation: fadeIn 1s forwards; /* Animation d'apparition */
+}
+
+/* Animation fade-in */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Style des sections individuelles */
+.section {
+  padding: 20px; /* Espacement intérieur des sections */
+  box-sizing: border-box; 
+  border-radius: 8px; /* Coins arrondis */
+  transition: background-color 0.3s, transform 0.3s; /* Transition pour les effets */
+}
+
+/* Animation pour le survol des sections */
+.section:hover {
+  background-color: #ffffff; /* Couleur de fond au survol */
+  transform: scale(1.05); /* Agrandissement au survol */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ombre plus marquée au survol */
+}
+
+/* Styles spécifiques pour chaque section */
+.section-1 {
+  background-color: #d0e2d1;
+  color: #4caf50; 
+}
+
+.section-2 {
+  background-color: #adc7d3;
+  color: #2196f3; 
+}
+
+.section-3 {
+  background-color: #c9a59f;
+  color: #910f06; 
+}
+
+
+
+
+/* Styles pour la table des utilisateurs */
+/* Style de base du tableau */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Ombre portée pour le tableau */
+  border-radius: 8px; /* Coins arrondis */
+  overflow: hidden; /* Cache les coins arrondis */
+}
+
+/* Style des cellules d'en-tête et de données */
+table th, table td {
+  border: 1px solid transparent;
+  padding: 12px;
+  text-align: center;
+  font-family: Arial, sans-serif;
+  transition: background-color 0.3s, transform 0.3s; /* Transition pour les effets */
+}
+
+/* Style des cellules d'en-tête */
+table th {
+  border: 1px solid #ddd;
+  background-color: #4CAF50;
+  color: rgb(247, 241, 241);
+  font-weight: bold;
+}
+
+/* Style des lignes paires */
+table tr:nth-child(even) {
+  background-color: #e7ebf0; /* Couleur de fond légèrement différente */
+}
+
+/* Style des lignes au survol */
+table tr:hover {
+  background-color: #ffffff; /* Couleur de fond au survol */
+  
+}
+
+/* Style des cellules au survol */
+table td:hover {
+  background-color: #d4cbcb; /* Couleur de fond au survol des cellules */
+  cursor: pointer; /* Curseur pointer pour indiquer que c'est cliquable */
+}
+
+
+/* Styles pour les boutons d'action */
+.btm {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.bts {
+  background-color: #9c0606;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+button:hover {
+  background-color: #7c8a7d;
+}
+
+/* Styles pour le message d'erreur */
+.error-message-gu {
+  color: red;
+  margin-top: 1px;
+  background-color: #f2dede;
+  padding: 10px;
+  border: 1px solid #ebccd1;
+  border-radius: 5px;
+  margin-left: 20px;
+  width: 91.4%;
+}
+
+
+.edit-forms {
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 20px;
+  max-width: 300px;
+  margin: 20px auto;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.edit-forms h2 {
+  margin-bottom: 15px;
+  color: #333;
+  font-size: 1.5em;
+  text-align: center;
+  font-family: Arial, sans-serif;
+  color: rgb(117, 119, 126);
+}
+
+.edit-forms label {
+  display: block;
+  margin-bottom: 10px;
+  color: #555;
+  font-weight: bold;
+}
+
+.edit-forms input[type="text"],
+.edit-forms input[type="email"],
+.edit-forms select {
+  font-family: Arial, sans-serif;
+  color: rgb(117, 119, 126);
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  box-sizing: border-box;
+}
+
+.edit-forms button[type="submit"],
+.edit-forms button[type="button"] {
+  padding: 10px 15px;
+  margin-right: 10px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 1em;
+  width: 100%;
+}
+
+.edit-forms button[type="submit"] {
+  background-color: #4caf50;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+.edit-forms button[type="button"] {
+  background-color: #f44336;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+.edit-forms button[type="submit"]:hover {
+  background-color: #45a049;
+}
+
+.edit-forms button[type="button"]:hover {
+  
+  background-color: #d32f2f;
+}
+
+.tableau {
+  margin-left: 20px; 
+  margin-right: 20px;
+  width: 93.3%;
+  margin-top: 50px;
+}

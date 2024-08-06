@@ -1,0 +1,95 @@
+/* Style général pour le tableau de bord */
+.vue {
+    background-image: url('C:\Users\CHRIS-06\Desktop\Projet_Urban_pulse\Front_Urban_pulse\projet_frontend\public\image\blanc.jpg');
+    background-size: cover; /* Assurez-vous que l'image couvre toute la zone */
+    background-position: center; /* Centrer l'image d'arrière-plan */
+    height: 100vh; /* Assure que le tableau de bord occupe toute la hauteur de la fenêtre */
+    margin: 0; /* Évitez les marges supplémentaires autour du tableau de bord */
+  }
+  
+  /* Conteneur principal du tableau de bord */
+  .dashboard {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Conteneur principal avec la sidebar et le contenu */
+  .main-content {
+    display: flex;
+    margin-top: 67px; /* Hauteur de la navbar */
+  }
+  
+  /* Contenu principal, espace pour la sidebar */
+  .content {
+    flex-grow: 1;
+    padding: 20px;
+    margin-left: 250px; /* Largeur de la sidebar */
+    margin-top: 60px; /* Hauteur de la navbar */
+    overflow: auto; /* Permet le défilement si le contenu dépasse */
+    margin-top: 1px;
+  }
+  
+  /* Styles pour le titre */
+  .h1 {
+    background-color: #d7dce6;
+    padding: 10px;
+    border-radius: 5px;
+    margin-left: 1px; 
+    margin-right: 20px;
+    margin-top: 15px;
+  }
+  
+  /* Vue d'ensemble des statistiques */
+  .stats-overview {
+    background-color: #f4f4f4;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+    margin-left: 1px; 
+    margin-right: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Style pour les titres dans la vue d'ensemble */
+  .stats-overview h2 {
+    margin-top: 0;
+    color: #333;
+  }
+  
+  /* Style pour les paragraphes dans la vue d'ensemble */
+  .stats-overview p {
+    margin: 5px 0;
+    font-size: 16px;
+  }
+  
+  /* Conteneur du graphique */
+  .chart-container {
+    background-color: #ffffff;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+    margin-left: 1px; 
+    margin-right: 20px;
+  }
+  
+  /* Style pour le titre du graphique */
+  .chart-container h2 {
+    margin-top: 0;
+    color: #333;
+  }
+  
+  /* Ajustement pour le graphique */
+  .chart-container canvas {
+    max-width: 100%;
+    max-height: 250px;
+    
+  }
+  
+  /* Style pour les messages d'erreur */
+  .error-message {
+    color: red;
+    margin-top: 10px;
+  }
+  

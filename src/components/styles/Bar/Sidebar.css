@@ -1,0 +1,164 @@
+/* Style de la barre latérale */
+.side {
+  width: 200px;
+  background-color: #81b3e6;
+  padding: 25px;
+  box-shadow: 2px 0 5px rgba(199, 23, 23, 0.1);
+  position: fixed; /* Fixer la barre latérale à gauche */
+  left: 0;
+  bottom: 1;
+  transition: transform 0.3s ease; /* Animation pour la barre latérale */
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centrer horizontalement */
+  justify-content: flex-start; /* Centrer verticalement au début */
+  height: 84.4%;
+  border-radius: 5px;
+}
+
+/* Effet de survol pour la barre latérale */
+.side:hover {
+  transform: translateX(-5px);
+}
+
+.side ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  width: 220px; /* Assurez-vous que la liste occupe toute la largeur */
+  margin-top: 30px;
+  border: 0px solid #ccc; /* Ajouter une bordure */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Ajouter une transition pour un effet fluide */
+}
+
+.side ul:hover {
+  transform: translateY(-10px); /* Élever l'élément */
+  box-shadow: 0 4px 8px rgba(39, 52, 226, 0.2); /* Ajouter une ombre pour un effet de profondeur */
+}
+
+.side p {
+  font-family: Arial, sans-serif; /* Police de caractères */
+  font-size: 15px; /* Taille du texte */
+  font-weight: bold; /* Texte en gras */
+  text-align: left;
+  color: #496e99;
+}
+
+.side img {
+  height: 30px;
+}
+
+/* Style des éléments de liste dans la barre latérale */
+.side ul li {
+  margin: 15px 0;
+  text-align: left; /* Centrer le texte dans les éléments de liste */
+  width: 200px; /* Assurez-vous que les éléments de liste occupent toute la largeur */
+  padding: 10px; /* Espace autour des éléments de liste */
+  border-bottom: 1px solid #ffffff; /* Bordure en bas */
+  text-decoration: none;
+  color: #0e4d80; /* Couleur du texte */
+  display: block;
+  font-family: Arial, sans-serif; /* Police de caractères */
+  font-size: 15px; /* Taille du texte */
+  font-weight: bold; /* Texte en gras */
+  transition: background-color 0.3s ease, color 0.3s ease; /* Transition pour l'effet de survol */
+}
+
+/* Style pour les éléments de liste survolés */
+.side ul li:hover {
+  background-color: #5a9bd4; /* Couleur de fond au survol */
+  color: white; /* Couleur du texte au survol */
+  cursor: pointer; /* Curseur pointer au survol */
+}
+
+/* Style des liens dans les éléments de liste */
+.side ul li a {
+  text-decoration: none;
+  color: inherit; /* Hériter la couleur du texte de l'élément parent */
+}
+
+/* Style du texte de déconnexion cliquable */
+.sidebar-logout {
+  display: flex;
+  align-items: center;
+}
+
+.logout-text {
+  margin-left: 10px;
+  cursor: pointer; /* Curseur pointer pour indiquer que c'est cliquable */
+  font-weight: normal; /* Moins gras que l'icône */
+}
+
+/* Style du formulaire de déconnexion */
+.logout-form {
+  position: absolute;
+  bottom: 25px; /* Positionner le formulaire au bas de la barre latérale */
+  left: 0;
+  padding: 10px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 85%; /* Occuper toute la largeur disponible */
+  text-align: center;
+  margin-left: 10px;
+}
+
+.logout-form p {
+  margin: 0 0 10px;
+}
+
+.logout-form button {
+  margin: 5px;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.deco {
+  background-color: rgb(99, 16, 16);
+}
+
+.anu {
+  background-color: green;
+}
+
+/* Style de la liste principale */
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Style du sous-menu */
+.submenu {
+  top: 100%; /* Positionne le sous-menu juste en dessous de l'élément parent */
+  background-color: #dfe7e9;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+/* Style des éléments du sous-menu */
+.submenu li {
+  padding: 10px;
+}
+
+.submenu li a {
+  text-decoration: none;
+  color: #333;
+}
+
+.submenu li a:hover {
+  color: #007bff;
+}
+
+/* Style du lien */
+a {
+  text-decoration: none;
+  color: #333;
+}
+
+a:hover {
+  color: #007bff;
+}

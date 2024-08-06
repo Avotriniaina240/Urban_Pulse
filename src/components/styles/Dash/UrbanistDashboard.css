@@ -1,0 +1,60 @@
+/* Style général pour le tableau de bord */
+.dashboard-Urbanist {
+    background-image: url('C:\Users\CHRIS-06\Desktop\Projet_Urban_pulse\Front_Urban_pulse\projet_frontend\public\image/blanc.jpg');
+    background-size: cover; /* Assurez-vous que l'image couvre toute la zone */
+    background-position: center; /* Centrer l'image d'arrière-plan */
+    height: 100vh; /* Assure que le tableau de bord occupe toute la hauteur de la fenêtre */
+    margin: 0; /* Évitez les marges supplémentaires autour du tableau de bord */
+  }
+  
+  /* Conteneur principal du tableau de bord */
+  .dashboard-Urbanist {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Conteneur principal avec la sidebar et le contenu */
+  .main-content-Urbanist {
+    display: flex;
+    margin-top: 67px; /* Hauteur de la navbar */
+  }
+  
+  /* Style de la barre latérale */
+  .sidebarUrbanist {
+    width: 250px;
+    background-color: #2c3e50;
+    color: white;
+    height: calc(100vh - 60px); /* Ajuste la hauteur en fonction de la navbar */
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 60px; /* Positionne la sidebar sous la navbar */
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+  
+  /* Contenu principal, espace pour la sidebar */
+  .content-Urbanist {
+    flex-grow: 1;
+    padding: 20px;
+    margin-left: 250px; /* Largeur de la sidebar */
+    margin-top: 60px; /* Hauteur de la navbar */
+    overflow: auto; /* Permet le défilement si le contenu dépasse */
+    margin-top: 1px;
+    font-family: Arial, sans-serif;
+    color: rgb(117, 119, 126);
+  }
+  
+  /* Styles pour le titre */
+  .h1-Urbanist {
+    background-color: #d7dce6;
+    padding: 10px;
+    border-radius: 5px;
+    margin-left: 30px; 
+    margin-top: -10px;
+    font-family: Arial, sans-serif;
+  }
+  
+  

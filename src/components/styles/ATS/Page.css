@@ -1,0 +1,123 @@
+.page-container {
+  font-family: 'Arial, sans-serif';
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: linear-gradient(to right, #6a11cb, #2575fc);
+  overflow: hidden;
+  animation: backgroundAnimation 10s infinite;
+}
+
+.page-header {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+.page-header nav .login-button {
+  background-color: #fff;
+  color: #6a11cb;
+  padding: 10px 20px;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.page-header nav .login-button:hover {
+  background-color: #ddd;
+}
+
+.page-main {
+  text-align: center;
+}
+
+.hero-section {
+  animation: fadeIn 1s ease-in-out, borderAnimation 5s infinite;
+  border: 2px solid transparent;
+  padding: 20px;
+}
+
+.hero-section h1 {
+  font-size: 3rem;
+  margin-bottom: 10px;
+  color: #fff;
+}
+
+.hero-section p {
+  font-size: 1.5rem;
+  margin-bottom: 40px;
+  color: #fff;
+}
+
+.slogans .slogan {
+  font-size: 1.25rem;
+  margin: 10px 0;
+  opacity: 0;
+  animation: fadeInUp 1s ease-in-out forwards;
+  color: #fff;
+}
+
+.slogans .slogan:nth-child(1) {
+  animation-delay: 0.5s;
+}
+
+.slogans .slogan:nth-child(2) {
+  animation-delay: 1s;
+}
+
+.slogans .slogan:nth-child(3) {
+  animation-delay: 1.5s;
+}
+
+.slogans .slogan:nth-child(4) {
+  animation-delay: 2s;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes backgroundAnimation {
+  0% {
+    background: linear-gradient(to right, #8a56c2, #81b3e6);
+  }
+  50% {
+    background: linear-gradient(to right, #947973, #81b3e6);
+  }
+  100% {
+    background: linear-gradient(to right, #824abe, #42639c);
+  }
+}
+
+@keyframes borderAnimation {
+  0% {
+    border-color: transparent;
+  }
+  50% {
+    border-color: white;
+  }
+  100% {
+    border-color: transparent;
+  }
+}

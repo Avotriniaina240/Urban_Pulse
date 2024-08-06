@@ -1,0 +1,57 @@
+.notifications-container {
+  position: relative;
+  display: inline-block;
+  margin-left: 100px; /* Ajustez selon votre mise en page */
+}
+
+.notifications-dropdown {
+  position: absolute;
+  top: 40px; /* Ajuste selon la taille de ton icône */
+  right: 0;
+  width: 200px; /* Ajuste selon tes besoins */
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 15px;
+  z-index: 1000; /* Assure que le dropdown soit au-dessus des autres éléments */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ombre pour un effet de profondeur */
+  opacity: 0; /* Initialement caché */
+  visibility: hidden; /* Initialement caché */
+  transform: translateY(-10px); /* Initialement décalé vers le haut */
+  transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease; /* Animations */
+}
+
+.notifications-dropdown.show {
+  opacity: 1; /* Rendre visible */
+  visibility: visible; /* Rendre visible */
+  transform: translateY(0); /* Réinitialiser la position */
+}
+
+/* Style des paragraphes dans le dropdown */
+.notifications-dropdown p {
+  margin: 0 0 10px;
+  font-size: 14px;
+  font-family: Arial, sans-serif;
+  color: rgb(117, 119, 126);
+  transition: color 0.3s ease; /* Transition pour la couleur du texte */
+}
+
+.notifications-dropdown p:last-child {
+  margin-bottom: 0;
+}
+
+/* Animation de survol des paragraphes */
+.notifications-dropdown p:hover {
+  color: #007bff; /* Couleur au survol */
+  cursor: pointer; /* Curseur pointer pour indiquer que c'est cliquable */
+  transform: translateX(5px); /* Déplacer légèrement le texte au survol */
+}
+
+/* Ajout d'une animation de transition au conteneur des notifications */
+.notifications-container {
+  transition: margin-left 0.3s ease; /* Transition pour le déplacement du conteneur */
+}
+
+.notifications-container:hover {
+  margin-left: 110px; /* Ajuste pour un effet de décalage au survol */
+}

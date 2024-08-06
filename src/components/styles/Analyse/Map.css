@@ -1,0 +1,42 @@
+/* src/styles/Analyse/Map.css */
+
+.map-container {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    margin-left: 270px;
+}
+.map{
+    max-height: 500px;
+}
+
+.content-container {
+    margin-top: 100px;
+    margin-right: 12px;
+    
+}
+
+.h1-m {
+    background-color: #d7dce6;
+    padding: 10px;
+    border-radius: 5px;
+    margin-right: 14px;
+    margin-left: 8px;
+    margin-top: 15px;
+}
+
+button {
+    margin: 10px 0;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+}

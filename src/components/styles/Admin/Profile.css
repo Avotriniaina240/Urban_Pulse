@@ -1,0 +1,87 @@
+/* src/styles/UserProfile.css */
+
+.user-profile {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+}
+
+.profile-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.profile-picture {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 2px solid #81b3e6;
+  object-fit: cover;
+}
+
+.profile-header h2 {
+  margin: 0;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.profile-header button {
+  padding: 10px 20px;
+  background-color: #81b3e6;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.profile-header button:hover {
+  background-color: #6fa2d8;
+}
+
+.profile-section {
+  margin-bottom: 20px;
+}
+
+.profile-section h3 {
+  margin-top: 0;
+  font-size: 20px;
+  color: #333;
+}
+
+.profile-section p {
+  margin: 5px 0;
+  color: #666;
+}
+
+.profile-section ul {
+  list-style: none;
+  padding: 0;
+}
+
+.profile-section li {
+  margin: 5px 0;
+  padding: 10px;
+  background-color: #e9f1fa;
+  border-radius: 5px;
+}
+
+.profile-section button {
+  padding: 8px 15px;
+  background-color: #81b3e6;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.profile-section button:hover {
+  background-color: #6fa2d8;
+}

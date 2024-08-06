@@ -1,0 +1,33 @@
+
+/* Conteneur principal du tableau de bord */
+.dashboard-Admin-P {
+  display: flex;
+  flex-direction: column;
+  font-family: Arial, sans-serif;
+}
+
+/* Conteneur principal avec la sidebar et le contenu */
+.main-content-Admin-P {
+  display: flex;
+  margin-top: 67px; /* Hauteur de la navbar */
+}
+
+/* Contenu principal, espace pour la sidebar */
+.content-Admin-P {
+  flex-grow: 1;
+  padding: 20px;
+  margin-left: 250px; /* Largeur de la sidebar */
+  margin-top: 60px; /* Hauteur de la navbar */
+  overflow: auto; /* Permet le défilement si le contenu dépasse */
+  margin-top: 1px;
+}
+
+/* Styles pour le titre */
+.h1-Admin-P {
+  background-color: #d7dce6;
+  padding: 10px;
+  border-radius: 5px;
+  margin-left: 1px; 
+  margin-right: 20px;
+  margin-top: 1px;
+}
