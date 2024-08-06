@@ -31,12 +31,12 @@ const ForgotPassword = () => {
       setTimeout(() => {
         setError('');
         setMessage('');
-      }, 5000);
+      }, 5000); // Clear messages after 5 seconds
     }
   };
 
   return (
-    <div className='body'>
+    <div className="body">
       <div className="form-container">
         <h1>Réinitialiser le mot de passe</h1>
         {error && <div className="error-message">{error}</div>}

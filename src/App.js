@@ -31,7 +31,7 @@ const App = () => {
         <Route path="/profile" element={<Profile />} />
         <Route path="/register-admin" element={<RegisterAdmin />} />
         <Route path="/urban-analysis" element={<UrbanAnalysis />} />
-        <Route path="/map" element={<Map />} />
+        <Route path="/map/*" element={<Map />} />
         <Route path="/forgot-password" element={<ForgotPassword />} /> {/* Ajoutez la route ForgotPassword */}
         <Route path="/reset-password/:token" element={<ResetPassword />} /> {/* Ajoutez la route ResetPassword */}
       </Routes>
