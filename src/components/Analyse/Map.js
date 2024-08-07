@@ -12,7 +12,6 @@ const Map = () => {
     const [airQualityData, setAirQualityData] = useState([]);
     const apiKey = '13c8b873a51de1239ad5606887a1565e';
 
-    // Fonction pour récupérer les données de qualité de l'air pour une zone
     const fetchAirQualityData = useCallback(async (lat, lon) => {
         try {
             const response = await axios.get(`http://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${apiKey}`);
@@ -29,13 +28,12 @@ const Map = () => {
         }
     }, [apiKey]);
 
-    // Fonction pour récupérer les données de toutes les zones
     const fetchAllData = useCallback(async () => {
         const zones = [
-            { lat: -21.4545, lon: 47.0833 }, // Zone 1
-            { lat: -21.4567, lon: 47.0850 }, // Zone 2
-            { lat: -21.4550, lon: 47.0860 }  // Zone 3 (ajoutez autant de zones que nécessaire)
-            
+            { lat: -21.4545, lon: 47.0833 },
+            { lat: -21.4567, lon: 47.0850 },
+            { lat: -21.4550, lon: 47.0860 },
+            { lat: -22.0000, lon: 48.0000 }
         ];
 
         try {
@@ -92,26 +90,7 @@ const Map = () => {
 
             map.addLayer(markers);
 
-            // Ajouter la légende
-            const legend = L.control({ position: 'bottomright' });
-
-            legend.onAdd = function () {
-                const div = L.DomUtil.create('div', 'info legend');
-                const grades = [1, 2, 3, 4];
-
-                for (let i = 0; i < grades.length; i++) {
-                    div.innerHTML +=
-                        '<i style="background:' + getColor(grades[i]) + '"></i> ' +
-                        (grades[i] === 1 ? 'Bon' :
-                        grades[i] === 2 ? 'Modéré' :
-                        grades[i] === 3 ? 'Insatisfaisant' :
-                        'Mauvais') + '<br>';
-                }
-
-                return div;
-            };
-
-            legend.addTo(map);
+            // Suppression du contrôle de recherche
         }
 
         return () => {
@@ -119,7 +98,7 @@ const Map = () => {
                 map.remove();
             }
         };
-    }, [airQualityData]);
+    }, [airQualityData, fetchAirQualityData]);
 
     return (
         <div className="map-container">
@@ -127,7 +106,19 @@ const Map = () => {
             <Sidebar />
             <div className="content-container">
                 <h1 className='h1-m'>Carte Interactive de la Ville</h1>
-                <button onClick={fetchAllData}>Actualiser les données</button>
+                <div className="toolbar">
+                    <div className="search-bar-container">
+                        <input
+                            type="text"
+                            id="search-bar"
+                            placeholder="Entrez une adresse ou un lieu"
+                            onChange={(e) => {
+                                // Ajoutez ici la logique de recherche automatique si nécessaire
+                            }}
+                        />
+                    </div>
+                    <button onClick={fetchAllData} className="refresh-button">Actualiser les données</button>
+                </div>
                 <div className="map" id="map" style={{ height: 'calc(100vh - 150px)', marginTop: '10px' }}></div>
             </div>
         </div>
@@ -136,13 +127,12 @@ const Map = () => {
 
 const getColor = (aqi) => {
     switch(aqi) {
-        case 1: return 'green'; // Bon
-        case 2: return 'yellow'; // Modéré
-        case 3: return 'orange'; // Insatisfaisant
-        case 4: return 'red'; // Mauvais
-        default: return 'grey'; // Très mauvais
+        case 1: return 'green';
+        case 2: return 'yellow';
+        case 3: return 'orange';
+        case 4: return 'red';
+        default: return 'grey';
     }
 };
 
 export default Map;
-2

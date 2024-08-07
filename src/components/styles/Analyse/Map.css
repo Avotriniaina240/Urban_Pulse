@@ -80,3 +80,22 @@ button:active {
     margin-right: 5px;
     border-radius: 50%;
 }
+
+.toolbar {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* Espace entre le bouton et la barre de recherche */
+    margin-top: 20px;
+}
+
+.search-bar-container{
+    margin-top: 16px;
+    width: 300px;
+}
+
+.refresh-button {
+    height: 40px; /* Ajustez cette valeur pour correspondre à la hauteur de la barre de recherche */
+    margin-left: 50.5%;
+}
+
+
