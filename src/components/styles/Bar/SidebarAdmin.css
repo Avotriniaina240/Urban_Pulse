@@ -1,11 +1,12 @@
-/* Style de la barre latérale */
-.sideRA {
+
+.sideAD {
     width: 200px;
     background-color: #81b3e6;
     padding: 25px;
     box-shadow: 2px 0 5px rgba(199, 23, 23, 0.1);
     position: fixed; /* Fixer la barre latérale à gauche */
     left: 0;
+    bottom: 1;
     transition: transform 0.3s ease; /* Animation pour la barre latérale */
     display: flex;
     flex-direction: column;
@@ -13,23 +14,30 @@
     justify-content: flex-start; /* Centrer verticalement au début */
     height: 84.4%;
     border-radius: 5px;
-    margin-top: -9.3%;
+    margin-top: -8px;
   }
   
   /* Effet de survol pour la barre latérale */
-  .sideRA:hover {
+  .sideAD:hover {
     transform: translateX(-5px);
   }
   
-  /* Style de la liste dans la barre latérale */
-  .sideRA ul {
+  .sideAD ul {
     list-style-type: none;
     padding: 0;
     margin: 0;
-    width: 100%; /* Assurez-vous que la liste occupe toute la largeur */
+    width: 220px; /* Assurez-vous que la liste occupe toute la largeur */
+    margin-top: 30px;
+    border: 0px solid #ccc; /* Ajouter une bordure */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Ajouter une transition pour un effet fluide */
   }
   
-  .sideRA p {
+  .sideAD ul:hover {
+    transform: translateY(-10px); /* Élever l'élément */
+    box-shadow: 0 4px 8px rgba(39, 52, 226, 0.2); /* Ajouter une ombre pour un effet de profondeur */
+  }
+  
+  .sideAD p {
     font-family: Arial, sans-serif; /* Police de caractères */
     font-size: 15px; /* Taille du texte */
     font-weight: bold; /* Texte en gras */
@@ -37,12 +45,12 @@
     color: #496e99;
   }
   
-  .sideRA img {
+  .sideAD img {
     height: 30px;
   }
   
   /* Style des éléments de liste dans la barre latérale */
-  .sideRA ul li {
+  .sideAD ul li {
     margin: 15px 0;
     text-align: left; /* Centrer le texte dans les éléments de liste */
     width: 200px; /* Assurez-vous que les éléments de liste occupent toute la largeur */
@@ -58,32 +66,32 @@
   }
   
   /* Style pour les éléments de liste survolés */
-  .sideRA ul li:hover {
+  .sideAD ul li:hover {
     background-color: #5a9bd4; /* Couleur de fond au survol */
     color: white; /* Couleur du texte au survol */
     cursor: pointer; /* Curseur pointer au survol */
   }
   
   /* Style des liens dans les éléments de liste */
-  .sideRA ul li a {
+  .sideAD ul li a {
     text-decoration: none;
     color: inherit; /* Hériter la couleur du texte de l'élément parent */
   }
   
   /* Style du texte de déconnexion cliquable */
-  .sidebar-logout-RA {
+  .sidebar-logout-AD {
     display: flex;
     align-items: center;
   }
   
-  .logout-text-RA {
+  .logout-text-AD {
     margin-left: 10px;
     cursor: pointer; /* Curseur pointer pour indiquer que c'est cliquable */
     font-weight: normal; /* Moins gras que l'icône */
   }
   
   /* Style du formulaire de déconnexion */
-  .logout-form-RA {
+  .logout-form-AD {
     position: absolute;
     bottom: 25px; /* Positionner le formulaire au bas de la barre latérale */
     left: 0;
@@ -97,11 +105,11 @@
     margin-left: 10px;
   }
   
-  .logout-form-RA p {
+  .logout-form-AD p {
     margin: 0 0 10px;
   }
   
-  .logout-form-RA button {
+  .logout-form-AD button {
     margin: 5px;
     padding: 5px 10px;
     border: none;
@@ -109,10 +117,49 @@
     cursor: pointer;
   }
   
-  .deco-RA {
+  .deco-AD {
     background-color: rgb(99, 16, 16);
   }
   
-  .anu-RA {
+  .anu-AD {
     background-color: green;
+  }
+  
+  /* Style de la liste principale */
+  ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  /* Style du sous-menu */
+  .submenu-AD {
+    top: 100%; /* Positionne le sous-menu juste en dessous de l'élément parent */
+    background-color: #dfe7e9;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+  }
+  
+  /* Style des éléments du sous-menu */
+  .submenu-AD li {
+    padding: 10px;
+  }
+  
+  .submenu-AD li a {
+    text-decoration: none;
+    color: #333;
+  }
+  
+  .submenu-AD li a:hover {
+    color: #007bff;
+  }
+  
+  /* Style du lien */
+  a {
+    text-decoration: none;
+    color: #333;
+  }
+  
+  a:hover {
+    color: #007bff;
   }

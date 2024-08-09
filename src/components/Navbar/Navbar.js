@@ -5,14 +5,8 @@ import '../styles/Bar/Navbar.css';
 const Navbar = ({ onSearchChange }) => {
   return (
     <div className="navbar">
-      <h1>Urban Pulse</h1>
-      <div className="navbar-search">
-        <input
-          type="text"
-          placeholder="Rechercher..."
-          onChange={(e) => onSearchChange(e.target.value)}
-        />
-      </div>
+        <img src="../image/ur.jpeg" alt="Urban Pulse Logo" className="navbar-logo" 
+        width={250} height={64} />
       {/*<Notifications />*/}
       <div className="navbar-links">
         <a href="admin-dashboard" title="Dashboard"><FaHome /></a>

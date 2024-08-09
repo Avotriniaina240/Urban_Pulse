@@ -30,15 +30,35 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Ombre légère */
 }
 
+@keyframes glowPulse {
+    0% {
+        text-shadow: 0 0 5px #81c784, 0 0 10px #81c784, 0 0 20px #81c784, 0 0 40px #81c784;
+        transform: scale(1);
+    }
+    50% {
+        text-shadow: 0 0 10px #aed581, 0 0 20px #aed581, 0 0 30px #aed581, 0 0 60px #aed581;
+        transform: scale(1.05);
+    }
+    100% {
+        text-shadow: 0 0 5px #81c784, 0 0 10px #81c784, 0 0 20px #81c784, 0 0 40px #81c784;
+        transform: scale(1);
+    }
+}
+
 .h1-m {
-    background-color: #e9ecef; /* Couleur de fond douce */
+    background-color: #d8e7d9; /* Couleur de fond douce */
     padding: 12px;
     border-radius: 8px; /* Coins arrondis */
     margin-bottom: 20px; /* Marge inférieure pour séparer du contenu */
-    color: #343a40; /* Couleur du texte */
+    color: #204e26; /* Couleur du texte */
     text-align: center; /* Alignement du texte */
     margin-top: 50px;
+    font-family: 'Lobster', cursive;
+    margin-left: 25px;
+    margin-right: 25px;
+    animation: glowPulse 5s infinite ease-in-out; /* Animation */
 }
+
 
 button {
     margin: 10px 0;
@@ -62,24 +82,37 @@ button:active {
     transform: scale(0.98); /* Réduction au clic */
 }
 
-/* Style pour la légende */
-.info.legend {
-    background-color: #fff;
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    padding: 6px;
+.legend {
+    background: white;
+    padding: 6px 8px;
+    border-radius: 5px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
     font-size: 14px;
-    line-height: 1.5;
-    color: #333;
+    line-height: 18px;
+    color: #555;
+    font-family: 'calibri', cursive;
+    line-height: 1.5; 
+  
 }
 
-.info.legend i {
+.legend h4 {
+    margin: 0 0 5px;
+    font-size: 16px;
+}
+
+.legend i {
     width: 18px;
     height: 18px;
+    border-radius: 50%;
     display: inline-block;
     margin-right: 5px;
-    border-radius: 50%;
 }
+
+.legend span {
+    display: inline-block;
+    margin-bottom: 2px;
+}
+
 
 .toolbar {
     display: flex;
@@ -95,7 +128,41 @@ button:active {
 
 .refresh-button {
     height: 40px; /* Ajustez cette valeur pour correspondre à la hauteur de la barre de recherche */
-    margin-left: 50.5%;
+    margin-left: 42.2%;
+    width: 12%;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 15px;
+    line-height: 1.5; /* Hauteur de ligne pour un bon alignement vertical */
+    display: flex; /* Flexbox pour centrer */
+    align-items: center; /* Centre verticalement */
+    justify-content: center;
+    gap : 10px;
+    font-family: 'pacifico', cursive;
 }
+.draw-button{
+    height: 40px; 
+    width: 18%;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 15px;
+    line-height: 1.5; /* Hauteur de ligne pour un bon alignement vertical */
+    display: flex; /* Flexbox pour centrer */
+    align-items: center; /* Centre verticalement */
+    justify-content: center;
+    transition: background-color 0.3s;
+    gap : 10px;
+    font-family: 'pacifico', cursive;
+}
+
+/* Bouton d'édition spécifique */
+.draw-button {
+    background-color: #e06500;
+}
+
+.draw-button:hover {
+    background-color: #c29416;
+}
+
 
 

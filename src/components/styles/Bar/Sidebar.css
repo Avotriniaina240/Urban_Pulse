@@ -162,3 +162,10 @@ a {
 a:hover {
   color: #007bff;
 }
+
+/*.side .sidebar-logo, .sideAD .sidebar-logo,
+.sideCitizen .sidebar-logo, .sideRA .sidebar-logo,
+.sideUrbanist .sidebar-logo, .sideCarte .sidebar-logo {
+  width: 240px;
+  height: 77px;
+}*/

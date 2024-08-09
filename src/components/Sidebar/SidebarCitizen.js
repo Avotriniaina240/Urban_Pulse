@@ -18,6 +18,10 @@ const SidebarCitizen = () => {
 
   return (
     <div className="sideCitizen">
+    {/* <div>
+     <img src="../image/pul.png" alt="Urban Pulse Logo" className="sidebar-logo" 
+        width={10} height={65}  />
+      </div>*/}
       <ul>
         <li><FaChartBar /> Analyse des Données Urbaines</li>
         <li><FaFileAlt /> Rapports et Analyses</li>

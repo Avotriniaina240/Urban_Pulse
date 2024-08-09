@@ -42,6 +42,10 @@ const Sidebar = () => {
 
   return (
     <div className="side">
+      {/* <div>
+     <img src="../image/pul.png" alt="Urban Pulse Logo" className="sidebar-logo" 
+        width={10} height={65}  />
+      </div>*/}
       <ul>
         <li><Link to="/vue-ensemble"><FaTachometerAlt /> Vue d'Ensemble</Link></li>
         <li><Link to="/urban-analysis"><FaChartBar /> Analyse des Données Urbaines</Link></li>

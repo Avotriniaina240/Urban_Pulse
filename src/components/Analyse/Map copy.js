@@ -9,7 +9,6 @@ import 'leaflet-draw/dist/leaflet.draw.css';
 import 'leaflet-draw';
 import '../styles/Analyse/Map.css';
 import axios from 'axios';
-import { FaSync, FaEdit} from 'react-icons/fa'; // Importer les icônes
 
 const Map = () => {
     const [airQualityData, setAirQualityData] = useState([]);
@@ -67,20 +66,21 @@ const Map = () => {
             }).addTo(mapInstance);
 
             const markers = L.markerClusterGroup();
-
             airQualityData.forEach(loc => {
                 if (loc.components) {
-                    const marker = L.circleMarker([loc.lat, loc.lng], {
-                        color: getColor(loc.air_quality),
-                        radius: 8,
-                        fillOpacity: 0.7,
-                        weight: 2
+                    const markerClass = getMarkerClass(loc.air_quality);
+
+                    const icon = L.divIcon({
+                        className: `marker-icon ${markerClass}`,
+                        html: ''
                     });
+
+                    const marker = L.marker([loc.lat, loc.lng], { icon });
 
                     marker.on('click', () => {
                         const popupContent = `
                             <div style="font-size: 14px;">
-                                <b>Qualité de l'air: Zone ${loc.air_quality}</b><br>
+                                <b>Qualité de l'air: ${loc.air_quality}</b><br>
                                 <strong>Composants:</strong><br>
                                 CO: ${loc.components.co || 'N/A'} µg/m³<br>
                                 NO2: ${loc.components.no2 || 'N/A'} µg/m³<br>
@@ -97,7 +97,7 @@ const Map = () => {
                     console.warn('Composants non trouvés pour', loc);
                 }
             });
-            mapInstance.addLayer(markers); 
+            mapInstance.addLayer(markers);
 
             const drawnItemsLayer = L.featureGroup().addTo(mapInstance);
             setDrawnItems(drawnItemsLayer);
@@ -125,7 +125,7 @@ const Map = () => {
                         fetchAirQualityData(lat, lng).then(data => {
                             const popupContent = `
                                 <div style="font-size: 14px;">
-                                    <b>Qualité de l'air: Zone ${data[0]?.air_quality || 'N/A'}</b><br>
+                                    <b>Qualité de l'air: ${data[0]?.air_quality || 'N/A'}</b><br>
                                     <strong>Composants:</strong><br>
                                     CO: ${data[0]?.components.co || 'N/A'} µg/m³<br>
                                     NO2: ${data[0]?.components.no2 || 'N/A'} µg/m³<br>
@@ -169,6 +169,16 @@ const Map = () => {
         };
     }, [airQualityData, drawingMode, fetchAirQualityData]);
 
+    const getMarkerClass = (aqi) => {
+        switch(aqi) {
+            case 1: return 'marker-green';
+            case 2: return 'marker-yellow';
+            case 3: return 'marker-orange';
+            case 4: return 'marker-red';
+            default: return '';
+        }
+    };
+
     return (
         <div className="map-container">
             <Navbar />
@@ -185,16 +195,13 @@ const Map = () => {
                                 // Ajoutez ici la logique de recherche automatique si nécessaire
                             }}
                         />
-
                     </div>
-                    <button onClick={fetchAllData} className="refresh-button">
-                        <FaSync /> Données
-                    </button>
+                    <button onClick={fetchAllData} className="refresh-button">Actualiser les données</button>
                     <button  
                         onClick={() => setDrawingMode(!drawingMode)} 
                         className="draw-button"
                     >
-                        <FaEdit /> {drawingMode ? 'Désactiver' : 'Mode édition'}
+                        {drawingMode ? 'Désactiver' : 'Mode édition'}
                     </button>
                 </div>
                 <div className="map" id="map" style={{ height: 'calc(100vh - 150px)', marginTop: '10px' }}></div>

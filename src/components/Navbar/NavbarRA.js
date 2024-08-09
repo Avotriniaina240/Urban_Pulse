@@ -6,6 +6,8 @@ import '../styles/Bar/NavbarRA.css'; // Assure-toi que ce fichier CSS existe
 const NavbarRA = () => {
   return (
     <div className="navbarRA">
+      <img src="../image/45.jpg" alt="Urban Pulse Logo" className="navbar-logo" 
+        width={100} height={64} />
       <h1>Urban Pulse</h1>
       <div className="navbar-search-RA">
         <input type="text" placeholder="Rechercher..." />

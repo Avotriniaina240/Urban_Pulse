@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FaTachometerAlt, FaChartBar, FaUsers, FaFileAlt, FaPlug, FaMapMarkedAlt, FaSignOutAlt } from 'react-icons/fa';
 import { Link, Route, Routes } from 'react-router-dom';
-import '../styles/Bar/SidebarRA.css';
+import '../styles/Bar/SidebarAdmin.css';
 import RegisterAdmin from '../Authentification/RegisterAdmin'; // Assurez-vous que le chemin est correct
 
-const SidebarRA = () => {
+const SidebarAdmin = () => {
   const [showLogoutForm, setShowLogoutForm] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const userMenuRef = useRef(null);
@@ -41,7 +41,7 @@ const SidebarRA = () => {
   }, []);
 
   return (
-    <div className="sideRA">
+    <div className="sideAD">
     {/* <div>
      <img src="../image/pul.png" alt="Urban Pulse Logo" className="sidebar-logo" 
         width={10} height={65}  />
@@ -60,21 +60,21 @@ const SidebarRA = () => {
             <FaUsers /> Gestion des Utilisateurs
           </a>
           {showUserMenu && (
-            <ul className="submenu-RA">
+            <ul className="submenu-AD">
               <li><Link to="/register-admin">Nouveau Utilisateur</Link></li>
               <li><Link to="/gestion-user">Gérer Utilisateur</Link></li>
             </ul>
           )}
         </li>
         <li>
-          <div className="sidebar-logout-RA">
+          <div className="sidebar-logout-AD">
             <FaSignOutAlt />
-            <span onClick={handleLogoutClick} className="logout-text-RA"><strong>Déconnexion</strong></span>
+            <span onClick={handleLogoutClick} className="logout-text-AD"><strong>Déconnexion</strong></span>
             {showLogoutForm && (
-              <div className="logout-form-RA">
+              <div className="logout-form-AD">
                 <p>Êtes-vous sûr de vouloir vous déconnecter ?</p>
-                <button className='deco-RA' onClick={handleLogout}>Déconnexion</button>
-                <button className='anu-RA' onClick={() => setShowLogoutForm(false)}>Annuler</button>
+                <button className='deco-AD' onClick={handleLogout}>Déconnexion</button>
+                <button className='anu-AD' onClick={() => setShowLogoutForm(false)}>Annuler</button>
               </div>
             )}
           </div>
@@ -88,4 +88,4 @@ const SidebarRA = () => {
   );
 };
 
-export default SidebarRA;
+export default SidebarAdmin;
