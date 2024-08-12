@@ -128,7 +128,7 @@ button:active {
 
 .refresh-button {
     height: 40px; /* Ajustez cette valeur pour correspondre à la hauteur de la barre de recherche */
-    margin-left: 42.2%;
+    margin-left: 70%;
     width: 12%;
     border: none;
     border-radius: 4px;
@@ -163,6 +163,76 @@ button:active {
 .draw-button:hover {
     background-color: #c29416;
 }
+
+/* Map.css */
+
+/* Classe pour le select */
+.role-select {
+    margin-left: 10px; /* Espacement entre le bouton "Données" et le select */
+    margin-right: -200px; /* Ajustez si nécessaire */
+    margin-top: 15px;
+    max-width: 150px; /* Ajustez la largeur maximale si nécessaire */
+    
+    /* Styles de base */
+    padding: 8px 12px; /* Espacement interne */
+    border: 2px solid #cfe2d0; /* Bordure */
+    border-radius: 4px; /* Coins arrondis */
+    background-color: #cfe2d0; /* Couleur de fond */
+    color: #3d5e9b; /* Couleur du texte */
+    font-family: 'pacifico', cursive;
+    font-size: 80%;
+    font-weight: bold;
+    
+    /* Ombre portée */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    
+    /* Effets de transition */
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.role-select:hover {
+    /* Effets au survol */
+    border-color: #81c784; /* Couleur de bordure au survol */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ombre plus prononcée */
+}
+
+/* Style du champ de recherche (plus petit) */
+.leaflet-control-geocoder-form input {
+    background-color: transparent; /* Supprime le fond */
+    border: none; /* Supprime la bordure */
+    border-radius: 100px;
+    padding: 5px 8px;
+    font-size: 15px; /* Taille de texte réduite */
+    width: 100%;
+    box-sizing: border-box;
+    outline: none;
+    color: #333; /* Couleur du texte */
+    margin-top: 5px;
+    height: 2px;
+}
+
+/* Icône de recherche petite */
+.leaflet-control-geocoder-icon {
+    background-color: #f2f7f2; /* Couleur de fond de l'icône */
+    border-radius: 100px;
+    width: 25px; /* Taille réduite de l'icône */
+    height: 25px; /* Taille réduite de l'icône */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+    margin-bottom: 1px;
+}
+
+.leaflet-control-geocoder-icon:hover {
+    background-color: #368d36; /* Changement de couleur au survol */
+    transform: scale(1.1); /* Agrandissement de l'icône au survol */
+}
+
+
+
+
 
 
 

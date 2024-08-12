@@ -117,14 +117,6 @@
     cursor: pointer;
   }
   
-  .deco-Carte {
-    background-color: rgb(99, 16, 16);
-  }
-  
-  .anu-Carte {
-    background-color: green;
-  }
-  
   /* Style de la liste principale */
   ul {
     list-style-type: none;

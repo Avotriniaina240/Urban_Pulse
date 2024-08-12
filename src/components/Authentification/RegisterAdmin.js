@@ -9,10 +9,10 @@ const RegisterAdmin = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
-  const [role, setRole] = useState('citizen'); // Par défaut à 'citizen'
+  const [role, setRole] = useState('citizen'); 
   const [error, setError] = useState('');
-  const [success, setSuccess] = useState(''); // État pour le message de succès
-  const [loading, setLoading] = useState(false); // État pour le chargement
+  const [success, setSuccess] = useState(''); 
+  const [loading, setLoading] = useState(false); 
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {

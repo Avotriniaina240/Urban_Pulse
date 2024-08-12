@@ -3,9 +3,9 @@
 /* Styles pour le body et le formulaire */
 .body {
   font-family: Arial, sans-serif;
-  background-size: cover; /* Pour couvrir toute la surface */
+  background-size: cover;
   background-color: #09a711;
-  background-position: center; /* Centrer l'image */
+  background-position: center; 
   display: flex;
   justify-content: center;
   align-items: center;
@@ -57,6 +57,7 @@ button {
   border-radius: 5px;
   transition: background-color 0.3s, box-shadow 0.3s;
   padding-right: 10px; 
+  z-index: 5;
 }
 
 button:disabled {
@@ -70,7 +71,7 @@ select {
 
 /* Styles pour les options désactivées */
 option[disabled] {
-  color: red; /* Couleur rouge pour les options désactivées */
+  color: red;
   cursor: not-allowed; /* Curseur non autorisé */
 }
 
@@ -79,13 +80,6 @@ option[disabled] {
   color: red;
   margin-bottom: 15px;
   text-align: center; /* Centrer le message d'erreur */
-  font-weight: bold;
-}
-
-.success-message {
-  color: green;
-  margin-bottom: 15px;
-  text-align: center; /* Centrer le message de succès */
   font-weight: bold;
 }
 
@@ -111,6 +105,7 @@ option[disabled] {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  z-index: 10;
 }
 
 .spinner {

@@ -1,123 +1,158 @@
+/* Styles globaux pour la page */
 .page-container {
-  font-family: 'Arial, sans-serif';
+  font-family: 'Roboto', Arial, sans-serif;
   color: #333;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  background: linear-gradient(to bottom, #f0f4f8, #e0e5e9);
+}
+
+/* En-tête avec effet d'ombre et de transparence */
+.page-header {
+  background-color: rgba(0, 77, 153, 0.8);
+  color: white;
+  padding: 15px 20px;
+  position: fixed;
+  width: 100%;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  height: 60px;
+  display: flex;
+  justify-content: flex-end; /* Aligne les éléments à droite */
+  align-items: center; /* Centre verticalement les éléments */
+}
+
+.page-header:hover {
+  background-color: rgba(0, 77, 153, 1);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.25);
+}
+
+.page-header-page nav {
+  display: flex;
+  justify-content: flex-end; /* Aligne le contenu du nav à droite */
+  align-items: center;
+  width: 100%; /* Prend toute la largeur disponible */
+  
+}
+
+.login-button {
+  color: white;
+  text-decoration: none;
+  background-color: #007bff;
+  padding: 12px 24px;
+  border-radius: 6px;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  margin-right: 50px;
+}
+
+.login-button:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+/* Section principale avec animation fade-in */
+.page-main {
+  margin-top: 70px;
+  padding: 40px 20px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  background: linear-gradient(to right, #6a11cb, #2575fc);
-  overflow: hidden;
-  animation: backgroundAnimation 10s infinite;
+  align-items: flex-start;
+  animation: fadeIn 1s ease-out;
 }
 
-.page-header {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-}
-
-.page-header nav .login-button {
-  background-color: #fff;
-  color: #6a11cb;
-  padding: 10px 20px;
-  border-radius: 5px;
-  text-decoration: none;
-  transition: background-color 0.3s ease;
-}
-
-.page-header nav .login-button:hover {
-  background-color: #ddd;
-}
-
-.page-main {
-  text-align: center;
-}
-
-.hero-section {
-  animation: fadeIn 1s ease-in-out, borderAnimation 5s infinite;
-  border: 2px solid transparent;
+/* Conteneur du texte */
+.content-container-page {
+  margin-top: 6px;
+  text-align: left;
+  border: 1px solid #ddd;
   padding: 20px;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  height: 600px;
+}
+
+.text-section {
+  margin-bottom: 30px;
 }
 
 .hero-section h1 {
-  font-size: 3rem;
-  margin-bottom: 10px;
-  color: #fff;
+  font-size: 3em;
+  margin: 0;
+  color: #004d99;
+  animation: slideIn 1s ease-out;
 }
 
 .hero-section p {
-  font-size: 1.5rem;
-  margin-bottom: 40px;
-  color: #fff;
+  font-size: 1.5em;
+  color: #555;
+  margin-top: 10px;
+  animation: fadeIn 1.5s ease-out;
 }
 
-.slogans .slogan {
-  font-size: 1.25rem;
-  margin: 10px 0;
-  opacity: 0;
-  animation: fadeInUp 1s ease-in-out forwards;
-  color: #fff;
+/* Section des slogans avec animation de rebond */
+.slogans {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 30px;
+  width: 100%;
 }
 
-.slogans .slogan:nth-child(1) {
-  animation-delay: 0.5s;
+.slogan {
+  background-color: #e6f2ff;
+  border-left: 6px solid #004d99;
+  padding: 15px 25px;
+  border-radius: 8px;
+  font-size: 1.2em;
+  color: #004d99;
+  width: 100%;
+  max-width: 600px;
+  animation: bounceIn 2s ease-out;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.slogans .slogan:nth-child(2) {
-  animation-delay: 1s;
+.slogan:nth-child(even) {
+  background-color: #cce0ff;
 }
 
-.slogans .slogan:nth-child(3) {
-  animation-delay: 1.5s;
-}
-
-.slogans .slogan:nth-child(4) {
-  animation-delay: 2s;
-}
-
+/* Animations */
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(-20px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
   }
 }
 
-@keyframes fadeInUp {
+@keyframes slideIn {
   from {
+    transform: translateY(-20px);
     opacity: 0;
-    transform: translateY(20px);
   }
   to {
-    opacity: 1;
     transform: translateY(0);
+    opacity: 1;
   }
 }
 
-@keyframes backgroundAnimation {
+@keyframes bounceIn {
   0% {
-    background: linear-gradient(to right, #8a56c2, #81b3e6);
+    transform: scale(0.8);
+    opacity: 0;
   }
   50% {
-    background: linear-gradient(to right, #947973, #81b3e6);
+    transform: scale(1.05);
+    opacity: 1;
   }
   100% {
-    background: linear-gradient(to right, #824abe, #42639c);
-  }
-}
-
-@keyframes borderAnimation {
-  0% {
-    border-color: transparent;
-  }
-  50% {
-    border-color: white;
-  }
-  100% {
-    border-color: transparent;
+    transform: scale(1);
+    opacity: 1;
   }
 }

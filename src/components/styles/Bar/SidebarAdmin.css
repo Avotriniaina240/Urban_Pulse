@@ -117,14 +117,6 @@
     cursor: pointer;
   }
   
-  .deco-AD {
-    background-color: rgb(99, 16, 16);
-  }
-  
-  .anu-AD {
-    background-color: green;
-  }
-  
   /* Style de la liste principale */
   ul {
     list-style-type: none;

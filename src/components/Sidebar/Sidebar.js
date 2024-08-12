@@ -5,13 +5,8 @@ import '../styles/Bar/Sidebar.css';
 import RegisterAdmin from '../Authentification/RegisterAdmin'; // Assurez-vous que le chemin est correct
 
 const Sidebar = () => {
-  const [showLogoutForm, setShowLogoutForm] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
   const userMenuRef = useRef(null);
-
-  const handleLogoutClick = () => {
-    setShowLogoutForm(!showLogoutForm);
-  };
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -69,14 +64,7 @@ const Sidebar = () => {
         <li>
           <div className="sidebar-logout">
             <FaSignOutAlt />
-            <span onClick={handleLogoutClick} className="logout-text"><strong>Déconnexion</strong></span>
-            {showLogoutForm && (
-              <div className="logout-form">
-                <p>Êtes-vous sûr de vouloir vous déconnecter ?</p>
-                <button className='deco' onClick={handleLogout}>Déconnexion</button>
-                <button className='anu' onClick={() => setShowLogoutForm(false)}>Annuler</button>
-              </div>
-            )}
+            <span onClick={handleLogout} className="logout-text"><strong>Déconnexion</strong></span>
           </div>
         </li>
       </ul>
