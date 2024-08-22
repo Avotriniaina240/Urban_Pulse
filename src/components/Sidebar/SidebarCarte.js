@@ -13,11 +13,6 @@ const SidebarCarte = () => {
     setShowLogoutForm(!showLogoutForm);
   };
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    window.location.href = '/login';
-  };
-
   const handleUserMenuClick = (event) => {
     event.preventDefault();
     setShowUserMenu(!showUserMenu);
@@ -49,7 +44,7 @@ const SidebarCarte = () => {
       <ul>
         <li><Link to="/vue-ensemble"><FaTachometerAlt /> Vue d'Ensemble</Link></li>
         <li><Link to="/urban-analysis"><FaChartBar /> Analyse des Données Urbaines</Link></li>
-        <li><FaFileAlt /> Rapports et Analyses</li>
+        <li><Link to="/home-reports"><FaFileAlt /> Rapports et Analyses</Link></li>
         <li><FaPlug /> Intégrations Externes</li>
         <li><Link to="/map"><FaMapMarkedAlt /> Cartographie et Géolocalisation</Link></li>
         <li
@@ -61,7 +56,7 @@ const SidebarCarte = () => {
           </a>
           {showUserMenu && (
             <ul className="submenu-Carte">
-              <li><Link to="/register-admin-Carte">Nouveau Utilisateur</Link></li>
+              <li><Link to="/register-admin">Nouveau Utilisateur</Link></li>
               <li><Link to="/gestion-user">Gérer Utilisateur</Link></li>
             </ul>
           )}
@@ -70,13 +65,6 @@ const SidebarCarte = () => {
           <div className="sidebar-logout-Carte">
             <FaSignOutAlt />
             <span onClick={handleLogoutClick} className="logout-text-Carte"><strong>Déconnexion</strong></span>
-            {showLogoutForm && (
-              <div className="logout-form-Carte">
-                <p>Êtes-vous sûr de vouloir vous déconnecter ?</p>
-                <button className='deco-Carte' onClick={handleLogout}>Déconnexion</button>
-                <button className='anu-Carte' onClick={() => setShowLogoutForm(false)}>Annuler</button>
-              </div>
-            )}
           </div>
         </li>
       </ul>

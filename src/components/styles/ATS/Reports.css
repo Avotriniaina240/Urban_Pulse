@@ -1,0 +1,71 @@
+.report-form-wrapper {
+  padding: 20px;
+  border: 2px solid #a9c8e9; /* Deuxième bordure */
+  border-radius: 12px;
+  background-color: #ffffff;
+  box-shadow: 0px 10px 35px rgba(0, 0, 0, 0.15);
+  margin: 30px auto; /* Centrer et espacer le conteneur */
+  max-width: 550px; /* Limite la largeur du conteneur */
+}
+
+.report-form {
+  display: flex;
+  flex-direction: column;
+  max-width: 350px;
+  margin: auto;
+  padding: 40px;
+  border: 2px solid #a9c8e9;
+  border-radius: 10px;
+  background-color: #f6f7fa;
+  box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.1);
+  margin-top: -420px;
+  margin-right: 350px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: fadeInBorder 1.2s ease-in-out;
+}
+
+.report-form:hover {
+  transform: translateY(-10px); /* Légère élévation au survol */
+  box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.2); /* Ombre plus marquée */
+}
+
+.report-form textarea,
+.report-form input {
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.report-form button {
+  padding: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.report-form button:hover {
+  background-color: #0056b3;
+  box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.2);
+  transform: translateY(-5px); /* Effet de levée au survol */
+}
+
+.report-form button:active {
+  transform: translateY(2px); /* Effet de clic */
+}
+
+/* Animation pour l'apparition de la bordure */
+@keyframes fadeInBorder {
+  from {
+      opacity: 0;
+      transform: scale(0.9);
+  }
+  to {
+      opacity: 1;
+      transform: scale(1);
+  }
+}

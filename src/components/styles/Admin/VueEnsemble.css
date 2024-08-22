@@ -1,95 +1,232 @@
 /* Style général pour le tableau de bord */
 .vue {
-    background-image: url('C:\Users\CHRIS-06\Desktop\Projet_Urban_pulse\Front_Urban_pulse\projet_frontend\public\image\blanc.jpg');
-    background-size: cover; /* Assurez-vous que l'image couvre toute la zone */
-    background-position: center; /* Centrer l'image d'arrière-plan */
-    height: 100vh; /* Assure que le tableau de bord occupe toute la hauteur de la fenêtre */
-    margin: 0; /* Évitez les marges supplémentaires autour du tableau de bord */
-  }
-  
-  /* Conteneur principal du tableau de bord */
-  .dashboard {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  /* Conteneur principal avec la sidebar et le contenu */
-  .main-content {
-    display: flex;
-    margin-top: 67px; /* Hauteur de la navbar */
-  }
-  
-  /* Contenu principal, espace pour la sidebar */
-  .content {
-    flex-grow: 1;
-    padding: 20px;
-    margin-left: 250px; /* Largeur de la sidebar */
-    margin-top: 60px; /* Hauteur de la navbar */
-    overflow: auto; /* Permet le défilement si le contenu dépasse */
-    margin-top: 1px;
-  }
-  
-  /* Styles pour le titre */
-  .h1 {
-    background-color: #d7dce6;
-    padding: 10px;
-    border-radius: 5px;
-    margin-left: 1px; 
-    margin-right: 20px;
-    margin-top: 15px;
-  }
-  
-  /* Vue d'ensemble des statistiques */
-  .stats-overview {
-    background-color: #f4f4f4;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
-    margin-left: 1px; 
-    margin-right: 20px;
-    font-family: Arial, sans-serif;
-  }
-  
-  /* Style pour les titres dans la vue d'ensemble */
-  .stats-overview h2 {
-    margin-top: 0;
-    color: #333;
-  }
-  
-  /* Style pour les paragraphes dans la vue d'ensemble */
-  .stats-overview p {
-    margin: 5px 0;
-    font-size: 16px;
-  }
-  
-  /* Conteneur du graphique */
-  .chart-container {
-    background-color: #ffffff;
-    padding: 10px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-bottom: 10px;
-    margin-left: 1px; 
-    margin-right: 20px;
-  }
-  
-  /* Style pour le titre du graphique */
-  .chart-container h2 {
-    margin-top: 0;
-    color: #333;
-  }
-  
-  /* Ajustement pour le graphique */
-  .chart-container canvas {
-    max-width: 100%;
-    max-height: 250px;
-    
-  }
-  
-  /* Style pour les messages d'erreur */
-  .error-message {
-    color: red;
-    margin-top: 10px;
-  }
-  
+  background-size: cover; /* Assurez-vous que l'image couvre toute la zone */
+  background-position: center; /* Centrer l'image d'arrière-plan */
+  height: 100vh; /* Assure que le tableau de bord occupe toute la hauteur de la fenêtre */
+  margin: 0; /* Évitez les marges supplémentaires autour du tableau de bord */
+  opacity: 0;
+  animation: fadeIn 1s forwards;
+}
+
+/* Animation de fondu en entrée */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Conteneur principal du tableau de bord */
+.dashboard {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Conteneur principal avec la sidebar et le contenu */
+.main-content {
+  display: flex;
+  margin-top: 67px; /* Hauteur de la navbar */
+}
+
+/* Contenu principal, espace pour la sidebar */
+.content {
+  flex-grow: 1;
+  padding: 20px;
+  margin-left: 250px; /* Largeur de la sidebar */
+  overflow: auto; /* Permet le défilement si le contenu dépasse */
+  animation: slideIn 0.5s ease-out forwards;
+}
+
+/* Animation de slide pour le contenu principal */
+@keyframes slideIn {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+/* Styles pour le titre */
+.h1 {
+  background: linear-gradient(90deg, #d7dce6, #f0f4f8);
+  color: #333;
+  padding: 10px;
+  border-radius: 5px;
+  margin-left: 2px;
+  margin-right: 10px;
+  margin-top: 15px;
+  animation: bounceIn 0.6s ease-out forwards;
+}
+
+/* Animation d'apparition avec rebond pour le titre */
+@keyframes bounceIn {
+  0% { transform: scale(0.5); opacity: 0; }
+  60% { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(1); }
+}
+
+/* Vue d'ensemble des statistiques */
+.stats-overview {
+  display: flex;
+  gap: 20px; /* Espace entre les colonnes */
+  margin-bottom: 20px;
+  margin-left: 2px;
+  margin-right: 10px;
+  font-family: Arial, sans-serif;
+  opacity: 0;
+  animation: fadeInUp 1s forwards, bounceInStats 1s forwards;
+  animation-delay: 0.3s, 0.8s; /* Différer l'animation de rebond pour plus d'effet */
+}
+
+/* Style pour chaque colonne dans la vue d'ensemble */
+.stats-column {
+  flex: 1; /* Prend une largeur égale */
+  background-color: #f4f4f4;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Style pour le graphique de pourcentage */
+.percentage-chart {
+  position: relative;
+  width: 175px;
+  height: 95px;
+  margin: 0 auto;
+}
+
+.percentage-chart canvas {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+/* Style pour le texte central du graphique de pourcentage */
+.percentage-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 18px;
+  color: #333;
+  font-weight: bold;
+}
+
+/* Animation de fondu et montée pour les colonnes de statistiques */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Animation de rebond pour les chiffres dans les statistiques */
+@keyframes bounceInStats {
+  0% { transform: scale(0.5); opacity: 0; }
+  60% { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(1); }
+}
+
+/* Style pour les titres dans les colonnes */
+.stats-column h2 {
+  margin-top: 0;
+  color: #333;
+}
+
+/* Style pour les paragraphes dans les colonnes */
+.stats-column p {
+  margin: 5px 0;
+  font-size: 16px;
+}
+
+/* Conteneur du graphique */
+.chart-container {
+  background-color: #ffffff;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  margin-bottom: 10px;
+  margin-left: 1px;
+  margin-right: 20px;
+  opacity: 0;
+  animation: zoomIn 1s forwards;
+  animation-delay: 0.6s;
+}
+
+/* Animation d'apparition avec zoom pour le graphique */
+@keyframes zoomIn {
+  from { opacity: 0; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Style pour le titre du graphique */
+.chart-container h2 {
+  margin-top: 0;
+  color: #333;
+}
+
+/* Ajustement pour le graphique */
+.chart-container canvas {
+  max-width: 100%;
+  max-height: 250px;
+}
+
+/* Style pour les messages d'erreur */
+.error-message {
+  color: red;
+  margin-top: 10px;
+  opacity: 0;
+  animation: fadeIn 0.5s forwards, shake 0.5s forwards;
+  animation-delay: 0.8s, 1s;
+}
+
+/* Animation de secousse pour les messages d'erreur */
+@keyframes shake {
+  0% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  50% { transform: translateX(0); }
+  75% { transform: translateX(5px); }
+  100% { transform: translateX(0); }
+}
+
+/* Animation de glissement pour les éléments de tableau */
+@keyframes slideInFromBottom {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.table-element {
+  opacity: 0;
+  animation: slideInFromBottom 0.6s forwards;
+  animation-delay: 1.2s;
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.table-element:hover {
+  transform: scale(1.03);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Effets de survol pour les boutons */
+.button {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.3s;
+}
+
+.button:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+/* Effet de focus pour les champs de formulaire */
+input:focus, textarea:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+/* Effet de focus pour les boutons */
+.button:focus {
+  outline: none;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+}

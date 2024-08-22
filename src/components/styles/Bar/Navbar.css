@@ -1,3 +1,4 @@
+/* Style général pour la navbar */
 .navbar {
   background-color: #81b3e6;
   color: white;
@@ -14,44 +15,58 @@
   height: 45px;
 }
 
+/* Style pour le logo */
 .navbar-logo {
-  margin-top: -1px;
+  display: flex;
+  align-items: center;
+  margin-right: auto; /* Espace entre le logo et la barre de recherche */
 }
 
-.navbar h1 {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  font-size: 25px;
+.logo-letter {
+  font-size: 1.5rem; /* Taille de la lettre du logo */
   font-weight: bold;
+  color: #f39c12;
+  margin-right: 8px;
+  animation: pulse 1.5s infinite ease-in-out; /* Animation infinie de pulsation */
 }
 
-.navbar-search {
-  margin-right: auto;
-  margin-left: 20px; /* Facultatif : ajoute un espace entre le logo et la barre de recherche */
+.logo-text {
+  font-size: 1.2rem; /* Taille du texte du logo */
+  font-weight: 600;
+  color: white;
+  background: linear-gradient(45deg, #301e08, #72369b, #340d7c, #1e90ff);
+  background-size: 400% 400%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: gradientAnimation 5s ease infinite; /* Animation infinie du dégradé */
 }
 
-.navbar-search input {
-  padding: 6px;
-  font-size: 15px;
-  border: none;
-  border-radius: 8px;
-  max-width: 200px;
-  margin-bottom: 3px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  transition: box-shadow 0.3s ease, transform 0.3s ease;
+/* Animation de pulsation pour la lettre du logo */
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 0.8;
+  }
 }
 
-.navbar-search input:focus {
-  outline: none;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  transform: scale(1.05);
+/* Animation de dégradé en mouvement pour le texte du logo */
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 0%;
+  }
+  50% {
+    background-position: 100% 100%;
+  }
+  100% {
+    background-position: 0% 0%;
+  }
 }
 
-.navbar-search input::placeholder {
-  color: #999;
-  opacity: 1;
-}
-
+/* Styles pour les liens de la navbar */
 .navbar-links {
   display: flex;
   align-items: center;

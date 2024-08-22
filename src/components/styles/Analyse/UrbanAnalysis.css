@@ -1,19 +1,217 @@
-/* src/components/UrbanAnalysis.css */
+/* Conteneur principal pour toute la page */
+.page-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
 
-.analysis-container {
-    padding: 20px;
-    background-color: #ffffff;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
-  
+/* Conteneur principal du contenu */
+.main-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* En-tête */
+header {
+  width: 100%;
+}
+
+/* Contenu principal */
+.content {
+  flex: 1;
+  margin-left: 250px; /* Largeur de la sidebar */
+  padding: 20px;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Section pour les graphiques */
+.chart-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 97%;
+}
+
+/* Éléments de graphique */
+.chart-item {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 15px; /* Réduit le padding */
+  transition: transform 0.3s ease-in-out;
+  height: 545px;
+}
+
+.chart-item:hover {
+  transform: scale(1.02); /* Zoom léger au survol */
+}
+
+/* Section pour la carte et la description */
+.map-section-View {
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* Espace entre les éléments */
+  margin-top: auto; /* Pousse cette section vers le bas */
+}
+
+/* Section pour la description */
+.description-container {
+  width: 98%; /* Prend toute la largeur disponible */
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-top: 5px;
+  height: 109px;
+  margin-left: 0;
+}
+
+.description-container1 {
+  width: 98%; /* Prend toute la largeur disponible */
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-top: -27px;
+  height: 224px;
+  margin-left: -6px;
+}
+/* Texte de description */
+.description-text {
+  font-size: 14px;
+  color: #555;
+}
+
+.aff {
+  display: grid; /* Utiliser le grid layout */
+  grid-template-columns: repeat(3, 1fr); /* Créer trois colonnes de taille égale */
+  gap: 20px; /* Espacement entre les colonnes */
+  background-color: #f4f4f4;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-top: 30px;
+  margin-left: 1px; 
+  margin-right: 1px;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  font-weight: bold; 
+  opacity: 0; /* Commence caché pour l'animation */
+  animation: fadeIn 1s forwards; /* Animation d'apparition */
+}
+
+/* Titre pour la description */
+.urb-h1 {
+  background: linear-gradient(90deg, #d7dce6, #f0f4f8);
+  color: #333;
+  padding: 10px;
+  border-radius: 5px;
+  margin: 15px 0; /* Marge au-dessus et en-dessous */
+  animation: bounceIn 0.6s ease-out forwards;
+  width: 97%;
+}
+
+/* Animation d'apparition avec rebond */
+@keyframes bounceIn {
+  0% { transform: scale(0.5); opacity: 0; }
+  60% { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(1); }
+}
+
+/* Ajustement pour les graphiques en écran large */
+@media (min-width: 768px) {
   .chart-container {
-    margin-top: 20px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 20px;
   }
-  
-  h2 {
-    font-size: 24px;
-    color: #333;
-    margin-bottom: 20px;
+
+  .chart-item {
+    flex: 1;
+    min-width: 250px; /* Largeur minimale */
   }
-  
+}
+
+/* Styles spécifiques pour le graphique */
+.bar {
+  transition: fill 0.3s ease, transform 0.3s ease; /* Animation de couleur et transformation */
+}
+
+.bar:hover {
+  fill: orange; /* Couleur au survol */
+  transform: scale(1.05); /* Zoom léger au survol */
+}
+
+/* Styles pour la légende du graphique */
+.legend-container {
+  background: #f9f9f9;
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  width: 214px; /* Largeur maximale */
+  height: 192px;
+}
+
+.legend-title {
+  font-size: 1.2rem;
+  color: #333;
+  margin-bottom: 10px;
+  margin-top: 1px;
+}
+
+.legend-list {
+  list-style: none;
+  padding: 0;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.legend-color {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  display: inline-block;
+  margin-right: 8px;
+}
+
+.legend-abbreviation {
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.legend-description {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.description-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.description-color {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  margin-right: 10px;
+}
+
+.description-text {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.leaflet-container.leaflet-touch-zoom {
+  margin-left: -270px;
+  touch-action: pan-x pan-y;
+}

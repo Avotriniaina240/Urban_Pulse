@@ -1,39 +1,49 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { Line } from 'react-chartjs-2';
+import { Line, Doughnut } from 'react-chartjs-2';
 import Navbar from '../Navbar/Navbar';
 import Sidebar from '../Sidebar/Sidebar';
 import '../styles/Admin/VueEnsemble.css';
-import { Chart as ChartJS, CategoryScale, LinearScale, LineElement, PointElement, Title, Tooltip, Legend, Filler } from 'chart.js';
+import { Chart as ChartJS, CategoryScale, LinearScale, LineElement, PointElement, Title, Tooltip, Legend, Filler, ArcElement } from 'chart.js';
 
-ChartJS.register(CategoryScale, LinearScale, LineElement, PointElement, Title, Tooltip, Legend, Filler);
+ChartJS.register(CategoryScale, LinearScale, LineElement, PointElement, Title, Tooltip, Legend, Filler, ArcElement);
 
 const VueEnsemble = () => {
   const [stats, setStats] = useState({ newUsers: 0, totalUsers: 0 });
   const [monthlyStats, setMonthlyStats] = useState([]);
   const [error, setError] = useState('');
 
+  // Simuler des données fictives
   useEffect(() => {
-    async function fetchData() {
+    const fetchData = () => {
       try {
-        const statsResponse = await axios.get('http://localhost:5000/admin/stats', {
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}` // Assurez-vous que le token est correctement stocké
-          }
-        });
-        setStats(statsResponse.data);
+        // Données fictives pour les statistiques générales
+        const statsResponse = {
+          newUsers: 35,
+          totalUsers: 4500,
+        };
+        setStats(statsResponse);
 
-        const monthlyResponse = await axios.get('http://localhost:5000/admin/monthly-stats', {
-          headers: {
-            'Authorization': `Bearer ${localStorage.getItem('token')}` // Assurez-vous que le token est correctement stocké
-          }
-        });
-        setMonthlyStats(monthlyResponse.data);
+        // Données fictives pour les statistiques mensuelles
+        const monthlyResponse = [
+          { month: 'Janvier', userCount: 300 },
+          { month: 'Février', userCount: 250 },
+          { month: 'Mars', userCount: 400 },
+          { month: 'Avril', userCount: 350 },
+          { month: 'Mai', userCount: 500 },
+          { month: 'Juin', userCount: 600 },
+          { month: 'Juillet', userCount: 550 },
+          { month: 'Août', userCount: 700 },
+          { month: 'Septembre', userCount: 650 },
+          { month: 'Octobre', userCount: 750 },
+          { month: 'Novembre', userCount: 800 },
+          { month: 'Décembre', userCount: 900 },
+        ];
+        setMonthlyStats(monthlyResponse);
       } catch (err) {
         setError('Erreur lors de la récupération des données.');
         console.error(err);
       }
-    }
+    };
 
     fetchData();
   }, []);
@@ -51,6 +61,17 @@ const VueEnsemble = () => {
     ],
   };
 
+  const percentageData = {
+    labels: ['Nouveaux Utilisateurs', 'Autres'],
+    datasets: [
+      {
+        label: 'Répartition des Utilisateurs',
+        data: [stats.newUsers, stats.totalUsers - stats.newUsers],
+        backgroundColor: ['#4caf50', '#e6e6e6'],
+      },
+    ],
+  };
+
   return (
     <div className="vue">
       <Navbar />
@@ -60,9 +81,25 @@ const VueEnsemble = () => {
           <h1 className='h1'>Tableau de Bord Administrateur</h1>
           
           <div className="stats-overview">
-            <h2>Vue d'ensemble</h2>
-            <p><strong>Utilisateurs Totaux :</strong> {stats.totalUsers}</p>
-            <p><strong>Nouveaux Utilisateurs ce Mois :</strong> {stats.newUsers}</p>
+            <div className="stats-column">
+              <div className="percentage-chart">
+                <Doughnut data={percentageData} options={{ maintainAspectRatio: false }} />
+                <div className="percentage-text">{stats.newUsers}</div>
+              </div>
+            </div>
+
+            <div className="stats-column">
+              <div className="percentage-chart">
+                <Doughnut data={{
+                  labels: ['Total Utilisateurs'],
+                  datasets: [{
+                    data: [stats.totalUsers],
+                    backgroundColor: ['#2196f3'],
+                  }],
+                }} options={{ maintainAspectRatio: false }} />
+                <div className="percentage-text">{stats.totalUsers}</div>
+              </div>
+            </div>
           </div>
 
           <div className="chart-container">

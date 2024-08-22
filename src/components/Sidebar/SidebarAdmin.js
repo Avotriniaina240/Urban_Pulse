@@ -44,7 +44,7 @@ const SidebarAdmin = () => {
       <ul>
         <li><Link to="/vue-ensemble"><FaTachometerAlt /> Vue d'Ensemble</Link></li>
         <li><Link to="/urban-analysis"><FaChartBar /> Analyse des Données Urbaines</Link></li>
-        <li><FaFileAlt /> Rapports et Analyses</li>
+        <li><Link to="/home-reports"><FaFileAlt /> Rapports et Analyses</Link></li>
         <li><FaPlug /> Intégrations Externes</li>
         <li><Link to="/map"><FaMapMarkedAlt /> Cartographie et Géolocalisation</Link></li>
         <li

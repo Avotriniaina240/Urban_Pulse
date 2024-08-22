@@ -14,6 +14,9 @@ import UrbanAnalysis from './components/Analyse/UrbanAnalysis';
 import Map from './components/Analyse/Map';
 import ForgotPassword from './components/Authentification/ForgotPassword'; // Importez le composant ForgotPassword
 import ResetPassword from './components/Authentification/ResetPassword'; // Importez le composant ResetPassword
+import HomeReports from './components/Autres/HomeReports';
+import Reports from './components/Autres/Reports';
+import ReportsListe from './components/Autres/ReportsListe';
 
 
 const App = () => {
@@ -34,6 +37,9 @@ const App = () => {
         <Route path="/map/*" element={<Map />} />
         <Route path="/forgot-password" element={<ForgotPassword />} /> {/* Ajoutez la route ForgotPassword */}
         <Route path="/reset-password/:token" element={<ResetPassword />} /> {/* Ajoutez la route ResetPassword */}
+        <Route path="/home-reports/*" element={<HomeReports />} />
+        <Route path="/reports-liste/*" element={<ReportsListe />} />
+        <Route path="/reports/*" element={<Reports />} />
       </Routes>
     </Router>
   );

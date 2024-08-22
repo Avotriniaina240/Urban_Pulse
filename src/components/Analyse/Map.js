@@ -4,22 +4,21 @@ import Sidebar from '../Sidebar/SidebarCarte';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css';
-import 'leaflet.markercluster';
 import 'leaflet-draw/dist/leaflet.draw.css';
 import 'leaflet-control-geocoder/dist/Control.Geocoder.css';
-import 'leaflet-control-geocoder';
+import 'leaflet.awesome-markers/dist/leaflet.awesome-markers.css';
 import 'leaflet-draw';
+import 'leaflet-control-geocoder';
 import '../styles/Analyse/Map.css';
 import axios from 'axios';
 import { FaSync, FaEdit } from 'react-icons/fa';
 
 const Map = () => {
     const [airQualityData, setAirQualityData] = useState([]);
-    const [trafficData, setTrafficData] = useState([]);
-    const [drawingMode, setDrawingMode] = useState(false);
     const [map, setMap] = useState(null);
+    const [drawingMode, setDrawingMode] = useState(false);
     const [drawnItems, setDrawnItems] = useState(null);
-    const [selectedRole, setSelectedRole] = useState('pollution'); // Rôle sélectionné (pollution, météo, ou trafic)
+    const [selectedRole, setSelectedRole] = useState('pollution'); // Rôle sélectionné (pollution ou météo)
     const apiKey = '13c8b873a51de1239ad5606887a1565e';
 
     const fetchAirQualityData = useCallback(async (lat, lon) => {
@@ -51,16 +50,6 @@ const Map = () => {
         }
     }, [apiKey]);
 
-    const fetchTrafficData = useCallback(async (lat, lon) => {
-        try {
-            const response = await axios.get(`https://api.example.com/traffic?lat=${lat}&lon=${lon}&apikey=${apiKey}`);
-            return response.data.traffic || []; // Assurez-vous de modifier cela en fonction de la structure de la réponse
-        } catch (error) {
-            console.error('Erreur lors de la récupération des données de trafic:', error);
-            return [];
-        }
-    }, [apiKey]);
-
     const fetchAllData = useCallback(async () => {
         const zones = [
             { lat: -21.4545, lon: 47.0833 },
@@ -74,16 +63,14 @@ const Map = () => {
                 zones.map(async (zone) => {
                     const airQuality = await fetchAirQualityData(zone.lat, zone.lon);
                     const weather = await fetchWeatherData(zone.lat, zone.lon);
-                    const traffic = await fetchTrafficData(zone.lat, zone.lon);
-                    return { airQuality, weather, traffic, lat: zone.lat, lon: zone.lon };
+                    return { airQuality, weather, lat: zone.lat, lon: zone.lon };
                 })
             );
             setAirQualityData(allData.flatMap(data => data.airQuality));
-            setTrafficData(allData.flatMap(data => data.traffic));
         } catch (error) {
             console.error('Erreur lors de la récupération des données pour toutes les zones:', error);
         }
-    }, [fetchAirQualityData, fetchWeatherData, fetchTrafficData]);
+    }, [fetchAirQualityData, fetchWeatherData]);
 
     useEffect(() => {
         const mapContainer = document.getElementById('map');
@@ -95,101 +82,61 @@ const Map = () => {
                 attribution: '© OpenStreetMap contributors'
             }).addTo(mapInstance);
 
-            const markers = L.markerClusterGroup();
-            
             const updateMarkers = () => {
-                markers.clearLayers();
-
                 airQualityData.forEach(loc => {
-                    if (loc.components) {
-                        const marker = L.circleMarker([loc.lat, loc.lng], {
-                            color: getColor(loc.air_quality),
-                            radius: 8,
-                            fillOpacity: 0.7,
-                            weight: 2
-                        });
-
-                        marker.on('click', async () => {
-                            let popupContent = '';
-                            if (selectedRole === 'pollution') {
-                                popupContent = `
-                                    <div>
-                                        <b>Qualité de l'air : Zone ${loc.air_quality}</b><br>
-                                        <strong>Composants:</strong><br>
-                                        CO : ${loc.components.co || 'N/A'} µg/m³<br>
-                                        NO2 : ${loc.components.no2 || 'N/A'} µg/m³<br>
-                                        O3 : ${loc.components.o3 || 'N/A'} µg/m³<br>
-                                        PM2.5 : ${loc.components.pm2_5 || 'N/A'} µg/m³<br>
-                                        PM10 : ${loc.components.pm10 || 'N/A'} µg/m³<br>
-                                    </div>
-                                `;
-                            } else if (selectedRole === 'meteo') {
-                                const weatherData = await fetchWeatherData(loc.lat, loc.lng);
-                                popupContent = `
-                                    <div style="font-size: 14px;">
-                                        <b>Météo :</b><br>
-                                        Température : ${weatherData ? weatherData.temperature : 'N/A'} °C<br>
-                                        Humidité : ${weatherData ? weatherData.humidity : 'N/A'}%<br>
-                                        Description : ${weatherData ? weatherData.weather : 'N/A'}<br>
-                                    </div>
-                                `;
-                            } else if (selectedRole === 'traffic') {
-                                const traffic = await fetchTrafficData(loc.lat, loc.lng);
-                                popupContent = `
-                                    <div style="font-size: 14px;">
-                                        <b>Trafic:</b><br>
-                                        ${traffic.length > 0 
-                                            ? traffic.map(t => `<div>${t.description || 'Pas de description'}: ${t.severity || 'Inconnu'}</div>`).join('<br>')
-                                            : 'Aucune donnée de trafic disponible'}
-                                    </div>
-                                `;
-                            }
-                            marker.bindPopup(popupContent).openPopup();
-                        });
-
-                        markers.addLayer(marker);
-                    } else {
-                        console.warn('Composants non trouvés pour', loc);
-                    }
-                });
-
-                trafficData.forEach(loc => {
-                    const marker = L.circleMarker([loc.lat, loc.lng], {
-                        color: 'blue',
-                        radius: 8,
-                        fillOpacity: 0.7,
-                        weight: 2
+                    const icon = L.AwesomeMarkers.icon({
+                        icon: selectedRole === 'pollution' ? 'cloud' : 'sun',
+                        markerColor: getColor(loc.air_quality),
+                        prefix: 'fa',
+                        iconColor: 'red'
                     });
 
-                    marker.bindPopup(`
-                        <div style="font-size: 14px;">
-                            <b>Trafic:</b><br>
-                            Description: ${loc.description || 'N/A'}<br>
-                            Gravité: ${loc.severity || 'N/A'}
-                        </div>
-                    `);
+                    const marker = L.marker([loc.lat, loc.lng], { icon }).addTo(mapInstance);
 
-                    markers.addLayer(marker);
+                    marker.on('click', async () => {
+                        let popupContent = '';
+                        if (selectedRole === 'pollution') {
+                            popupContent = `
+                                <div>
+                                    <b>Qualité de l'air : Zone ${loc.air_quality}</b><br>
+                                    <strong>Composants:</strong><br>
+                                    CO : ${loc.components.co || 'N/A'} µg/m³<br>
+                                    NO2 : ${loc.components.no2 || 'N/A'} µg/m³<br>
+                                    O3 : ${loc.components.o3 || 'N/A'} µg/m³<br>
+                                    PM2.5 : ${loc.components.pm2_5 || 'N/A'} µg/m³<br>
+                                    PM10 : ${loc.components.pm10 || 'N/A'} µg/m³<br>
+                                </div>
+                            `;
+                        } else if (selectedRole === 'meteo') {
+                            const weatherData = await fetchWeatherData(loc.lat, loc.lng);
+                            popupContent = `
+                                <div style="font-size: 14px;">
+                                    <b>Météo :</b><br>
+                                    Température : ${weatherData ? weatherData.temperature : 'N/A'} °C<br>
+                                    Humidité : ${weatherData ? weatherData.humidity : 'N/A'}%<br>
+                                    Description : ${weatherData ? weatherData.weather : 'N/A'}<br>
+                                </div>
+                            `;
+                        }
+                        marker.bindPopup(popupContent).openPopup();
+                    });
                 });
-
-                mapInstance.addLayer(markers);
             };
 
-            updateMarkers(); // Appeler updateMarkers pour initialiser les marqueurs
+            updateMarkers(); // Initialiser les marqueurs
 
-            // Ajouter la barre de recherche
-                const geocoder = L.Control.geocoder({
-                    defaultMarkGeocode: false
-                }).on('markgeocode', function(e) {
-                    const bbox = e.geocode.bbox;
-                    const poly = L.polygon([
-                        [bbox.getSouthEast().lat, bbox.getSouthEast().lng],
-                        [bbox.getNorthEast().lat, bbox.getNorthEast().lng],
-                        [bbox.getNorthWest().lat, bbox.getNorthWest().lng],
-                        [bbox.getSouthWest().lat, bbox.getSouthWest().lng]
-                    ]).addTo(mapInstance);
-                    mapInstance.fitBounds(poly.getBounds());
-                }).addTo(mapInstance);
+            const geocoder = L.Control.geocoder({
+                defaultMarkGeocode: false
+            }).on('markgeocode', function (e) {
+                const bbox = e.geocode.bbox;
+                const poly = L.polygon([
+                    [bbox.getSouthEast().lat, bbox.getSouthEast().lng],
+                    [bbox.getNorthEast().lat, bbox.getNorthEast().lng],
+                    [bbox.getNorthWest().lat, bbox.getNorthWest().lng],
+                    [bbox.getSouthWest().lat, bbox.getSouthWest().lng]
+                ]).addTo(mapInstance);
+                mapInstance.fitBounds(poly.getBounds());
+            }).addTo(mapInstance);
 
             const drawnItemsLayer = L.featureGroup().addTo(mapInstance);
             setDrawnItems(drawnItemsLayer);
@@ -197,10 +144,11 @@ const Map = () => {
             if (drawingMode) {
                 const drawControl = new L.Control.Draw({
                     draw: {
-                        polygon: true,
+                        polygon: false,
                         polyline: false,
                         rectangle: false,
                         circle: false,
+                        circlemarker: false,
                         marker: true
                     },
                     edit: {
@@ -209,50 +157,37 @@ const Map = () => {
                     }
                 }).addTo(mapInstance);
 
-                mapInstance.on(L.Draw.Event.CREATED, (event) => {
+                mapInstance.on(L.Draw.Event.CREATED, async (event) => {
                     const layer = event.layer;
                     drawnItemsLayer.addLayer(layer);
                     if (layer instanceof L.Marker) {
                         const { lat, lng } = layer.getLatLng();
-                        fetchAirQualityData(lat, lng).then(data => {
-                            fetchWeatherData(lat, lng).then(weatherData => {
-                                fetchTrafficData(lat, lng).then(traffic => {
-                                    let popupContent = '';
-                                    if (selectedRole === 'pollution') {
-                                        popupContent = `
-                                            <div style="font-size: 14px;">
-                                                <b>Qualité de l'air: Zone ${data[0]?.air_quality || 'N/A'}</b><br>
-                                                <strong>Composants:</strong><br>
-                                                CO: ${data[0]?.components.co || 'N/A'} µg/m³<br>
-                                                NO2: ${data[0]?.components.no2 || 'N/A'} µg/m³<br>
-                                                O3: ${data[0]?.components.o3 || 'N/A'} µg/m³<br>
-                                                PM2.5: ${data[0]?.components.pm2_5 || 'N/A'} µg/m³<br>
-                                                PM10: ${data[0]?.components.pm10 || 'N/A'} µg/m³<br>
-                                            </div>
-                                        `;
-                                    } else if (selectedRole === 'meteo') {
-                                        popupContent = `
-                                            <div style="font-size: 14px;">
-                                                <b>Météo:</b><br>
-                                                Température: ${weatherData ? weatherData.temperature : 'N/A'} °C<br>
-                                                Humidité: ${weatherData ? weatherData.humidity : 'N/A'}%<br>
-                                                Description: ${weatherData ? weatherData.weather : 'N/A'}<br>
-                                            </div>
-                                        `;
-                                    } else if (selectedRole === 'traffic') {
-                                        popupContent = `
-                                            <div style="font-size: 14px;">
-                                                <b>Trafic:</b><br>
-                                                ${traffic.length > 0 
-                                                    ? traffic.map(t => `<div>${t.description || 'Pas de description'}: ${t.severity || 'Inconnu'}</div>`).join('<br>')
-                                                    : 'Aucune donnée de trafic disponible'}
-                                            </div>
-                                        `;
-                                    }
-                                    layer.bindPopup(popupContent).openPopup();
-                                });
-                            });
-                        });
+                        const airQuality = await fetchAirQualityData(lat, lng);
+                        const weatherData = await fetchWeatherData(lat, lng);
+                        let popupContent = '';
+                        if (selectedRole === 'pollution') {
+                            popupContent = `
+                                <div style="font-size: 14px;">
+                                    <b>Qualité de l'air: Zone ${airQuality[0]?.air_quality || 'N/A'}</b><br>
+                                    <strong>Composants:</strong><br>
+                                    CO: ${airQuality[0]?.components.co || 'N/A'} µg/m³<br>
+                                    NO2: ${airQuality[0]?.components.no2 || 'N/A'} µg/m³<br>
+                                    O3: ${airQuality[0]?.components.o3 || 'N/A'} µg/m³<br>
+                                    PM2.5: ${airQuality[0]?.components.pm2_5 || 'N/A'} µg/m³<br>
+                                    PM10: ${airQuality[0]?.components.pm10 || 'N/A'} µg/m³<br>
+                                </div>
+                            `;
+                        } else if (selectedRole === 'meteo') {
+                            popupContent = `
+                                <div style="font-size: 14px;">
+                                    <b>Météo:</b><br>
+                                    Température: ${weatherData ? weatherData.temperature : 'N/A'} °C<br>
+                                    Humidité: ${weatherData ? weatherData.humidity : 'N/A'}%<br>
+                                    Description: ${weatherData ? weatherData.weather : 'N/A'}<br>
+                                </div>
+                            `;
+                        }
+                        layer.bindPopup(popupContent).openPopup();
                     }
                 });
             }
@@ -274,10 +209,6 @@ const Map = () => {
                     div.innerHTML += '<i style="background:blue"></i> Température<br>';
                     div.innerHTML += '<i style="background:grey"></i> Humidité<br>';
                     div.innerHTML += '<i style="background:orange"></i> Description<br>';
-                } else if (selectedRole === 'traffic') {
-                    div.innerHTML = '<strong>Trafic</strong><br>';
-                    div.innerHTML += '<i style="background:blue"></i> Description<br>';
-                    div.innerHTML += '<i style="background:red"></i> Gravité<br>';
                 }
                 return div;
             };
@@ -285,8 +216,6 @@ const Map = () => {
             legend.addTo(mapInstance);
 
             setMap(mapInstance);
-        } else {
-             // Mettre à jour les marqueurs si la carte existe déjà
         }
 
         return () => {
@@ -294,7 +223,17 @@ const Map = () => {
                 mapInstance.remove();
             }
         };
-    }, [airQualityData, trafficData, drawingMode, fetchAirQualityData, fetchWeatherData, fetchTrafficData, selectedRole]);
+    }, [airQualityData, drawingMode, fetchAirQualityData, fetchWeatherData, selectedRole]);
+
+    const getColor = (aqi) => {
+        switch (aqi) {
+            case 1: return 'green';
+            case 2: return 'yellow';
+            case 3: return 'orange';
+            case 4: return 'red';
+            default: return 'grey';
+        }
+    };
 
     return (
         <div className="map-container">
@@ -310,13 +249,12 @@ const Map = () => {
                     >
                         <option value="pollution">Qualité de l'air</option>
                         <option value="meteo">Météo</option>
-                        <option value="traffic">Trafic</option>
                     </select>
                     <button onClick={fetchAllData} className="refresh-button">
                         <FaSync /> Données
                     </button>
-                    <button  
-                        onClick={() => setDrawingMode(!drawingMode)} 
+                    <button
+                        onClick={() => setDrawingMode(!drawingMode)}
                         className="draw-button"
                     >
                         <FaEdit /> {drawingMode ? 'Désactiver' : 'Mode édition'}
@@ -327,16 +265,6 @@ const Map = () => {
             </div>
         </div>
     );
-};
-
-const getColor = (aqi) => {
-    switch(aqi) {
-        case 1: return 'green';
-        case 2: return 'yellow';
-        case 3: return 'orange';
-        case 4: return 'red';
-        default: return 'grey';
-    }
 };
 
 export default Map;
