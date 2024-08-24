@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Line, Doughnut } from 'react-chartjs-2';
-import Navbar from '../Navbar/Navbar';
+import Navbar from '../StyleBar/Navbar/Navbar';
 import Sidebar from '../Sidebar/Sidebar';
 import '../styles/Admin/VueEnsemble.css';
 import { Chart as ChartJS, CategoryScale, LinearScale, LineElement, PointElement, Title, Tooltip, Legend, Filler, ArcElement } from 'chart.js';

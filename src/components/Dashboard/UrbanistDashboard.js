@@ -1,6 +1,6 @@
 // src/components/AdminDashboard.js
 import React from 'react';
-import Navbar from '../Navbar/NavbarUrbanist';
+import Navbar from '../StyleBar/Navbar/NavbarUrbanist';
 import Sidebar from '../Sidebar/SidebarUrbanist';
 import '../styles/Dash/UrbanistDashboard.css'; // Gardez cette ligne si vous avez des styles pour la mise en page
 

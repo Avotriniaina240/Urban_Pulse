@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
-import NavbarRA from '../Navbar/NavbarRA';
+import NavbarRA from '../StyleBar/Navbar/NavbarRA';
 import SidebarRA from '../Sidebar/SidebarRA';
 import '../styles/Admin/RegisterAdmin.css';
 

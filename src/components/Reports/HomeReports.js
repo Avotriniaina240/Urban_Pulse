@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Navbar from '../Navbar/Navbar';
-import Sidebar from '../Sidebar/SidebarCarte';
+import Navbar from '../StyleBar/Navbar/Navbar';
+import Sidebar from '../StyleBar/Sidebar/SidebarCarte';
 import '../styles/ATS/HomeReports.css';
 
 const HomeReports = () => {
@@ -18,13 +18,19 @@ const HomeReports = () => {
             <Link to="/reports-liste">
               <button className="home-button">Voir la Liste des Plaintes</button>
             </Link>
-            <Link to="/manage">
+            <Link to="/manage-reports">
               <button className="home-button">Gérer les Plaintes</button>
             </Link>
           </div>
         </div>
       </div>
+      <div>
+          <Link to="/analyze-reports">
+            <button className="round-button">+</button>
+          </Link>
+          </div>
     </div>
+    
   );
 };
 

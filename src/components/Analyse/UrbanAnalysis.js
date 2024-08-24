@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import TrendChart from '../Analyse/TrendChart';
-import Navbar from '../Navbar/Navbar';
+import Navbar from '../StyleBar/Navbar/Navbar';
 import Sidebar from '../Sidebar/SidebarAdmin';
 import MapView from '../Analyse/MapView';
 import BarChart from '../Analyse/BarChart';

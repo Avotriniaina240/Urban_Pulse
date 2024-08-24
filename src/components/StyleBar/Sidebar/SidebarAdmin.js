@@ -1,16 +1,16 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { FaTachometerAlt, FaChartBar, FaUsers, FaFileAlt, FaPlug, FaMapMarkedAlt, FaSignOutAlt } from 'react-icons/fa';
+import { FaTachometerAlt, FaChartBar, FaUsers, FaFileAlt, FaBalanceScale, FaMapMarkedAlt, FaSignOutAlt } from 'react-icons/fa';
 import { Link, Route, Routes } from 'react-router-dom';
-import '../styles/Bar/SidebarCarte.css';
+import '../styles/Bar/SidebarAdmin.css';
 import RegisterAdmin from '../Authentification/RegisterAdmin'; // Assurez-vous que le chemin est correct
 
-const SidebarCarte = () => {
-  const [showLogoutForm, setShowLogoutForm] = useState(false);
+const SidebarAdmin = () => {
   const [showUserMenu, setShowUserMenu] = useState(false);
   const userMenuRef = useRef(null);
 
-  const handleLogoutClick = () => {
-    setShowLogoutForm(!showLogoutForm);
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    window.location.href = '/login';
   };
 
   const handleUserMenuClick = (event) => {
@@ -36,8 +36,8 @@ const SidebarCarte = () => {
   }, []);
 
   return (
-    <div className="sideCarte">
-      {/* <div>
+    <div className="sideAD">
+    {/* <div>
      <img src="../image/pul.png" alt="Urban Pulse Logo" className="sidebar-logo" 
         width={10} height={65}  />
       </div>*/}
@@ -45,7 +45,7 @@ const SidebarCarte = () => {
         <li><Link to="/vue-ensemble"><FaTachometerAlt /> Vue d'Ensemble</Link></li>
         <li><Link to="/urban-analysis"><FaChartBar /> Analyse des Données Urbaines</Link></li>
         <li><Link to="/home-reports"><FaFileAlt /> Rapports et Analyses</Link></li>
-        <li><FaPlug /> Intégrations Externes</li>
+        <li><Link to="/comparison"><FaBalanceScale /> Comparaison</Link></li>
         <li><Link to="/map"><FaMapMarkedAlt /> Cartographie et Géolocalisation</Link></li>
         <li
           ref={userMenuRef}
@@ -55,16 +55,16 @@ const SidebarCarte = () => {
             <FaUsers /> Gestion des Utilisateurs
           </a>
           {showUserMenu && (
-            <ul className="submenu-Carte">
+            <ul className="submenu-AD">
               <li><Link to="/register-admin">Nouveau Utilisateur</Link></li>
               <li><Link to="/gestion-user">Gérer Utilisateur</Link></li>
             </ul>
           )}
         </li>
         <li>
-          <div className="sidebar-logout-Carte">
+          <div className="sidebar-logout-AD">
             <FaSignOutAlt />
-            <span onClick={handleLogoutClick} className="logout-text-Carte"><strong>Déconnexion</strong></span>
+            <span onClick={handleLogout} className="logout-text-AD"><strong>Déconnexion</strong></span>
           </div>
         </li>
       </ul>
@@ -76,4 +76,4 @@ const SidebarCarte = () => {
   );
 };
 
-export default SidebarCarte;
+export default SidebarAdmin;

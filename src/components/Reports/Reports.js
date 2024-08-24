@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import Navbar from '../Navbar/Navbar';
-import Sidebar from '../Sidebar/SidebarCarte';
+import Navbar from '../StyleBar/Navbar/Navbar';
+import Sidebar from '../StyleBar/Sidebar/SidebarCarte';
 import '../styles/ATS/Reports.css';
 
 const Reports = () => {
@@ -33,13 +33,12 @@ const Reports = () => {
             <Link to="/reports-liste">
               <button className="home-button">Voir la Liste des Plaintes</button>
             </Link>
-            <Link to="/manage">
+            <Link to="/manage-reports">
               <button className="home-button">Gérer les Plaintes</button>
             </Link>
           </div>
         </div>
       </div>
-      <div className=''>
         <form onSubmit={handleSubmit} className="report-form">
           <textarea
             value={description}
@@ -61,7 +60,6 @@ const Reports = () => {
           <button type="submit">Soumettre</button>
         </form>
       </div>
-    </div>
   );
 };
 

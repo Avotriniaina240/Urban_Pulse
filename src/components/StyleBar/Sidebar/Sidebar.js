@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { FaTachometerAlt, FaChartBar, FaUsers, FaFileAlt, FaPlug, FaMapMarkedAlt, FaSignOutAlt } from 'react-icons/fa';
+import { FaTachometerAlt, FaChartBar, FaUsers, FaFileAlt, FaBalanceScale, FaMapMarkedAlt, FaSignOutAlt } from 'react-icons/fa';
 import { Link, Route, Routes } from 'react-router-dom';
 import '../styles/Bar/Sidebar.css';
 import RegisterAdmin from '../Authentification/RegisterAdmin'; // Assurez-vous que le chemin est correct
@@ -45,7 +45,7 @@ const Sidebar = () => {
         <li><Link to="/vue-ensemble"><FaTachometerAlt /> Vue d'Ensemble</Link></li>
         <li><Link to="/urban-analysis"><FaChartBar /> Analyse des Données Urbaines</Link></li>
         <li><Link to="/home-reports"><FaFileAlt /> Rapports et Analyses</Link></li>
-        <li><FaPlug /> Intégrations Externes</li>
+        <li><Link to="/comparison"><FaBalanceScale /> Comparaison</Link></li>
         <li><Link to="/map"><FaMapMarkedAlt /> Cartographie et Géolocalisation</Link></li>
         <li
           ref={userMenuRef}

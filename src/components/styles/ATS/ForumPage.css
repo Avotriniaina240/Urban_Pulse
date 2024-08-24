@@ -1,0 +1,15 @@
+.forum-page {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    background-color: #f5f5f5;
+  }
+  
+  .forum-content {
+    display: flex;
+    flex: 1;
+    padding: 20px;
+    margin-top: 20px;
+    overflow-y: auto;
+  }
+  

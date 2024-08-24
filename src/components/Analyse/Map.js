@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import Navbar from '../Navbar/Navbar';
-import Sidebar from '../Sidebar/SidebarCarte';
+import Navbar from '../StyleBar/Navbar/Navbar';
+import Sidebar from '../StyleBar/Sidebar/SidebarCarte';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import 'leaflet.markercluster/dist/MarkerCluster.Default.css';

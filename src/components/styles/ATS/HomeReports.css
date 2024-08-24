@@ -82,3 +82,67 @@
       transform: scale(1);
     }
 }
+
+/* Styles pour le bouton rond */
+.round-button {
+    position: fixed; /* Fixe le bouton à un endroit spécifique */
+    top: 50%; /* Centrage vertical */
+    left: 50%; /* Centrage horizontal */
+    transform: translate(-50%, -50%); /* Déplace le bouton pour centrer exactement */
+    width: 300px; /* Augmente la largeur */
+    height: 300px; /* Augmente la hauteur */
+    margin-top: -220px;
+    margin-left: 80px;
+    border: none;
+    border-radius: 50%; /* Assure que le bouton reste rond */
+    background-color: #87add4;
+    color: white;
+    font-size: 100px; /* Augmente la taille du texte */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease; /* Ajoute une transition pour la transformation */
+    overflow: hidden; /* Masque l'animation qui dépasse le bouton */
+    position: relative;
+  }
+  
+  /* Styles pour l'animation d'analyse */
+  .round-button::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    border-radius: 50%;
+    background: rgba(29, 160, 11, 0.3); /* Couleur de la ligne défilante */
+    transform: scale(0);
+    transition: transform 0.3s ease;
+    animation: scan 1.5s infinite; /* Animation d'analyse */
+  }
+  
+  /* Styles pour le bouton rond au survol */
+  .round-button:hover {
+    background-color: #0056b3;
+    box-shadow: 0px 6px 20px rgba(0, 0, 0, 0.2);
+    transform: translate(-50%, -50%) scale(1.1); /* Agrandit le bouton légèrement au survol */
+  }
+  
+  /* Animation d'analyse */
+  @keyframes scan {
+    0% {
+      transform: scale(0);
+      opacity: 0.5;
+    }
+    50% {
+      transform: scale(1.2);
+      opacity: 0.2;
+    }
+    100% {
+      transform: scale(0);
+      opacity: 0;
+    }
+  }
+  

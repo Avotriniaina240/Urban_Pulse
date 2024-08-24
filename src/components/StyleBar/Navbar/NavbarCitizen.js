@@ -1,17 +1,17 @@
-
+// src/components/Navbar.js
 import React from 'react';
 import { FaHome, FaUser, FaComment, FaShieldAlt, FaCog } from 'react-icons/fa';
-import '../styles/Bar/NavbarUrbanist.css'; // Assure-toi que ce fichier CSS existe
+import '../../styles/Bar/NavbarCitizen.css'; // Assure-toi que ce fichier CSS existe
 
-const NavbarUrbanist = () => {
+const NavbarCitizen = () => {
   return (
-    <div className="navbarUrbanist">
+    <div className="navbarCitizen">
       <h1>Urban Pulse</h1>
-      <div className="navbar-search-Urbnaist">
+      <div className="navbar-search-Citizen">
         <input type="text" placeholder="Rechercher..." />
       </div>
-      <div className="navbar-links-Urbanist">
-        <a href="urbanist-dashboard" title="Dashboard"><FaHome /></a>
+      <div className="navbar-links-Citizen">
+        <a href="dashboard-citizen" title="Dashboard"><FaHome /></a>
         <a href="Profile" title="Profil"><FaUser /></a> 
         <a href= "#Comment" title = "Commentaires et Feedback"><FaComment /></a>
         <a href="#Security" title="Sécurité et Confidentialité"><FaShieldAlt /></a>
@@ -21,5 +21,5 @@ const NavbarUrbanist = () => {
   );
 };
 
-export default NavbarUrbanist;
+export default NavbarCitizen;
 
