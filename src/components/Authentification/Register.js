@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
-import '../styles/Authentification/Auth.css';
+import '../styles/Admin/Auth.css';
 
 const Register = () => {
   const [email, setEmail] = useState('');

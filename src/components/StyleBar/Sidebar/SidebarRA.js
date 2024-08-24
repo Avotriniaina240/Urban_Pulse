@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FaTachometerAlt, FaChartBar, FaUsers, FaFileAlt, FaBalanceScale, FaMapMarkedAlt, FaSignOutAlt } from 'react-icons/fa';
 import { Link, Route, Routes } from 'react-router-dom';
-import '../styles/Bar/SidebarRA.css';
-import RegisterAdmin from '../Authentification/RegisterAdmin'; // Assurez-vous que le chemin est correct
+import '../../styles/Bar/SideCss/SidebarRA.css';
+import RegisterAdmin from '../../Authentification/RegisterAdmin'; // Assurez-vous que le chemin est correct
 
 const SidebarRA = () => {
   const [showUserMenu, setShowUserMenu] = useState(false);

@@ -1,6 +1,6 @@
 import React from 'react';
 import { FaHome, FaUser, FaComment, FaShieldAlt, FaCog } from 'react-icons/fa';
-import '../../styles/Bar/Navbar.css';
+import '../../styles/Bar/NavCss/Navbar.css';
 
 const Navbar = ({ onSearchChange }) => {
   return (

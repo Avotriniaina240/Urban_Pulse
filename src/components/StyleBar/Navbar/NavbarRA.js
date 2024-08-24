@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { FaHome, FaUser, FaComment, FaShieldAlt, FaCog } from 'react-icons/fa';
-import '../../styles/Bar/NavbarRA.css'; // Assure-toi que ce fichier CSS existe
+import '../../styles/Bar/NavCss/NavbarRA.css'; // Assure-toi que ce fichier CSS existe
 
 const NavbarRA = () => {
   return (

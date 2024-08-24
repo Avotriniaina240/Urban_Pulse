@@ -1,7 +1,7 @@
 // src/components/Navbar.js
 import React from 'react';
 import { FaHome, FaUser, FaComment, FaShieldAlt, FaCog } from 'react-icons/fa';
-import '../../styles/Bar/NavbarCitizen.css'; // Assure-toi que ce fichier CSS existe
+import '../../styles/Bar/NavCss/NavbarCitizen.css'; // Assure-toi que ce fichier CSS existe
 
 const NavbarCitizen = () => {
   return (

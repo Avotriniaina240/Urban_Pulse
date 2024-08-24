@@ -1,7 +1,7 @@
 
 import React, {  } from 'react';
 import { FaChartBar, FaFileAlt, FaPlug, FaMapMarkedAlt, FaSignOutAlt } from 'react-icons/fa';
-import '../styles/Bar/SidebarUrbanist.css';
+import '../../styles/Bar/SideCss/SidebarUrbanist.css';
 
 const SidebarUrbanist = () => {
 

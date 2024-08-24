@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { FaTachometerAlt, FaChartBar, FaUsers, FaFileAlt, FaBalanceScale, FaMapMarkedAlt, FaSignOutAlt } from 'react-icons/fa';
 import { Link, Route, Routes } from 'react-router-dom';
-import '../../styles/Bar/SidebarCarte.css';
+import '../../styles/Bar/SideCss/SidebarCarte.css';
 import RegisterAdmin from '../../Authentification/RegisterAdmin'; // Assurez-vous que le chemin est correct
 
 const SidebarCarte = () => {

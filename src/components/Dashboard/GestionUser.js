@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Navbar from '../StyleBar/Navbar/Navbar';
-import Sidebar from '../Sidebar/Sidebar';
+import Sidebar from '../StyleBar/Sidebar/Sidebar';
 import Swal from 'sweetalert2';
 import '../styles/Admin/GestionUser.css';
 

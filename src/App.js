@@ -1,13 +1,13 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Page from './components/Pages/page'; 
+import Page from './components/Parametres/page'; 
 import Login from './components/Authentification/Login'; 
 import Register from './components/Authentification/Register'; 
 import AdminDashboard from './components/Dashboard/AdminDashboard'; 
 import UrbanistDashboard from './components/Dashboard/UrbanistDashboard';
 import VueEnsemble from './components/Dashboard/VueEnsemble';
 import GestionUser from './components/Dashboard/GestionUser';
-import Profile from './components/Profile/Profile';
+import Profile from './components/Parametres/Profile';
 import DashboardCitizen from './components/Dashboard/DashboardCitizen';
 import RegisterAdmin from './components/Authentification/RegisterAdmin';
 import UrbanAnalysis from './components/Analyse/UrbanAnalysis';

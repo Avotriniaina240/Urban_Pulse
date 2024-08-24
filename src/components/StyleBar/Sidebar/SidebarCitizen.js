@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { FaChartBar, FaFileAlt, FaPlug, FaMapMarkedAlt, FaSignOutAlt } from 'react-icons/fa';
-import '../styles/Bar/SidebarCitizen.css';
+import '../../styles/Bar/SideCss/SidebarCitizen.css';
 
 const SidebarCitizen = () => {
   const [showLogoutForm, setShowLogoutForm] = useState(false);

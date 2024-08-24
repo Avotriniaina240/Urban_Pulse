@@ -1,7 +1,7 @@
 // src/components/AdminDashboard.js
 import React from 'react';
 import Navbar from '../StyleBar/Navbar/NavbarCitizen';
-import Sidebar from '../Sidebar/SidebarCitizen';
+import Sidebar from '../StyleBar/Sidebar/SidebarCitizen';
 import '../styles/Dash/DashboardCitizen.css'; // Gardez cette ligne si vous avez des styles pour la mise en page
 
 const DashboardCitizen = () => {

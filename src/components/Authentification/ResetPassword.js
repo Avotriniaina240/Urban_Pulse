@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
-import '../styles/Authentification/Auth.css';
+import '../styles/Admin/Auth.css';
 
 const ResetPassword = () => {
   const { token } = useParams();
