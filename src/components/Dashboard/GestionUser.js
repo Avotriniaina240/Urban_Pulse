@@ -13,6 +13,12 @@ const GestionUser = () => {
   const [searchText, setSearchText] = useState(''); 
   const token = localStorage.getItem('token'); 
 
+  // Filtrer les utilisateurs en fonction du texte de recherche
+  const filteredUsers = users.filter(user =>
+    user.username.toLowerCase().includes(searchText.toLowerCase()) ||
+    user.email.toLowerCase().includes(searchText.toLowerCase())
+  );
+
   useEffect(() => {
     async function fetchData() {
       try {
@@ -97,11 +103,6 @@ const GestionUser = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const filteredUsers = users.filter(user => 
-    user.username.toLowerCase().includes(searchText.toLowerCase()) || 
-    user.email.toLowerCase().includes(searchText.toLowerCase())
-  );
-
   return (
     <div className="vueg">
       <Navbar onSearchChange={setSearchText} />
@@ -148,7 +149,16 @@ const GestionUser = () => {
                 <th>Nom d'utilisateur</th>
                 <th>Email</th>
                 <th>Rôle</th>
-                <th>Actions</th>
+                <th>
+                  <input 
+                    type="text" 
+                    placeholder="Rechercher..." 
+                    value={searchText}
+                    onChange={(e) => setSearchText(e.target.value)}
+                    className="search-input"
+                    style={{ width: '100%', boxSizing: 'border-box' }} // Pour ajuster la largeur de la barre de recherche
+                  />
+                </th>
               </tr>
             </thead>
             <tbody>

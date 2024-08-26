@@ -24,7 +24,7 @@
   position: relative; /* Pour positionner le spinner */
 }
 
-h1 {
+.h1-auth {
   margin-bottom: 20px;
   font-size: 24px;
   color: #333;

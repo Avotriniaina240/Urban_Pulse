@@ -11,7 +11,7 @@ import Profile from './components/Parametres/Profile';
 import DashboardCitizen from './components/Dashboard/DashboardCitizen';
 import RegisterAdmin from './components/Authentification/RegisterAdmin';
 import UrbanAnalysis from './components/Analyse/UrbanAnalysis';
-import Map from './components/Analyse/Map';
+import Map from './components/Maps/Map';
 import ForgotPassword from './components/Authentification/ForgotPassword'; // Importez le composant ForgotPassword
 import ResetPassword from './components/Authentification/ResetPassword'; // Importez le composant ResetPassword
 import HomeReports from './components/Reports/HomeReports';

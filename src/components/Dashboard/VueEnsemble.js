@@ -78,7 +78,7 @@ const VueEnsemble = () => {
       <div className="main-content">
         <Sidebar />
         <div className="content">
-          <h1 className='h1'>Tableau de Bord Administrateur</h1>
+          <h1 className='h1-vue'>Tableau de Bord Administrateur</h1>
           
           <div className="stats-overview">
             <div className="stats-column">

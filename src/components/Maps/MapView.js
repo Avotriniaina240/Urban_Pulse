@@ -7,8 +7,8 @@ const MapView = ({ markers }) => {
         marginTop: '30px',
         borderRadius: '10px',
         height: '400px',
-        width: '138%',
-        right: '37.9%',
+        width: '130%',
+        right: '32.5%',
     }
 
     useEffect(() => {

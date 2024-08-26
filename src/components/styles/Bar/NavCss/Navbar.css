@@ -1,6 +1,6 @@
 /* Style général pour la navbar */
 .navbar {
-  background-color: #81b3e6;
+  background-color: #c7d4e0;
   color: white;
   padding: 10px 20px;
   display: flex;
@@ -71,6 +71,7 @@
   display: flex;
   align-items: center;
   margin-left: auto; /* Pousse les liens vers la droite */
+  
 }
 
 .navbar-links a {
@@ -80,4 +81,8 @@
   font-size: 20px;
   display: inline-flex;
   align-items: center;
+}
+
+.fa-heart {
+  background-color: red;
 }

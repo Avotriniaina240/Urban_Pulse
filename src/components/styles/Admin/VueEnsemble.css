@@ -42,15 +42,15 @@
 }
 
 /* Styles pour le titre */
-.h1 {
-  background: linear-gradient(90deg, #d7dce6, #f0f4f8);
-  color: #333;
+.h1-vue {
+  background: linear-gradient(90deg, #ccd4db, #f0f4f8);
+  color: #464343;
   padding: 10px;
   border-radius: 5px;
-  margin-left: 2px;
-  margin-right: 10px;
-  margin-top: 15px;
+  margin: 15px 0; /* Marge au-dessus et en-dessous */
   animation: bounceIn 0.6s ease-out forwards;
+  width: 98%;
+  font-family: Arial, sans-serif;
 }
 
 /* Animation d'apparition avec rebond pour le titre */

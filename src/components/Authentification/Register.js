@@ -36,7 +36,7 @@ const Register = () => {
   return (
     <di className = 'body'>
     <div className="form-container">
-      <h1>Créer un compte</h1>
+      <h1 className='h1-auth'>Créer un compte</h1>
       {error && <div className="error-message">{error}</div>}
       {success && <div className="success-message">{success}</div>} {/* Afficher le message de succès */}
       {loading && (

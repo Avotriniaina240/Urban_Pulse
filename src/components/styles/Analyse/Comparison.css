@@ -22,12 +22,15 @@
 }
 
 /* Titre de la page */
-h1 {
-    font-size: 24px;
-    color: #333;
-    margin-bottom: 20px;
-    text-align: center;
-    animation: slideInDown 0.6s ease-in-out;
+.h1-cp {
+    background: linear-gradient(90deg, #ccd3d8, #f0f4f8);
+    color: #464343;
+    padding: 10px;
+    border-radius: 5px;
+    margin: 15px 0; /* Marge au-dessus et en-dessous */
+    animation: bounceIn 0.6s ease-out forwards;
+    width: 98%;
+    font-family: Arial, sans-serif;
 }
 
 /* Barre d'outils pour la comparaison */

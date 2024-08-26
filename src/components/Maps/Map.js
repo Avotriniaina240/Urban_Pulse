@@ -10,45 +10,15 @@ import 'leaflet.awesome-markers/dist/leaflet.awesome-markers.css';
 import 'leaflet-draw';
 import 'leaflet-control-geocoder';
 import '../styles/Analyse/Map.css';
-import axios from 'axios';
 import { FaSync, FaEdit } from 'react-icons/fa';
+import { fetchAirQualityData, fetchWeatherData, getColor } from './MapUtils';
 
 const Map = () => {
     const [airQualityData, setAirQualityData] = useState([]);
     const [map, setMap] = useState(null);
     const [drawingMode, setDrawingMode] = useState(false);
     const [drawnItems, setDrawnItems] = useState(null);
-    const [selectedRole, setSelectedRole] = useState('pollution'); // Rôle sélectionné (pollution ou météo)
-    const apiKey = '13c8b873a51de1239ad5606887a1565e';
-
-    const fetchAirQualityData = useCallback(async (lat, lon) => {
-        try {
-            const response = await axios.get(`http://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${apiKey}`);
-            return response.data.list.map(item => ({
-                lat: lat,
-                lng: lon,
-                air_quality: item.main.aqi,
-                components: item.components || {}
-            }));
-        } catch (error) {
-            console.error('Erreur lors de la récupération des données sur la qualité de l\'air:', error);
-            return [];
-        }
-    }, [apiKey]);
-
-    const fetchWeatherData = useCallback(async (lat, lon) => {
-        try {
-            const response = await axios.get(`http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`);
-            return {
-                temperature: response.data.main.temp,
-                humidity: response.data.main.humidity,
-                weather: response.data.weather[0].description
-            };
-        } catch (error) {
-            console.error('Erreur lors de la récupération des données météorologiques:', error);
-            return null;
-        }
-    }, [apiKey]);
+    const [selectedRole, setSelectedRole] = useState('pollution');
 
     const fetchAllData = useCallback(async () => {
         const zones = [
@@ -68,9 +38,9 @@ const Map = () => {
             );
             setAirQualityData(allData.flatMap(data => data.airQuality));
         } catch (error) {
-            console.error('Erreur lors de la récupération des données pour toutes les zones:', error);
+            console.error('Erreur lors de la récupération des données pour toutes les zones :', error);
         }
-    }, [fetchAirQualityData, fetchWeatherData]);
+    }, []);
 
     useEffect(() => {
         const mapContainer = document.getElementById('map');
@@ -123,7 +93,7 @@ const Map = () => {
                 });
             };
 
-            updateMarkers(); // Initialiser les marqueurs
+            updateMarkers();
 
             const geocoder = L.Control.geocoder({
                 defaultMarkGeocode: false
@@ -223,17 +193,7 @@ const Map = () => {
                 mapInstance.remove();
             }
         };
-    }, [airQualityData, drawingMode, fetchAirQualityData, fetchWeatherData, selectedRole]);
-
-    const getColor = (aqi) => {
-        switch (aqi) {
-            case 1: return 'green';
-            case 2: return 'yellow';
-            case 3: return 'orange';
-            case 4: return 'red';
-            default: return 'grey';
-        }
-    };
+    }, [airQualityData, drawingMode, selectedRole]);
 
     return (
         <div className="map-container">

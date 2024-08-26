@@ -61,7 +61,7 @@ const Login = () => {
   return (
     <div className='body'>
       <div className="form-container">
-        <h1>Bienvenue</h1>
+        <h1 className='h1-auth'>Bienvenue</h1>
         {error && <div className="error-message">{error}</div>}
         {message && <div className="success-message">{message}</div>}
         {loading && (

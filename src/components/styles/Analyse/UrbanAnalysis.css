@@ -107,13 +107,14 @@ header {
 
 /* Titre pour la description */
 .urb-h1 {
-  background: linear-gradient(90deg, #d7dce6, #f0f4f8);
-  color: #333;
+  background: linear-gradient(90deg, #d9e0e6, #f0f4f8);
+  color: #464343;
   padding: 10px;
   border-radius: 5px;
   margin: 15px 0; /* Marge au-dessus et en-dessous */
   animation: bounceIn 0.6s ease-out forwards;
   width: 97%;
+  font-family: Arial, sans-serif;
 }
 
 /* Animation d'apparition avec rebond */

@@ -59,7 +59,7 @@ const Comparison = () => {
             <Navbar />
             <Sidebar />
             <div className="content-container-comparison">
-                <h1>Comparaison des Quartiers/Villes</h1>
+                <h1 className='h1-cp'>Comparaison des Quartiers/Villes</h1>
                 <div className="comparison-toolbar">
                     <select multiple onChange={handleLocationSelection}>
                         <option value="-21.4545,47.0833">Zone 1</option>

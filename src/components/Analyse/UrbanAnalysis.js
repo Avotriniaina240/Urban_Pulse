@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import TrendChart from '../Analyse/TrendChart';
 import Navbar from '../StyleBar/Navbar/Navbar';
 import Sidebar from '../StyleBar/Sidebar/SidebarAdmin';
-import MapView from '../Analyse/MapView';
+import MapView from '../Maps/MapView';
 import BarChart from '../Analyse/BarChart';
 import '../styles/Analyse/UrbanAnalysis.css'; // Importez le fichier CSS
 

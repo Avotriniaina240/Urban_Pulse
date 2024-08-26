@@ -1,11 +1,4 @@
-/* Style général pour le tableau de bord */
-.vueg {
-  background-image: url('C:\Users\CHRIS-06\Desktop\Projet_Urban_pulse\Front_Urban_pulse\projet_frontend\public\image\blanc.jpg');
-  background-size: cover; /* Assurez-vous que l'image couvre toute la zone */
-  background-position: center; /* Centrer l'image d'arrière-plan */
-  height: 100vh; /* Assure que le tableau de bord occupe toute la hauteur de la fenêtre */
-  margin: 0; /* Évitez les marges supplémentaires autour du tableau de bord */
-}
+
 
 /* Conteneur principal du tableau de bord */
 .dashboard-gu {
@@ -102,6 +95,23 @@
   background-color: #c9a59f;
   color: #910f06; 
 }
+
+/* Styles pour la barre de recherche */
+.search-input {
+  width: 100%;
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  box-sizing: border-box;
+  margin-bottom: -1px;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #4CAF50;
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+
 
 
 

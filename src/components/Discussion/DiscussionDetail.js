@@ -1,21 +1,55 @@
-import React, { useState } from 'react';
-import '../styles/ATS/DiscussionDetail.css'; // You can style your component here
+import React, { useState, useEffect } from 'react';
+import '../styles/ATS/DiscussionDetail.css';
+import { getUser } from '../Analyse/utilis'; // Assurez-vous que le chemin est correct
 
 function DiscussionDetail({ discussion }) {
-  const [comments, setComments] = useState(discussion.comments || []);
   const [newComment, setNewComment] = useState('');
   const [username, setUsername] = useState('');
+  const [comments, setComments] = useState([]);
+
+  useEffect(() => {
+    // Fonction pour charger les commentaires depuis le local storage ou initialiser à partir de la discussion
+    const loadComments = () => {
+      const storedComments = localStorage.getItem(`comments-${discussion.id}`);
+      return storedComments ? JSON.parse(storedComments) : discussion.comments || [];
+    };
+
+    setComments(loadComments());
+  }, [discussion]);
+
+  useEffect(() => {
+    const fetchUsername = async () => {
+      try {
+        const user = await getUser();
+        setUsername(user.username);
+      } catch (error) {
+        console.error('Erreur lors de la récupération du nom d\'utilisateur:', error);
+      }
+    };
+
+    fetchUsername();
+  }, []);
+
+  useEffect(() => {
+    // Enregistrer les commentaires dans le local storage lorsque les commentaires changent
+    localStorage.setItem(`comments-${discussion.id}`, JSON.stringify(comments));
+  }, [comments, discussion.id]);
 
   const handleCommentSubmit = (e) => {
     e.preventDefault();
     if (newComment && username) {
+      // Vérifier les doublons
+      const isDuplicate = comments.some(comment => comment.text === newComment && comment.username === username);
+      if (isDuplicate) {
+        console.error('Le commentaire est déjà présent.');
+        return;
+      }
       const updatedComments = [
         ...comments,
-        { id: comments.length + 1, text: newComment, username: username },
+        { id: comments.length + 1, text: newComment, username },
       ];
       setComments(updatedComments);
       setNewComment('');
-      setUsername('');
     }
   };
 
@@ -33,13 +67,6 @@ function DiscussionDetail({ discussion }) {
           ))}
         </ul>
         <form onSubmit={handleCommentSubmit}>
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            placeholder="Votre nom"
-            required
-          />
           <textarea
             value={newComment}
             onChange={(e) => setNewComment(e.target.value)}

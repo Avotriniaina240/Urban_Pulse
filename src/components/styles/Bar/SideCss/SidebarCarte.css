@@ -1,7 +1,7 @@
 
 .sideCarte {
     width: 200px;
-    background-color: #81b3e6;
+    background-color: #c7d4e0;
     padding: 25px;
     box-shadow: 2px 0 5px rgba(199, 23, 23, 0.1);
     position: fixed; /* Fixer la barre latérale à gauche */
@@ -57,7 +57,7 @@
     padding: 10px; /* Espace autour des éléments de liste */
     border-bottom: 1px solid #ffffff; /* Bordure en bas */
     text-decoration: none;
-    color: #0e4d80; /* Couleur du texte */
+    color: #464343; /* Couleur du texte */
     display: block;
     font-family: Arial, sans-serif; /* Police de caractères */
     font-size: 15px; /* Taille du texte */
