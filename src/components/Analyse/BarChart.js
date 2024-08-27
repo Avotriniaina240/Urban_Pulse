@@ -90,10 +90,11 @@ const BarChart = ({ data, legend }) => {
                                 key={index}
                                 className="legend-item"
                                 onClick={() => handleLegendClick(item.label)}
+                                style={{ cursor: 'pointer', marginBottom: '5px' }}
                             >
                                 <span
                                     className="legend-color"
-                                    style={{ backgroundColor: item.color }}
+                                    style={{ backgroundColor: item.color, width: '20px', height: '20px', display: 'inline-block', marginRight: '10px' }}
                                 ></span>
                                 <span className="legend-abbreviation">
                                     {item.abbreviation}

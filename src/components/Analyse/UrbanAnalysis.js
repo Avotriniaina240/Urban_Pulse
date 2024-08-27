@@ -69,14 +69,14 @@ const UrbanAnalysis = () => {
                                     Un utilisateur pourrait utiliser cette page pour surveiller la répartition de certains services ou infrastructures dans une ville. En cliquant sur les marqueurs sur la carte, l'utilisateur peut voir où se trouvent ces services et, en utilisant les graphiques, il peut comprendre comment ces services sont distribués ou utilisés. La légende permet à l'utilisateur de filtrer les informations affichées, par exemple, en montrant seulement certains types de services ou en comparant différentes données.
                                 </p>
                             </div>
-                            <div className="aff">
+                            {/*<div className="aff">
                                 <div className="section section-1">MAP</div>
                                 <div className="section section-2">POLLUTION</div>
                                 <div className="section section-3">METEO</div>
                             </div>
                             <div className="map-container">
                                 <MapView markers={mapMarkers} />
-                            </div>
+                            </div>*/}
                         </div>
                     </div>
                 </div>

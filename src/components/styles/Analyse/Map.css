@@ -139,7 +139,9 @@ button:active {
     justify-content: center;
     gap: 10px;
     font-family: 'pacifico', cursive;
-    color: #374e77;
+    font-size: 80%;
+    font-weight: bold;
+    color: #464343;
 }
 
 .draw-button {
@@ -155,7 +157,9 @@ button:active {
     transition: background-color 0.3s;
     gap: 10px;
     font-family: 'pacifico', cursive;
-    color: #374e77;
+    font-size: 80%;
+    font-weight: bold;
+    color: #464343;
 }
 
 .draw-button {
@@ -184,7 +188,7 @@ button:active {
     border: 2px solid #c0d3e6;
     border-radius: 4px;
     background-color: #c0d3e6;
-    color: #374e77;
+    color: #464343;
     font-family: 'pacifico', cursive;
     font-size: 80%;
     font-weight: bold;
@@ -247,3 +251,44 @@ button:active {
     color: #fff;
     background-color: grey;
 }
+
+
+/* Style pour les titres en gras */
+.meteo-container b {
+    color: #333; /* Couleur du texte du titre */
+    font-size: 16px; /* Taille légèrement plus grande pour les titres */
+}
+
+/* Style pour le texte de la météo */
+.meteo-container div {
+    color: #555; /* Couleur du texte */
+}
+
+/* Style pour la température en bleu */
+.temperature {
+    color: #007bff; /* Bleu */
+}
+
+/* Style pour l'humidité en vert */
+.humidity {
+    color: #28a745; /* Vert */
+}
+
+.air-quality-container b {
+    font-size: 14px;
+    color: #333;
+    line-height: -5;
+}
+
+.air-quality-container strong {
+    display: block;
+    margin-top: 8px;
+    margin-bottom: -1px;
+    color: #555;
+}
+
+.air-quality-container .component {
+    font-weight: bold;
+    color: #007BFF;
+}
+

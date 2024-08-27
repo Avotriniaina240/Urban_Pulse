@@ -139,7 +139,7 @@ table th, table td {
 /* Style des cellules d'en-tête */
 table th {
   border: 1px solid #ddd;
-  background-color: #4CAF50;
+  background-color: #a2b2c1;
   color: rgb(247, 241, 241);
   font-weight: bold;
 }

@@ -18,6 +18,7 @@
 .dashboard {
   display: flex;
   flex-direction: column;
+  font-family: Arial, sans-serif;
 }
 
 /* Conteneur principal avec la sidebar et le contenu */

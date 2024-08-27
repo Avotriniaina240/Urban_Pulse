@@ -3,15 +3,14 @@ import {
     LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
 } from 'recharts';
 
-// Exemple de données pour tester
-const exampleData = [
-    { date: '2024-01-01', value1: 4000, value2: 2400 },
-    { date: '2024-01-02', value1: 3000, value2: 1398 },
-    { date: '2024-01-03', value1: 2000, value2: 9800 },
-    // Ajoutez d'autres points de données ici
-];
-
 const TrendChart = ({ data, legendTitle }) => {
+    if (!data || data.length === 0) {
+        return <p>Aucune donnée disponible pour afficher le graphique.</p>;
+    }
+
+    // Dynamically extract keys for lines
+    const lineKeys = Object.keys(data[0]).filter(key => key !== 'date');
+    
     return (
         <div>
             {legendTitle && <h3 className="legend-title">{legendTitle}</h3>}
@@ -33,45 +32,51 @@ const TrendChart = ({ data, legendTitle }) => {
                     <Legend 
                         wrapperStyle={{ paddingTop: "10px", textAlign: "center" }} 
                     />
-                    <Line 
-                        type="monotone" 
-                        dataKey="value1" 
-                        stroke="#8884d8" 
-                        activeDot={{ r: 8 }} 
-                        isAnimationActive={true}
-                        dot={{ stroke: '#8884d8', strokeWidth: 2, r: 3 }} 
-                    />
-                    <Line 
-                        type="monotone" 
-                        dataKey="value2" 
-                        stroke="#82ca9d" 
-                        activeDot={{ r: 8 }} 
-                        isAnimationActive={true}
-                        dot={{ stroke: '#82ca9d', strokeWidth: 2, r: 3 }} 
-                    />
+                    {lineKeys.map((key, index) => (
+                        <Line 
+                            key={key}
+                            type="monotone" 
+                            dataKey={key} 
+                            stroke={index % 2 === 0 ? '#8884d8' : '#82ca9d'} 
+                            activeDot={{ r: 8 }} 
+                            isAnimationActive={true}
+                            dot={{ stroke: index % 2 === 0 ? '#8884d8' : '#82ca9d', strokeWidth: 2, r: 3 }} 
+                        />
+                    ))}
                 </LineChart>
             </ResponsiveContainer>
-            <div className="description-container1">
-                <div className="description-item">
-                    <span className="description-color" style={{ backgroundColor: '#8884d8' }}></span>
-                    <span className="description-text">
-                        <strong>Value1</strong>: Représente les ventes mensuelles réalisées par l'entreprise. Ce chiffre montre l'évolution des ventes au fil des mois.
-                    </span>
+            {legendTitle && (
+                <div className="description-container1">
+                    {lineKeys.map((key, index) => (
+                        <div className="description-item" key={key}>
+                            <span className="description-color" style={{ backgroundColor: index % 2 === 0 ? '#8884d8' : '#82ca9d' }}></span>
+                            <span className="description-text">
+                                <strong>{key}</strong>: Représente les données associées à la série <strong>{key}</strong>. Ce chiffre montre l'évolution au fil du temps.
+                            </span>
+                        </div>
+                    ))}
                 </div>
-                <div className="description-item">
-                    <span className="description-color" style={{ backgroundColor: '#82ca9d' }}></span>
-                    <span className="description-text">
-                        <strong>Value2</strong>: Représente les objectifs de ventes fixés par l'entreprise. Ce chiffre permet de comparer les performances réelles aux objectifs fixés.
-                    </span>
-                </div>
-            </div>
+            )}
         </div>
     );
 };
 
-// Utilisation du composant
-const App = () => (
-    <TrendChart data={exampleData} legendTitle="Évolution des Valeurs" />
-);
+// Exemple d'utilisation du composant avec des données réelles basées sur une carte
+const App = () => {
+    // Remplacez ceci par vos données réelles récupérées d'une API ou d'une autre source
+    const realData = [
+        { date: '2024-01-01', value1: 4000, value2: 2400 },
+        { date: '2024-01-02', value1: 3000, value2: 1398 },
+        { date: '2024-01-03', value1: 2000, value2: 9800 },
+        // Ajoutez d'autres points de données ici
+    ];
+
+    return (
+        <TrendChart 
+            data={realData} 
+            legendTitle="Évolution des Valeurs" 
+        />
+    );
+};
 
 export default App;

@@ -86,3 +86,19 @@
 .fa-heart {
   background-color: red;
 }
+
+/* Style spécifique pour l'icône de notification */
+.navbar-links a#notification {
+  position: relative;
+}
+
+.navbar-links a#notification::after {
+  content: ' ';
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  width: 8px;
+  height: 8px;
+  background-color: red;
+  border-radius: 50%;
+}

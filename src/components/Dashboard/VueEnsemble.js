@@ -8,37 +8,31 @@ import { Chart as ChartJS, CategoryScale, LinearScale, LineElement, PointElement
 ChartJS.register(CategoryScale, LinearScale, LineElement, PointElement, Title, Tooltip, Legend, Filler, ArcElement);
 
 const VueEnsemble = () => {
-  const [stats, setStats] = useState({ newUsers: 0, totalUsers: 0 });
+  const [stats, setStats] = useState({ monthlyNewUsers: 0, totalUsers: 0 });
   const [monthlyStats, setMonthlyStats] = useState([]);
   const [error, setError] = useState('');
 
-  // Simuler des données fictives
   useEffect(() => {
-    const fetchData = () => {
+    const fetchData = async () => {
       try {
-        // Données fictives pour les statistiques générales
-        const statsResponse = {
-          newUsers: 35,
-          totalUsers: 4500,
-        };
-        setStats(statsResponse);
+        const statsResponse = await fetch('http://localhost:5000/api/user-stats');
+        const monthlyResponse = await fetch('http://localhost:5000/api/user-monthly-stats');
+        
+        if (!statsResponse.ok || !monthlyResponse.ok) {
+          throw new Error('Erreur lors de la récupération des données');
+        }
+        
+        const statsData = await statsResponse.json();
+        const monthlyData = await monthlyResponse.json();
 
-        // Données fictives pour les statistiques mensuelles
-        const monthlyResponse = [
-          { month: 'Janvier', userCount: 300 },
-          { month: 'Février', userCount: 250 },
-          { month: 'Mars', userCount: 400 },
-          { month: 'Avril', userCount: 350 },
-          { month: 'Mai', userCount: 500 },
-          { month: 'Juin', userCount: 600 },
-          { month: 'Juillet', userCount: 550 },
-          { month: 'Août', userCount: 700 },
-          { month: 'Septembre', userCount: 650 },
-          { month: 'Octobre', userCount: 750 },
-          { month: 'Novembre', userCount: 800 },
-          { month: 'Décembre', userCount: 900 },
-        ];
-        setMonthlyStats(monthlyResponse);
+        console.log('Monthly Stats:', monthlyData);
+
+        setStats({
+          monthlyNewUsers: monthlyData.monthly_new_users || 0,
+          totalUsers: statsData.total_users || 0,
+        });
+
+        setMonthlyStats(monthlyData.stats || []);  // Assurez-vous que "stats" est un tableau dans la réponse
       } catch (err) {
         setError('Erreur lors de la récupération des données.');
         console.error(err);
@@ -48,12 +42,13 @@ const VueEnsemble = () => {
     fetchData();
   }, []);
 
+  // Vérifiez si monthlyStats contient des données
   const chartData = {
-    labels: monthlyStats.map(stat => stat.month),
+    labels: monthlyStats.length > 0 ? monthlyStats.map(stat => stat.month) : ['Aucun mois disponible'],
     datasets: [
       {
         label: 'Utilisateurs inscrits',
-        data: monthlyStats.map(stat => stat.userCount),
+        data: monthlyStats.length > 0 ? monthlyStats.map(stat => stat.userCount) : [0],
         borderColor: 'rgba(75, 192, 192, 1)',
         backgroundColor: 'rgba(75, 192, 192, 0.2)',
         fill: true,
@@ -62,11 +57,11 @@ const VueEnsemble = () => {
   };
 
   const percentageData = {
-    labels: ['Nouveaux Utilisateurs', 'Autres'],
+    labels: ['Nouveaux Utilisateurs ce mois-ci', 'Autres Utilisateurs'],
     datasets: [
       {
         label: 'Répartition des Utilisateurs',
-        data: [stats.newUsers, stats.totalUsers - stats.newUsers],
+        data: [stats.monthlyNewUsers, stats.totalUsers - stats.monthlyNewUsers],
         backgroundColor: ['#4caf50', '#e6e6e6'],
       },
     ],
@@ -84,7 +79,7 @@ const VueEnsemble = () => {
             <div className="stats-column">
               <div className="percentage-chart">
                 <Doughnut data={percentageData} options={{ maintainAspectRatio: false }} />
-                <div className="percentage-text">{stats.newUsers}</div>
+                <div className="percentage-text">{stats.monthlyNewUsers}</div>
               </div>
             </div>
 

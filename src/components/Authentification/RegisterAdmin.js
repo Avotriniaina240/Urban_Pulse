@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, Link } from 'react-router-dom';
-import NavbarRA from '../StyleBar/Navbar/Navbar';
-import SidebarRA from '../StyleBar/Sidebar/SidebarRA';
 import '../styles/Admin/RegisterAdmin.css';
 
 const RegisterAdmin = () => {
@@ -38,8 +36,6 @@ const RegisterAdmin = () => {
   return (
     <div className='body'>
       <div className="form-container">
-      <NavbarRA />
-      <SidebarRA />
         <h1 className='h1-auth'>Créer un compte</h1>
         {error && <div className="error-message">{error}</div>}
         {success && <div className="success-message">{success}</div>} {/* Afficher le message de succès */}

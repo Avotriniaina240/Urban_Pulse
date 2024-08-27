@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import 'react-toastify/dist/ReactToastify.css';
 import Page from './components/Parametres/page'; 
 import Login from './components/Authentification/Login'; 
 import Register from './components/Authentification/Register'; 
@@ -25,6 +26,11 @@ import DiscussionDetail from './components/Discussion/DiscussionDetail';
 import DiscussionItem from './components/Discussion/DiscussionItem';
 import DiscussionList from './components/Discussion/DiscussionList';
 import ForumPage from './components/Discussion/ForumPage';
+import CitySelector from './components/Prediction/CitySelector';
+import TimeSeriesChart from './components/Prediction/TimeSeriesChart';
+import IndicatorSelector from './components/Prediction/IndicatorSelector';
+import DateRangePicker from './components/Prediction/DateRangePicker';
+import HistoricalAndPrediction from './components/Prediction/HistoricalAndPrediction';
 
 
 
@@ -54,10 +60,15 @@ const App = () => {
         <Route path="/analyze-reports/*" element={<AnalyzeReports />} />
         <Route path="/comparison/*" element={<Comparison />} />
         <Route path="/forum-header/*" element={<ForumHeader />} />
+        <Route path="/forum-page/*" element={<ForumPage />} />
         <Route path="/discussion-detail/*" element={<DiscussionDetail />} />
         <Route path="/discussion-item/*" element={<DiscussionItem />} />
         <Route path="/discussion-list/*" element={<DiscussionList />} />
-        <Route path="/forum-page/*" element={<ForumPage />} />
+        <Route path="/city-selector/*" element={<CitySelector />} />
+        <Route path="/time-serie-chart/*" element={<TimeSeriesChart />} />
+        <Route path="/indicator-selector/*" element={<IndicatorSelector />} />
+        <Route path="/date-range-piker/*" element={<DateRangePicker />} />
+        <Route path="/historique-prediction/*" element={<HistoricalAndPrediction />} />
       </Routes>
     </Router>
   );

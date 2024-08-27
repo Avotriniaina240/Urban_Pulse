@@ -13,98 +13,143 @@
     justify-content: flex-start; /* Centrer verticalement au début */
     height: 84.4%;
     border-radius: 5px;
-    margin-top: -4.9%;
+    margin-top: -28px;
   }
-  
-  /* Effet de survol pour la barre latérale */
-  .sideRA:hover {
-    transform: translateX(-5px);
-  }
-  
-  /* Style de la liste dans la barre latérale */
-  .sideRA ul {
-    list-style-type: none;
-    padding: 0;
-    margin: 0;
-    width: 100%; /* Assurez-vous que la liste occupe toute la largeur */
-  }
-  
-  .sideRA p {
-    font-family: Arial, sans-serif; /* Police de caractères */
-    font-size: 15px; /* Taille du texte */
-    font-weight: bold; /* Texte en gras */
-    text-align: left;
-    color: #496e99;
-  }
-  
-  .sideRA img {
-    height: 30px;
-  }
-  
-  /* Style des éléments de liste dans la barre latérale */
-  .sideRA ul li {
-    margin: 15px 0;
-    text-align: left; /* Centrer le texte dans les éléments de liste */
-    width: 200px; /* Assurez-vous que les éléments de liste occupent toute la largeur */
-    padding: 10px; /* Espace autour des éléments de liste */
-    border-bottom: 1px solid #ffffff; /* Bordure en bas */
-    text-decoration: none;
-    color: #464343; /* Couleur du texte */
-    display: block;
-    font-family: Arial, sans-serif; /* Police de caractères */
-    font-size: 15px; /* Taille du texte */
-    font-weight: bold; /* Texte en gras */
-    transition: background-color 0.3s ease, color 0.3s ease; /* Transition pour l'effet de survol */
-  }
-  
-  /* Style pour les éléments de liste survolés */
-  .sideRA ul li:hover {
-    background-color: #5a9bd4; /* Couleur de fond au survol */
-    color: white; /* Couleur du texte au survol */
-    cursor: pointer; /* Curseur pointer au survol */
-  }
-  
-  /* Style des liens dans les éléments de liste */
-  .sideRA ul li a {
-    text-decoration: none;
-    color: inherit; /* Hériter la couleur du texte de l'élément parent */
-  }
-  
-  /* Style du texte de déconnexion cliquable */
-  .sidebar-logout-RA {
-    display: flex;
-    align-items: center;
-  }
-  
-  .logout-text-RA {
-    margin-left: 10px;
-    cursor: pointer; /* Curseur pointer pour indiquer que c'est cliquable */
-    font-weight: normal; /* Moins gras que l'icône */
-  }
-  
-  /* Style du formulaire de déconnexion */
-  .logout-form-RA {
-    position: absolute;
-    bottom: 25px; /* Positionner le formulaire au bas de la barre latérale */
-    left: 0;
-    padding: 10px;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 85%; /* Occuper toute la largeur disponible */
-    text-align: center;
-    margin-left: 10px;
-  }
-  
-  .logout-form-RA p {
-    margin: 0 0 10px;
-  }
-  
-  .logout-form-RA button {
-    margin: 5px;
-    padding: 5px 10px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
+
+.sideRA:hover {
+  transform: translateX(-5px);
+}
+
+  ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  width: 220px; /* Assurez-vous que la liste occupe toute la largeur */
+  margin-top: 30px;
+  border: 0px solid #ccc; /* Ajouter une bordure */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Ajouter une transition pour un effet fluide */
+}
+
+.sideRA ul:hover {
+  transform: translateY(-10px); /* Élever l'élément */
+  box-shadow: 0 4px 8px rgba(39, 52, 226, 0.2); /* Ajouter une ombre pour un effet de profondeur */
+}
+
+.sideRA p {
+  font-family: Arial, sans-serif; /* Police de caractères */
+  font-size: 15px; /* Taille du texte */
+  font-weight: bold; /* Texte en gras */
+  text-align: left;
+  color: #496e99;
+}
+
+.sideRA img {
+  height: 30px;
+}
+
+/* Style des éléments de liste dans la barre latérale */
+.sideRA ul li {
+  margin: 15px 0;
+  text-align: left; /* Centrer le texte dans les éléments de liste */
+  width: 200px; /* Assurez-vous que les éléments de liste occupent toute la largeur */
+  padding: 10px; /* Espace autour des éléments de liste */
+  border-bottom: 1px solid #ffffff; /* Bordure en bas */
+  text-decoration: none;
+  color: #464343; /* Couleur du texte */
+  display: block;
+  font-family: Arial, sans-serif; /* Police de caractères */
+  font-size: 15px; /* Taille du texte */
+  font-weight: bold; /* Texte en gras */
+  transition: background-color 0.3s ease, color 0.3s ease; /* Transition pour l'effet de survol */
+}
+
+/* Style pour les éléments de liste survolés */
+.sideRA ul li:hover {
+  background-color: #5a9bd4; /* Couleur de fond au survol */
+  color: white; /* Couleur du texte au survol */
+  cursor: pointer; /* Curseur pointer au survol */
+}
+
+/* Style des liens dans les éléments de liste */
+.sideRA ul li a {
+  text-decoration: none;
+  color: inherit; /* Hériter la couleur du texte de l'élément parent */
+}
+
+/* Style du texte de déconnexion cliquable */
+.sidebar-logout-RA {
+  display: flex;
+  align-items: center;
+}
+
+.logout-text-RA {
+  margin-left: 10px;
+  cursor: pointer; /* Curseur pointer pour indiquer que c'est cliquable */
+  font-weight: normal; /* Moins gras que l'icône */
+}
+
+/* Style du formulaire de déconnexion */
+.logout-form-RA {
+  position: absolute;
+  bottom: 25px; /* Positionner le formulaire au bas de la barre latérale */
+  left: 0;
+  padding: 10px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 85%; /* Occuper toute la largeur disponible */
+  text-align: center;
+  margin-left: 10px;
+}
+
+.logout-form-RA p {
+  margin: 0 0 10px;
+}
+
+.logout-form-RA button {
+  margin: 5px;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Style de la liste principale */
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* Style du sous-menu */
+.submenu-RA {
+  top: 100%; /* Positionne le sous-menu juste en dessous de l'élément parent */
+  background-color: #dfe7e9;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+/* Style des éléments du sous-menu */
+.submenu-RA li {
+  padding: 10px;
+}
+
+.submenu-RA li a {
+  text-decoration: none;
+  color: #e64848;
+}
+
+.submenu-RA li a:hover {
+  color: #007bff;
+}
+
+/* Style du lien */
+a {
+  text-decoration: none;
+  color: #333;
+}
+
+a:hover {
+  color: #007bff;
+}

@@ -1,0 +1,16 @@
+/* src/styles/HistoricalAndPrediction.css */
+.historical-prediction-container {
+    padding: 20px;
+  }
+  
+  h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  .selectors {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 30px;
+  }
+  

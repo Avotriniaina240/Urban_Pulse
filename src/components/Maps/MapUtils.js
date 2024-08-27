@@ -40,3 +40,6 @@ export const getColor = (aqi) => {
         default: return 'grey';
     }
 };
+
+
+

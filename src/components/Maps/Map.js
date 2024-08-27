@@ -21,13 +21,7 @@ const Map = () => {
     const [selectedRole, setSelectedRole] = useState('pollution');
 
     const fetchAllData = useCallback(async () => {
-        const zones = [
-            { lat: -21.4545, lon: 47.0833 },
-            { lat: -21.4567, lon: 47.0850 },
-            { lat: -21.4550, lon: 47.0860 },
-            { lat: -22.0000, lon: 48.0000 }
-        ];
-
+        const zones = [];
         try {
             const allData = await Promise.all(
                 zones.map(async (zone) => {
@@ -127,63 +121,103 @@ const Map = () => {
                     }
                 }).addTo(mapInstance);
 
+                // Fonction pour convertir la description de la qualité de l'air en français
+                const getAirQualityDescriptionInFrench = (airQualityIndex) => {
+                    console.log('Air Quality Index Received:', airQualityIndex); // Log pour vérifier la valeur reçue
+                    if (!airQualityIndex) return 'Description non disponible';
+                    switch (true) {
+                        case (airQualityIndex <= 50):
+                            return 'Bonne';
+                        case (airQualityIndex <= 100):
+                            return 'Modérée';
+                        case (airQualityIndex <= 150):
+                            return 'Insuffisante';
+                        case (airQualityIndex <= 200):
+                            return 'Mauvaise';
+                        case (airQualityIndex > 200):
+                            return 'Très mauvaise';
+                        default:
+                            return 'Description non disponible';
+                    }
+                };
+
+                // Fonction pour convertir la description météo en français
+                const getWeatherDescriptionInFrench = (description) => {
+                    console.log('Description Received:', description); // Log pour vérifier la valeur reçue
+                    if (!description) return 'non disponible';
+                    switch (description.toLowerCase()) {
+                        case 'clear sky':
+                            return 'Ciel dégagé';
+                        case 'few clouds':
+                            return 'Quelques nuages';
+                        case 'scattered clouds':
+                            return 'Nuages épars';
+                        case 'broken clouds':
+                            return 'Nuages fragmentés';
+                        case 'shower rain':
+                            return 'Averses';
+                        case 'rain':
+                            return 'Pluie';
+                        case 'thunderstorm':
+                            return 'Orage';
+                        case 'snow':
+                            return 'Neige';
+                        case 'mist':
+                            return 'Brume';
+                        default:
+                            return 'non disponible';
+                    }
+                };
+
+                // Fonction pour gérer les événements de création sur la carte
                 mapInstance.on(L.Draw.Event.CREATED, async (event) => {
                     const layer = event.layer;
                     drawnItemsLayer.addLayer(layer);
+
                     if (layer instanceof L.Marker) {
                         const { lat, lng } = layer.getLatLng();
                         const airQuality = await fetchAirQualityData(lat, lng);
                         const weatherData = await fetchWeatherData(lat, lng);
+
                         let popupContent = '';
                         if (selectedRole === 'pollution') {
+                            // Utiliser la fonction pour obtenir la description de la qualité de l'air
+                            const airQualityIndex = airQuality[0]?.air_quality;
+                            const airQualityDescription = getAirQualityDescriptionInFrench(airQualityIndex);
+
                             popupContent = `
-                                <div style="font-size: 14px;">
-                                    <b>Qualité de l'air: Zone ${airQuality[0]?.air_quality || 'N/A'}</b><br>
+                                <div class="air-quality-container">
+                                    <b>Zone ${airQualityIndex || 'N/A'}</b><br>
+                                    <b>Qualité : ${airQualityDescription}</b><br>
                                     <strong>Composants:</strong><br>
-                                    CO: ${airQuality[0]?.components.co || 'N/A'} µg/m³<br>
-                                    NO2: ${airQuality[0]?.components.no2 || 'N/A'} µg/m³<br>
-                                    O3: ${airQuality[0]?.components.o3 || 'N/A'} µg/m³<br>
-                                    PM2.5: ${airQuality[0]?.components.pm2_5 || 'N/A'} µg/m³<br>
-                                    PM10: ${airQuality[0]?.components.pm10 || 'N/A'} µg/m³<br>
+                                    🌫️ <span class="component">CO:</span> ${airQuality[0]?.components.co || 'N/A'} µg/m³<br>
+                                    🌪️ <span class="component">NO2:</span> ${airQuality[0]?.components.no2 || 'N/A'} µg/m³<br>
+                                    🌬️ <span class="component">O3:</span> ${airQuality[0]?.components.o3 || 'N/A'} µg/m³<br>
+                                    🌫️ <span class="component">PM2.5:</span> ${airQuality[0]?.components.pm2_5 || 'N/A'} µg/m³<br>
+                                    🌫️ <span class="component">PM10:</span> ${airQuality[0]?.components.pm10 || 'N/A'} µg/m³<br>
                                 </div>
                             `;
                         } else if (selectedRole === 'meteo') {
+                            // Assurez-vous que weatherData.weather et weatherData.weather[0] sont définis
+                            const weatherDescription = weatherData?.weather?.[0]?.description;
+                            const weatherDescriptionInFrench = getWeatherDescriptionInFrench(weatherDescription);
+
+                            console.log('Weather Description:', weatherDescriptionInFrench); // Log pour vérifier la description de la météo
+
                             popupContent = `
-                                <div style="font-size: 14px;">
+                                <div class="meteo-container">
                                     <b>Météo:</b><br>
-                                    Température: ${weatherData ? weatherData.temperature : 'N/A'} °C<br>
-                                    Humidité: ${weatherData ? weatherData.humidity : 'N/A'}%<br>
-                                    Description: ${weatherData ? weatherData.weather : 'N/A'}<br>
+                                    🌡️ <span class="temperature">Température: ${weatherData ? weatherData.temperature : 'N/A'} °C</span><br>
+                                    💧 <span class="humidity">Humidité: ${weatherData ? weatherData.humidity : 'N/A'}%</span><br>
+                                    📝 Description: ${weatherDescriptionInFrench}<br>
                                 </div>
                             `;
                         }
+
                         layer.bindPopup(popupContent).openPopup();
                     }
                 });
             }
-
-            const legend = L.control({ position: 'bottomright' });
-
-            legend.onAdd = function () {
-                const div = L.DomUtil.create('div', 'info legend');
-                if (selectedRole === 'pollution') {
-                    const grades = [1, 2, 3, 4];
-                    const labels = ['Excellente', 'Admissible', 'Préoccupante', 'Dangereuse'];
-                    div.innerHTML = '<strong>Qualité de l\'air</strong><br>';
-                    grades.forEach((grade, index) => {
-                        div.innerHTML +=
-                            `<i style="background:${getColor(grade)}"></i> ${labels[index]}<br>`;
-                    });
-                } else if (selectedRole === 'meteo') {
-                    div.innerHTML = '<strong>Météo</strong><br>';
-                    div.innerHTML += '<i style="background:blue"></i> Température<br>';
-                    div.innerHTML += '<i style="background:grey"></i> Humidité<br>';
-                    div.innerHTML += '<i style="background:orange"></i> Description<br>';
-                }
-                return div;
-            };
-
-            legend.addTo(mapInstance);
 
             setMap(mapInstance);
         }
