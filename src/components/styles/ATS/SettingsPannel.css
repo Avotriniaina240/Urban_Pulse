@@ -1,0 +1,103 @@
+/* SettingsPannel.css */
+
+.settings-panel {
+  position: fixed;
+  top: 60px;
+  right: 20px;
+  width: 200px;
+  background-color: #ffffff; /* Couleur de fond claire par défaut */
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Ombre subtile améliorée */
+  z-index: 1000;
+  color: #333;
+  padding: 10px; /* Réduction du padding pour un design plus compact */
+  opacity: 0;
+  transform: translateY(-20px);
+  transition: opacity 0.4s ease, transform 0.4s ease; /* Transition adoucie */
+  font-family: 'Roboto', Arial, sans-serif; /* Police moderne */
+  font-size: 14px; /* Taille de police ajustée pour compacité */
+}
+
+.settings-panel.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.settings-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px; /* Réduction de l'espacement */
+}
+
+.settings-section {
+  margin-bottom: 10px; /* Réduction de l'espacement entre les sections */
+}
+
+.settings-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  font-weight: bold;
+  padding: 5px 0; /* Espacement réduit */
+  transition: color 0.3s ease;
+  border-bottom: 1px solid #e0e0e0; /* Ligne de séparation subtile */
+}
+
+.settings-section-header:hover {
+  color: #007bff;
+  transform: translateY(-10px); /* Élever l'élément */
+  box-shadow: 0 4px 8px rgba(39, 52, 226, 0.5); /* Ajouter une ombre pour un effet de profondeur */
+}
+
+.settings-section-content {
+  padding: 5px 0; /* Espacement réduit pour un contenu plus compact */
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, opacity 0.4s ease; /* Transition améliorée */
+}
+
+.settings-section-content.show {
+  max-height: 200px; /* Hauteur ajustable selon le contenu */
+  opacity: 1;
+}
+
+.settings-section label {
+  display: flex;
+  align-items: center;
+  margin-bottom: 4px; /* Espacement réduit pour plus de compacité */
+}
+
+.settings-section input[type="checkbox"],
+.settings-section input[type="radio"] {
+  margin-right: 8px; /* Espacement ajusté */
+}
+
+/* Styles pour le mode sombre */
+.dark-mode {
+  background-color: #222; /* Couleur de fond plus sombre */
+  color: #ddd;
+}
+
+.dark-mode .settings-panel {
+  background-color: #333; /* Fond du panneau en mode sombre */
+  color: #ddd;
+  border-color: #555;
+}
+
+.dark-mode .close-button,
+.dark-mode .settings-section-header {
+  color: #ddd;
+}
+
+.dark-mode .settings-section-header:hover {
+  color: #66aaff; /* Couleur au survol en mode sombre */
+}
+
+/* styles pour les icônes FontAwesome */
+.icon {
+  margin-right: 10px; /* Ajustez la valeur selon vos besoins */
+}

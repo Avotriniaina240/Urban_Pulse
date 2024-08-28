@@ -1,35 +1,83 @@
-import React from 'react';
-import { FaHome, FaUser, FaComment, FaBell, FaCog } from 'react-icons/fa';
+import React, { useState, useEffect, useRef } from 'react';
+import { FaHome, FaComment, FaBell, FaEllipsisH } from 'react-icons/fa';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import '../../styles/Bar/NavCss/Navbar.css';
-
-// Fonction pour afficher les notifications de signalement
-const handleNotification = () => {
-  const notifications = [
-    "Signalement : Comportement inapproprié détecté dans le forum.",
-    "Signalement : Langage abusif signalé par plusieurs utilisateurs.",
-    "Signalement : Spam suspecté dans les commentaires.",
-    "Signalement : Contenu offensant détecté dans un post.",
-    "Signalement : Tentative de phishing rapportée par un utilisateur."
-  ];
-
-  notifications.forEach((message, index) => {
-    setTimeout(() => {
-      toast.info(message, {
-        position: "top-right",
-        autoClose: 3000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-    }, index * 2000); // Affiche chaque notification avec un délai de 1 seconde entre elles
-  });
-};
+import SettingsPanel from '../../Parametres/SettingsPannel';
 
 const Navbar = ({ onSearchChange }) => {
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [notifications, setNotifications] = useState([]);
+  const settingsRef = useRef(null); // Référence pour le panneau de paramètres
+  const settingsButtonRef = useRef(null); // Référence pour le bouton de paramètres
+
+  // Fonction pour récupérer et afficher les notifications
+  const loadAndDisplayNotifications = async () => {
+    try {
+      const response = await fetch('http://localhost:5000/api/notifications');
+      const data = await response.json();
+      setNotifications(data);
+
+      // Afficher les notifications
+      data.forEach((notification) => {
+        if (notification.type === 'success') {
+          toast.success(notification.message, {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        } else if (notification.type === 'error') {
+          toast.error(notification.message, {
+            position: "top-right",
+            autoClose: 3000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+          });
+        }
+        // Ajoutez d'autres types de notifications si nécessaire
+      });
+    } catch (error) {
+      console.error('Failed to load notifications', error);
+    }
+  };
+
+  const handleNotification = () => {
+    loadAndDisplayNotifications();
+  };
+
+  const toggleSettings = () => {
+    setIsSettingsOpen(prevState => !prevState); // Inverse l'état
+  };
+
+  // Gérer le clic en dehors du panneau de paramètres
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        settingsRef.current &&
+        settingsButtonRef.current &&
+        !settingsRef.current.contains(event.target) &&
+        !settingsButtonRef.current.contains(event.target)
+      ) {
+        setIsSettingsOpen(false);
+      }
+    };
+
+    // Ajouter l'écouteur d'événement lors du montage
+    document.addEventListener('mousedown', handleClickOutside);
+
+    // Nettoyer l'écouteur d'événement lors du démontage
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [settingsRef, settingsButtonRef]); // Ajout des dépendances
+
   return (
     <div className="navbar">
       <div className="navbar-logo">
@@ -38,14 +86,24 @@ const Navbar = ({ onSearchChange }) => {
       </div>
       <div className="navbar-links">
         <a href="admin-dashboard" title="Dashboard"><FaHome /></a>
-        <a href="Profile" title="Profil"><FaUser /></a>
         <a href="forum-page" title="Commentaires et Feedback"><FaComment /></a>
         <a href="#notification" title="Notification" onClick={handleNotification}>
           <FaBell />
         </a>
-        <a href="#settings" title="Paramètres et personnalisation"><FaCog /></a>
+        <FaEllipsisH
+          ref={settingsButtonRef} // Associer la référence au bouton
+          title="Paramètres et personnalisation"
+          onClick={toggleSettings}
+          style={{ cursor: 'pointer', color: '#000', marginLeft: '15px' }}
+        />
       </div>
       <ToastContainer />
+      {/* Affichage du panneau de paramètres avec animation et référence */}
+      {isSettingsOpen && (
+        <div ref={settingsRef} style={{ position: 'absolute', top: '60px', right: '20px' }}>
+          <SettingsPanel onClose={toggleSettings} />
+        </div>
+      )}
     </div>
   );
 };

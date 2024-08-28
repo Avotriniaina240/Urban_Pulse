@@ -197,7 +197,6 @@ button:active {
 }
 
 .role-select:hover {
-    border-color: #81b3e6;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
