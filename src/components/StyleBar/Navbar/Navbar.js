@@ -90,12 +90,14 @@ const Navbar = ({ onSearchChange }) => {
         <a href="#notification" title="Notification" onClick={handleNotification}>
           <FaBell />
         </a>
-        <FaEllipsisH
-          ref={settingsButtonRef} // Associer la référence au bouton
+        <div 
+          ref={settingsButtonRef} // Associer la référence à l'élément div
           title="Paramètres et personnalisation"
           onClick={toggleSettings}
-          style={{ cursor: 'pointer', color: '#000', marginLeft: '15px' }}
-        />
+          style={{ display: 'inline-block', cursor: 'pointer', color: '#000', marginLeft: '15px' }}
+        >
+          <FaEllipsisH />
+        </div>
       </div>
       <ToastContainer />
       {/* Affichage du panneau de paramètres avec animation et référence */}

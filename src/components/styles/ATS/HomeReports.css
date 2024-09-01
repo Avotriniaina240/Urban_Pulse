@@ -8,7 +8,6 @@
 }
 
 .global-border {
-    border: 2px solid #a9c8e9;
     padding: 5px;
     border-radius: 15px;
     background-color: #e2e6ee;
@@ -18,8 +17,8 @@
     margin: 0 auto; /* Centrer sur la page */
     transition: transform 0.3s ease, box-shadow 0.3s ease;
     animation: fadeInBorder 1.2s ease-in-out;
-    margin-left: 361px;
-    margin-top: -370px;
+    margin-left: 400px;
+    margin-top: -460px;
 }
 
 .global-border:hover {

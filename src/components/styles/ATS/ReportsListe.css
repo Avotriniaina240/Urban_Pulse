@@ -1,32 +1,90 @@
-/* src/components/ReportList.css */
-.report-list {
-  display: flex;
-  flex-direction: column;
-  max-width: 350px;
-  margin: auto;
-  padding: 40px;
-  border: 2px solid #a9c8e9;
+.reports-header-list {
+  max-width: 5%;
+  margin: 40px auto 20px auto; /* Centrer et ajuster les marges, espacement avec le contenu */
+  padding: 20px;
+  background-color: #ffffff; /* Même couleur de fond que le reste */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
-  background-color: #f6f7fa;
-  box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.1);
-  margin-top: -420px;
-  margin-right: 350px;
+  margin-top: -400px;
+  margin-right: 189px;
+  max-height: 360px;
+}
+
+.reports-header-list h2 {
+  color: #333;
+  font-size: 1.8em;
+  text-align: center;
+  margin-bottom: 20px; /* Espacement en dessous du titre */
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 25px;
+  font-size: 1em;
+  box-sizing: border-box;
+  margin-bottom: 20px; /* Espacement en dessous de la barre de recherche */
+}
+
+.report-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 colonnes de largeur égale */
+  grid-template-rows: repeat(4, 1fr); /* 4 lignes de hauteur égale */
+  gap: 20px; /* Espacement entre les éléments */
+  max-width: 59.5%;
+  max-height: 400px; /* Hauteur maximale pour limiter la longueur de la liste */
+  margin: 40px auto;
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #f3f5f8; /* Couleur de fond blanche pour une apparence plus propre */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   animation: fadeInBorder 1.2s ease-in-out;
+  margin-top: 200px;
+  margin-right: 189px;
+  overflow-y: auto; /* Activation du défilement vertical */
+}
+
+.report-list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: contents; /* Pour que la grille s'applique aux <li> directement */
+}
+
+.report-item-list {
+  margin: 0; /* Supprimer les marges pour réduire l'espace entre les éléments */
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #f9f9f9; /* Couleur de fond légèrement grise pour la distinction */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.report-item-list:hover {
+  box-shadow: 0 4px 20px rgba(29, 115, 214, 0.5); /* Effet d'ombre plus prononcé au survol */
+  background-color: rgb(219, 240, 250);
+  transform: translateY(-3px); /* Légère translation vers le haut au survol */
+}
+
+.report-item-list strong {
+  color: #555;
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 600;
+  font-size: 1em;
+}
+
+@keyframes fadeInBorder {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
   }
-  
-  .report-list h2 {
-    margin-bottom: 15px;
+  100% {
+    opacity: 1;
+    transform: translateY(0);
   }
-  
-  .report-list ul {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .report-list li {
-    margin-bottom: 10px;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px
-  }
+}

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Navbar from '../StyleBar/Navbar/Navbar';
 import Sidebar from '../StyleBar/Sidebar/Sidebar';
-import Swal from 'sweetalert2';
+import { toast } from 'react-toastify'; // Importer la fonction toast
 import '../styles/Admin/GestionUser.css';
 
 const GestionUser = () => {
@@ -49,23 +49,11 @@ const GestionUser = () => {
         },
       });
       setUsers(users.filter(user => user.id !== userId));
-      Swal.fire({
-        title: 'Supprimé!',
-        text: 'L\'utilisateur a été supprimé.',
-        icon: 'success',
-        timer: 1500, // 1500 ms = 1.5 secondes
-        showConfirmButton: false
-      });
+      toast.success('Utilisateur supprimé !');
     } catch (err) {
       setError("Erreur lors de la suppression de l'utilisateur.");
       console.error(err);
-      Swal.fire({
-        title: 'Erreur',
-        text: "Erreur lors de la suppression de l'utilisateur.",
-        icon: 'error',
-        timer: 1500, // 1500 ms = 1.5 secondes
-        showConfirmButton: false
-      });
+      toast.success('Erreur de la suppresion !');
     }
   };
 
@@ -84,17 +72,11 @@ const GestionUser = () => {
       });
       setUsers(users.map(user => (user.id === editingUser.id ? response.data : user)));
       setEditingUser(null);
-      Swal.fire({
-        title: 'Modifié!',
-        text: 'L\'utilisateur a été mis à jour.',
-        icon: 'success',
-        timer: 1500, // 1500 ms = 1.5 secondes
-        showConfirmButton: false
-      });
+      toast.success('l\'utilisateur a été mis à jour !');
     } catch (err) {
       setError("Erreur lors de la mise à jour de l'utilisateur.");
       console.error(err);
-      Swal.fire('Erreur', "Erreur lors de la mise à jour de l'utilisateur.", 'error');
+      toast.success('Erreur lors de la mise à jour de l\'utilisateur !');
     }
   };
 
