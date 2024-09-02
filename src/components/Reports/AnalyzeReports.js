@@ -8,7 +8,9 @@ const AnalyzeReports = () => {
   const [statistics, setStatistics] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [statusFilter, setStatusFilter] = useState('all'); // État pour le filtre de statut
 
+  // Effet pour charger les statistiques lors du premier rendu du composant
   useEffect(() => {
     const fetchStatistics = async () => {
       try {
@@ -41,6 +43,40 @@ const AnalyzeReports = () => {
 
     fetchStatistics();
   }, []);
+
+  // Fonction pour afficher les statistiques filtrées
+  const renderFilteredStatistics = () => {
+    if (!statistics) {
+      return <p>Les données ne sont pas disponibles.</p>;
+    }
+
+    switch (statusFilter) {
+      case 'resolved':
+        return <p><strong>Signalements Résolus:</strong> {statistics.resolved}</p>;
+      case 'pending':
+        return <p><strong>Signalements En Attente:</strong> {statistics.pending}</p>;
+      case 'in-progress':
+        return <p><strong>Signalements En Cours:</strong> {statistics.inProgress}</p>;
+      case 'all':
+      default:
+        return (
+          <div className="statistics-container">
+            <div className="statistics-item total-reports">
+              <p><strong>Total des Signalements:</strong> {statistics.totalReports}</p>
+            </div>
+            <div className="statistics-item resolved">
+              <p><strong>Signalements Résolus:</strong> {statistics.resolved}</p>
+            </div>
+            <div className="statistics-item pending">
+              <p><strong>Signalements En Attente:</strong> {statistics.pending}</p>
+            </div>
+            <div className="statistics-item in-progress">
+              <p><strong>Signalements En Cours:</strong> {statistics.inProgress}</p>
+            </div>
+          </div>
+        );
+    }
+  };
 
   if (loading) {
     return <div>Chargement des données...</div>;
@@ -75,11 +111,15 @@ const AnalyzeReports = () => {
         </div>
       </div>
       <div className="analysis-container">
-        <p><strong>Total des Signalements:</strong> {statistics.totalReports}</p>
-        <p><strong>Signalements Résolus:</strong> {statistics.resolved}</p>
-        <p><strong>Signalements En Attente:</strong> {statistics.pending}</p>
-        <p><strong>Signalements En Cours:</strong> {statistics.inProgress}</p>
-        {/* Ajoutez ici des graphiques, des tableaux ou d'autres éléments d'analyse */}
+        {/* Filtres de statut */}
+        <div className="status-filters">
+          <button onClick={() => setStatusFilter('all')} className={statusFilter === 'all' ? 'active-filter' : ''}>Tous</button>
+          <button onClick={() => setStatusFilter('resolved')} className={statusFilter === 'resolved' ? 'active-filter' : ''}>Résolus</button>
+          <button onClick={() => setStatusFilter('pending')} className={statusFilter === 'pending' ? 'active-filter' : ''}>En Attente</button>
+          <button onClick={() => setStatusFilter('in-progress')} className={statusFilter === 'in-progress' ? 'active-filter' : ''}>En Cours</button>
+        </div>
+        {/* Affichage des statistiques filtrées */}
+        {renderFilteredStatistics()}
       </div>
     </div>
   );

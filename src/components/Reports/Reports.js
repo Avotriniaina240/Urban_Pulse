@@ -9,6 +9,7 @@ const Reports = () => {
   const [description, setDescription] = useState('');
   const [location, setLocation] = useState('');
   const [image, setImage] = useState(null);
+  const [status, setStatus] = useState('pending'); // Valeur par défaut pour le statut
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -16,6 +17,7 @@ const Reports = () => {
     const formData = new FormData();
     formData.append('description', description);
     formData.append('location', location);
+    formData.append('status', status); // Ajouter le champ status
     if (image) {
       formData.append('image', image);
     }
@@ -35,6 +37,7 @@ const Reports = () => {
         setDescription('');
         setLocation('');
         setImage(null);
+        setStatus('pending'); // Réinitialiser le statut
       } else {
         const error = await response.text(); // Lire comme texte pour éviter les erreurs de parsing JSON
         console.error('Erreur lors de la soumission des données:', error);

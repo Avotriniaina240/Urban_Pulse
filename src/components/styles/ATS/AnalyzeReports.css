@@ -1,24 +1,192 @@
-
 .analysis-container {
-    display: flex;
-    flex-direction: column;
-    max-width: 350px;
-    margin: auto;
-    padding: 40px;
-    border: 2px solid #a9c8e9;
-    border-radius: 10px;
-    background-color: #f6f7fa;
-    box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.1);
-    margin-top: -420px;
-    margin-right: 350px;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    animation: fadeInBorder 1.2s ease-in-out;
-  }
+  display: flex;
+  flex-direction: column;
+  max-width: 400px; /* Augmenté pour un meilleur alignement */
+  margin: auto;
+  padding: 40px;
+  border-radius: 12px; /* Légèrement plus arrondi pour un look plus moderne */
+  background-color: #f6f7fa;
+  box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.1);
+  margin-top: -550px;
+  margin-right: 450px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  animation: fadeInBorder 1.2s ease-in-out;
+}
 
-  
-  
-  .analysis-container p {
-    margin: 10px 0;
-    font-size: 16px;
-    color: #333;
+.analysis-container:hover {
+  transform: translateY(-5px); /* Effet de survol pour dynamiser l'interface */
+  box-shadow: 0px 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+.analysis-container p {
+  margin: 10px 0;
+  font-size: 16px;
+  color: #333;
+  line-height: 1.6; /* Améliore la lisibilité */
+}
+
+/* Styles pour les filtres de statut */
+.status-filters {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px; /* Espace entre les boutons */
+  margin-bottom: 20px;
+}
+
+.status-filters button {
+  background-color: #e0e0e0;
+  border: none;
+  border-radius: 20px; /* Bordure plus arrondie */
+  color: #333;
+  font-size: 14px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Effet de survol */
+.status-filters button:hover {
+  background-color: #c2c2c2;
+  transform: scale(1.05); /* Zoom léger au survol */
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); /* Ombre portée douce */
+}
+
+/* Style du bouton actif */
+.status-filters .active-filter {
+  background-color: #a9c8e9;
+  color: #fff;
+  box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1); /* Ombre portée pour le bouton actif */
+  animation: pulsate 1.5s infinite; /* Animation de pulsation */
+}
+
+/* Animation de pulsation */
+@keyframes pulsate {
+  0% {
+    transform: scale(1);
+    opacity: 1;
   }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+
+/* Styles pour les boutons de la page d'accueil */
+.home-button {
+  background-color: #a9c8e9;
+  border: none;
+  border-radius: 20px; /* Alignement avec les autres boutons */
+  color: #fff;
+  font-size: 16px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.home-button:hover {
+  background-color: #87a5d6;
+  transform: scale(1.05); /* Effet de survol */
+}
+
+/* Styles pour les messages d'erreur */
+.error-message {
+  color: red;
+  font-size: 16px;
+  text-align: center;
+  margin: 20px;
+}
+
+.error-message button {
+  background-color: #a9c8e9;
+  border: none;
+  border-radius: 20px; /* Cohérence dans les bordures */
+  color: #fff;
+  font-size: 14px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.error-message button:hover {
+  background-color: #87a5d6;
+  transform: scale(1.05);
+}
+
+/* Animations */
+@keyframes fadeInBorder {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Conteneur pour les statistiques */
+.statistics-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px; /* Espace entre les lignes */
+  padding: 20px;
+  background-color: #fff; /* Fond blanc pour les statistiques */
+  border: 1px solid #dcdcdc; /* Bordure douce */
+  border-radius: 10px; /* Bordures arrondies */
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); /* Ombre portée douce */
+  animation: fadeIn 1s ease-in-out; /* Animation d'apparition */
+}
+
+/* Styles pour chaque ligne de statistique */
+.statistics-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 16px;
+  padding: 10px;
+  border-radius: 8px; /* Bordures arrondies */
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+/* Style pour le total des signalements */
+.total-reports {
+  background-color: #e0f7fa; /* Couleur douce pour le total */
+}
+
+/* Style pour les signalements résolus */
+.resolved {
+  background-color: #d0f0c0; /* Couleur douce pour les résolus */
+}
+
+/* Style pour les signalements en attente */
+.pending {
+  background-color: #fff9c4; /* Couleur douce pour les en attente */
+}
+
+/* Style pour les signalements en cours */
+.in-progress {
+  background-color: #ffe0b2; /* Couleur douce pour les en cours */
+}
+
+/* Effet de survol pour les lignes de statistique */
+.statistics-item:hover {
+  background-color: #f0f0f0; /* Changement de couleur au survol */
+  transform: translateX(5px); /* Déplacement léger au survol */
+}
+
+/* Animation d'apparition */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+

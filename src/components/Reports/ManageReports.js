@@ -104,13 +104,7 @@ const ManageReports = () => {
       (report.description && report.description.toLowerCase().includes(searchText.toLowerCase())) ||
       (report.status && report.status.toLowerCase().includes(searchText.toLowerCase()))
     )
-    .filter((report) => statusFilter === 'all' || report.status === statusFilter); // Filtrer par statut
-
-  // Calculer les statistiques
-  const totalReports = reports.length;
-  const resolvedReports = reports.filter(r => r.status === 'resolved').length;
-  const pendingReports = reports.filter(r => r.status === 'pending').length;
-  const inProgressReports = reports.filter(r => r.status === 'in-progress').length;
+    .filter((report) => statusFilter === 'all' || report.status === statusFilter); // Filtrer par statu
 
   return (
     <div>
@@ -142,20 +136,6 @@ const ManageReports = () => {
           className="search-input"
         />
 
-        {/* Filtres de statut */}
-        <div className="status-filters">
-          <button onClick={() => setStatusFilter('all')} className={statusFilter === 'all' ? 'active-filter' : ''}>Tous</button>
-          <button onClick={() => setStatusFilter('resolved')} className={statusFilter === 'resolved' ? 'active-filter' : ''}>Résolus</button>
-          <button onClick={() => setStatusFilter('pending')} className={statusFilter === 'pending' ? 'active-filter' : ''}>En Attente</button>
-          <button onClick={() => setStatusFilter('in-progress')} className={statusFilter === 'in-progress' ? 'active-filter' : ''}>En Cours</button>
-        </div>
-      </div>
-
-      <div className="report-stats">
-        <p><strong>Total des Signalements:</strong> {totalReports}</p>
-        <p><strong>Résolus:</strong> {resolvedReports}</p>
-        <p><strong>En Attente:</strong> {pendingReports}</p>
-        <p><strong>En Cours:</strong> {inProgressReports}</p>
       </div>
 
       <div className="report-management" ref={reportListRef}>
