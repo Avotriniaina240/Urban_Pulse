@@ -8,7 +8,7 @@ const TrendChart = ({ data, legendTitle }) => {
         return <p>Aucune donnée disponible pour afficher le graphique.</p>;
     }
 
-    // Dynamically extract keys for lines
+    // Dynamiquement extraire les clés pour les lignes, en supposant que chaque clé représente une série de données
     const lineKeys = Object.keys(data[0]).filter(key => key !== 'date');
     
     return (
@@ -61,22 +61,4 @@ const TrendChart = ({ data, legendTitle }) => {
     );
 };
 
-// Exemple d'utilisation du composant avec des données réelles basées sur une carte
-const App = () => {
-    // Remplacez ceci par vos données réelles récupérées d'une API ou d'une autre source
-    const realData = [
-        { date: '2024-01-01', value1: 4000, value2: 2400 },
-        { date: '2024-01-02', value1: 3000, value2: 1398 },
-        { date: '2024-01-03', value1: 2000, value2: 9800 },
-        // Ajoutez d'autres points de données ici
-    ];
-
-    return (
-        <TrendChart 
-            data={realData} 
-            legendTitle="Évolution des Valeurs" 
-        />
-    );
-};
-
-export default App;
+export default TrendChart;

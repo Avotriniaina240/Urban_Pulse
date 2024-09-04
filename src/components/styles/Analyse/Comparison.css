@@ -5,6 +5,12 @@
     height: 100vh;
     width: 100%;
     animation: fadeIn 0.5s ease-in-out;
+    background-color: #f0f4f8;
+    font-family: 'Roboto', sans-serif; /* Application de la police Roboto */
+}
+
+.comparison-data {
+    margin-top: 18px;
 }
 
 /* Contenu principal à côté de la barre latérale */
@@ -13,110 +19,130 @@
     display: flex;
     flex-direction: column;
     padding: 20px;
-    background-color: #f5f5f5;
+    background-color: #ffffff;
     overflow-y: auto;
     margin-left: 255px;
     margin-top: 90px;
     max-height: 100%;
     transition: margin-left 0.3s ease-in-out, margin-top 0.3s ease-in-out;
+    font-family: 'Roboto', sans-serif; /* Application de la police Roboto */
 }
 
 /* Titre de la page */
 .h1-cp {
-    background: linear-gradient(90deg, #ccd3d8, #f0f4f8);
-    color: #464343;
-    padding: 10px;
-    border-radius: 5px;
-    margin: 15px 0; /* Marge au-dessus et en-dessous */
+    background: linear-gradient(90deg, #e0eaff, #c0d6ff);
+    color: #2c3e50;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 20px 0;
     animation: bounceIn 0.6s ease-out forwards;
     width: 98%;
-    font-family: Arial, sans-serif;
+    font-family: 'Roboto', sans-serif; /* Application de la police Roboto */
+    text-align: center;
 }
 
 /* Barre d'outils pour la comparaison */
 .comparison-toolbar {
     display: flex;
-    justify-content: flex-start;
-    align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
     margin-bottom: 20px;
     animation: slideInLeft 0.6s ease-in-out;
+    align-items: center;
+}
+
+.comparison-toolbar input,
+.comparison-toolbar select,
+.comparison-toolbar button {
+    padding: 12px 15px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out, transform 0.2s ease-in-out;
+    font-family: 'Roboto', sans-serif; /* Application de la police Roboto */
+}
+
+.comparison-toolbar input {
+    width: 25%;
+    background-color: #ffffff;
 }
 
 .comparison-toolbar select {
-    padding: 12px 15px;
-    font-size: 16px;
-    font-weight: 500;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    margin-right: 10px;
-    transition: background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out, transform 0.2s ease-in-out;
-    width: 15%;
+    width: 20%;
     background-color: #f9f9f9;
     color: #333;
     cursor: pointer;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    appearance: none; /* Pour cacher la flèche par défaut */
 }
 
 .comparison-toolbar select:hover {
     background-color: #e6e6e6;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-    transform: translateY(-2px); /* Légère élévation au survol */
+    transform: translateY(-2px);
 }
 
 .comparison-toolbar select:focus {
     outline: none;
     background-color: #fff;
-    box-shadow: 0 0 0 4px rgba(100, 150, 255, 0.3), 0 4px 15px rgba(0, 0, 0, 0.2);
-    transform: translateY(-2px); /* Maintenir l'élévation au focus */
 }
 
-.comparison-toolbar select:active {
-    background-color: #ddd;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    transform: translateY(0); /* Revenir à sa position d'origine lors du clic */
+.comparison-toolbar button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    width: 20%;
+    margin-top: -5px;
+}
+
+.comparison-toolbar button:hover {
+    background-color: #0056b3;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
 
 /* Résultats de la comparaison */
 .comparison-results {
     display: flex;
-    justify-content: space-between; /* Add this to avoid items touching the borders */
+    flex-wrap: wrap;
+    gap: 20px;
 }
 
 /* Chaque élément comparatif */
 .comparison-item {
-    background-color: #fff;
+    background-color: #ffffff;
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15); /* Increased shadow for a more modern look */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
     flex: 1;
-    margin-right: 10px; /* Reduced margin to prevent overlapping with borders */
-    min-width: 150px;
-    max-width: 150px;
+    min-width: 200px;
+    max-width: 300px; /* Ajusté pour un meilleur rendu */
     display: flex;
     flex-direction: column;
-    align-items: center; /* Centering content horizontally */
-    justify-content: center; /* Centering content vertically */
-    text-align: center; /* Center text content */
+    align-items: flex-start; /* Alignement du texte à gauche */
+    justify-content: center;
+    text-align: left;
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out, background-color 0.3s ease-in-out;
+    font-family: 'Roboto', sans-serif; /* Application de la police Roboto */
 }
 
 .comparison-item:hover {
-    transform: translateY(-5px); /* Elevate slightly on hover */
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Stronger shadow on hover for emphasis */
-    background-color: #f0f0f0; /* Slightly darker background on hover */
+    transform: translateY(-5px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    background-color: #f0f4f8;
 }
 
 /* Title styling */
 .comparison-item h2 {
-    font-size: 20px;
-    color: #333; /* Darker color for better contrast */
+    font-size: 22px;
+    color: #333;
     margin-bottom: 10px;
     transition: color 0.3s ease-in-out;
+    font-family: 'Roboto', sans-serif; /* Application de la police Roboto */
 }
 
 .comparison-item:hover h2 {
-    color: #007BFF; /* Change title color on hover for effect */
+    color: #007BFF;
 }
 
 /* Paragraph styling */
@@ -125,16 +151,21 @@
     color: #666;
     margin-bottom: 8px;
     transition: color 0.3s ease-in-out;
+    font-family: 'Roboto', sans-serif; /* Application de la police Roboto */
 }
 
 .comparison-item:hover p {
-    color: #444; /* Darker paragraph text on hover */
+    color: #444;
 }
 
-
+/* Style pour le graphique */
 .chart-container-comparison {
     flex: 1;
-    max-width: 774px;
+    max-width: 100%;
+    margin-top: 20px;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
 }
 
 /* Animations keyframes */
@@ -143,17 +174,6 @@
         opacity: 0;
     }
     to {
-        opacity: 1;
-    }
-}
-
-@keyframes slideInDown {
-    from {
-        transform: translateY(-20px);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
         opacity: 1;
     }
 }
@@ -169,13 +189,13 @@
     }
 }
 
-@keyframes fadeInUp {
+@keyframes bounceIn {
     from {
-        transform: translateY(20px);
         opacity: 0;
+        transform: scale(0.9);
     }
     to {
-        transform: translateY(0);
         opacity: 1;
+        transform: scale(1);
     }
 }

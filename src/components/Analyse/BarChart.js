@@ -1,13 +1,13 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect } from 'react';
 import * as d3 from 'd3';
 import '../styles/Analyse/UrbanAnalysis.css'; // Assurez-vous que ce fichier CSS est correctement configuré
 
-const BarChart = ({ data, legend }) => {
+const BarChart = ({ data }) => {
     const ref = useRef();
-    const [activeLegend, setActiveLegend] = useState(null);
 
     useEffect(() => {
         if (!data || data.length === 0) {
+            console.log('Aucune donnée disponible');
             return;
         }
 
@@ -16,6 +16,7 @@ const BarChart = ({ data, legend }) => {
         const width = 500 - margin.left - margin.right;
         const height = 300 - margin.top - margin.bottom;
 
+        // Créer le SVG et le groupe pour le graphique
         const svg = d3.select(ref.current)
             .attr('width', width + margin.left + margin.right)
             .attr('height', height + margin.top + margin.bottom)
@@ -35,78 +36,46 @@ const BarChart = ({ data, legend }) => {
             .nice()
             .range([height, 0]);
 
-        // Barres avec animation
+        // Barres
         svg.selectAll('.bar')
             .data(data)
             .enter().append('rect')
             .attr('class', 'bar')
             .attr('x', d => x(d.label))
-            .attr('y', height) // Position initiale
-            .attr('width', x.bandwidth())
-            .attr('height', 0) // Hauteur initiale
-            .attr('fill', d => (activeLegend === null || activeLegend === d.label) ? 'steelblue' : '#ddd') // Couleur selon la légende active
-            .transition()
-            .duration(1000)
             .attr('y', d => y(d.value))
-            .attr('height', d => height - y(d.value)); // Animation
+            .attr('width', x.bandwidth())
+            .attr('height', d => height - y(d.value))
+            .attr('fill', 'steelblue'); // Couleur des barres
 
         // Axes
         svg.append('g')
             .attr('class', 'x-axis')
             .attr('transform', `translate(0,${height})`)
-            .call(d3.axisBottom(x));
+            .call(d3.axisBottom(x))
+            .selectAll('text')
+            .attr('dy', '0.35em')
+            .style('text-anchor', 'middle');
 
         svg.append('g')
             .attr('class', 'y-axis')
-            .call(d3.axisLeft(y));
+            .call(d3.axisLeft(y))
+            .append('text')
+            .attr('transform', 'rotate(-90)')
+            .attr('y', -margin.left + 10)
+            .attr('x', -height / 2)
+            .style('text-anchor', 'middle')
+            .text('Valeur');
 
         // Labels des axes
         svg.append('text')
             .attr('transform', `translate(${width / 2},${height + margin.bottom - 5})`)
             .style('text-anchor', 'middle')
             .text('Catégorie');
-
-        svg.append('text')
-            .attr('transform', 'rotate(-90)')
-            .attr('y', -margin.left + 10)
-            .attr('x', -height / 2)
-            .style('text-anchor', 'middle')
-            .text('Valeur');
-    }, [data, activeLegend]);
-
-    const handleLegendClick = (label) => {
-        setActiveLegend(activeLegend === label ? null : label);
-    };
+    }, [data]);
 
     return (
         <div className="chart-container">
             <svg ref={ref}></svg>
-            {legend && (
-                <div className="legend-container">
-                    <h3 className="legend-title">{legend.title}</h3>
-                    <ul className="legend-list">
-                        {legend.items.map((item, index) => (
-                            <li
-                                key={index}
-                                className="legend-item"
-                                onClick={() => handleLegendClick(item.label)}
-                                style={{ cursor: 'pointer', marginBottom: '5px' }}
-                            >
-                                <span
-                                    className="legend-color"
-                                    style={{ backgroundColor: item.color, width: '20px', height: '20px', display: 'inline-block', marginRight: '10px' }}
-                                ></span>
-                                <span className="legend-abbreviation">
-                                    {item.abbreviation}
-                                </span>: {item.label}
-                                <p className="legend-description">
-                                    {item.description}
-                                </p>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            )}
         </div>
     );
 };

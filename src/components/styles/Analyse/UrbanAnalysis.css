@@ -1,4 +1,3 @@
-/* Conteneur principal pour toute la page */
 .page-container {
   display: flex;
   flex-direction: column;
@@ -80,6 +79,7 @@ header {
   margin-top: -27px;
   height: 224px;
   margin-left: -6px;
+  height: 125px;
 }
 /* Texte de description */
 .description-text {
@@ -141,6 +141,7 @@ header {
 /* Styles spécifiques pour le graphique */
 .bar {
   transition: fill 0.3s ease, transform 0.3s ease; /* Animation de couleur et transformation */
+  height: 450px;
 }
 
 .bar:hover {
@@ -215,4 +216,65 @@ header {
 .leaflet-container.leaflet-touch-zoom {
   margin-left: -270px;
   touch-action: pan-x pan-y;
+}
+
+/* Conteneur des graphiques */
+.chart-container {
+  display: flex;
+  flex-direction: row; /* Alignement horizontal des graphiques */
+  align-items: flex-start; /* Aligner les éléments au début du conteneur */
+  margin-top: 20px;
+}
+
+/* Éléments de graphique */
+.chart-item {
+  margin: 0; /* Retirer la marge par défaut pour un alignement complet à gauche */
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  height: 450px;
+  background-color: #f9f9f9;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  flex: 1; /* Permet aux éléments de s'étendre et de remplir l'espace disponible */
+  max-width: 800px; /* Définit une largeur maximale pour éviter une trop grande largeur */
+}
+
+/* UrbanAnalysis.css */
+
+/* Titre pour le graphique à secteurs */
+.pie-chart-title {
+  font-size: 1.2rem; /* Taille du texte du titre */
+  font-weight: 600; /* Poids du texte */
+  color: #333; /* Couleur du texte */
+  margin-bottom: 10px; /* Espacement sous le titre */
+  text-align: left; /* Centrer le titre */
+}
+
+
+/* Effet de survol pour le graphique à secteurs */
+.chart-item:hover {
+  transform: scale(1.03);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Styles pour les légendes */
+.recharts-legend-item {
+  font-size: 14px;
+  font-weight: bold;
+}
+
+/* Styles pour le graphique à secteurs */
+.recharts-pie-label {
+  font-size: 12px;
+  font-weight: bold;
+  fill: #fff;
+}
+
+/* Animation de la pie chart */
+.recharts-pie {
+  transition: transform 0.6s ease;
+}
+
+.recharts-pie:hover {
+  transform: scale(1.1);
 }

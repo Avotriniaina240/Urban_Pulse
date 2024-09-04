@@ -1,51 +1,117 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import TrendChart from '../Analyse/TrendChart';
 import Navbar from '../StyleBar/Navbar/Navbar';
 import Sidebar from '../StyleBar/Sidebar/SidebarAdmin';
-import MapView from '../Maps/MapView';
-import BarChart from '../Analyse/BarChart';
-import '../styles/Analyse/UrbanAnalysis.css'; // Importez le fichier CSS
+import { PieChart, Pie, Cell, Legend } from 'recharts'; // Importation des composants de recharts
+import '../styles/Analyse/UrbanAnalysis.css'; // Assurez-vous que ce fichier CSS est correctement configuré
+
+const API_KEY = '13c8b873a51de1239ad5606887a1565e'; // Assurez-vous de sécuriser vos clés API
 
 const UrbanAnalysis = () => {
     const [trendData, setTrendData] = useState([]);
-    const [mapMarkers, setMapMarkers] = useState([]);
-    const [barChartData, setBarChartData] = useState([]);
+    const [pieChartData, setPieChartData] = useState([]);
+    const [locationsInput, setLocationsInput] = useState('');
+    const [coordinatesInput, setCoordinatesInput] = useState('');
+    const [neighborhoodsInput, setNeighborhoodsInput] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
 
-    useEffect(() => {
-        const fetchData = () => {
-            // Données statiques pour le graphique des tendances
-            setTrendData([
-                { date: '2024-01-01', value: 10 },
-                { date: '2024-01-02', value: 15 },
-                { date: '2024-01-03', value: 8 },
-                { date: '2024-01-04', value: 20 },
-                { date: '2024-01-05', value: 13 },
-            ]);
+    // Fonction pour récupérer les données de localisation
+    const fetchLocationData = async (query) => {
+        try {
+            const response = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${query}&appid=${API_KEY}`);
+            if (!response.ok) {
+                const errorMessage = await response.text();
+                throw new Error(`Erreur API: ${errorMessage}`);
+            }
+            const data = await response.json();
+            return {
+                lat: data.coord.lat,
+                lon: data.coord.lon
+            };
+        } catch (error) {
+            console.error(`Erreur lors de la récupération des données pour ${query}: ${error.message}`);
+            throw error;
+        }
+    };
 
-            // Données statiques pour les marqueurs de la carte
-            setMapMarkers([
-                
-            ]);
+    // Fonction pour vérifier les données du graphique à secteurs
+    const verifyPieChartData = (data) => {
+        if (!Array.isArray(data) || data.length === 0) {
+            return 'Les données du graphique à secteurs sont vides ou mal formatées.';
+        }
 
-            // Données statiques pour le bar chart
-            setBarChartData([
-                { label: 'A', value: 30 },
-                { label: 'B', value: 20 },
-                { label: 'C', value: 50 },
-                { label: 'D', value: 40 },
-            ]);
-        };
+        for (const item of data) {
+            if (!item.name || typeof item.value !== 'number') {
+                return `Données invalides détectées: ${JSON.stringify(item)}`;
+            }
+        }
 
-        fetchData();
-    }, []);
+        return null;
+    };
 
-    // Exemple d'utilisation de la légende
-    const legendItems = [
-        { label: 'A - Agriculture', color: 'steelblue' },
-        { label: 'B - Bâtiment', color: 'green' },
-        { label: 'C - Commerce', color: 'orange' },
-        { label: 'D - Développement', color: 'red' }
-    ];
+    // Fonction pour créer des données par défaut pour le graphique à secteurs
+    const createDefaultPieChartData = () => {
+        return [
+            
+        ];
+    };
+
+    // Fonction pour transformer les données de quartier en un format utilisable
+    const parseNeighborhoodsInput = (input) => {
+        return input.split(',').map(item => {
+            const [name, value] = item.split(':').map(part => part.trim());
+            return { name, value: parseFloat(value) };
+        }).filter(item => item.name && !isNaN(item.value));
+    };
+
+    // Fonction pour récupérer les données et mettre à jour les états
+    const fetchData = async () => {
+        setLoading(true);
+        setError(null);
+        try {
+            // Traitement des entrées utilisateur
+            const locationList = locationsInput.split(',').map(location => location.trim()).filter(Boolean);
+            const coordinateList = coordinatesInput.split(';').map(coord => coord.trim()).filter(Boolean);
+            const neighborhoodData = parseNeighborhoodsInput(neighborhoodsInput);
+
+            // Récupération des données pour les emplacements
+            const locationData = await Promise.all(locationList.map(async (location) => {
+                const { lat, lon } = await fetchLocationData(location);
+                return { location, lat, lon };
+            }));
+
+            // Traitement des coordonnées
+            const coordinateData = coordinateList.map(coord => {
+                const [lat, lon] = coord.split(',').map(Number);
+                return { location: `Coordonnée (${lat}, ${lon})`, lat, lon };
+            });
+
+            // Préparer les données pour les graphiques
+            const trendData = locationData.map(() => ({
+                date: new Date().toISOString().split('T')[0], // Exemple de date
+                temperature: Math.random() * 30, // Remplacez avec des données réelles
+                humidity: Math.random() * 100   // Remplacez avec des données réelles
+            }));
+
+            // Préparer les données pour le graphique à secteurs
+            let pieChartData = neighborhoodData;
+
+            // Vérifiez les données du graphique à secteurs et utilisez des données par défaut si nécessaire
+            const errorMessage = verifyPieChartData(pieChartData);
+            if (errorMessage) {
+                console.error(errorMessage);
+                pieChartData = createDefaultPieChartData();
+            }
+
+            setTrendData(trendData);
+            setPieChartData(pieChartData);
+        } catch (err) {
+            setError(`Une erreur est survenue lors de la récupération des données: ${err.message}`);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
         <div className="page-container">
@@ -54,35 +120,73 @@ const UrbanAnalysis = () => {
                 <Sidebar />
                 <div className="content">
                     <div className="header">
-                        <h1 className='urb-h1'>Tableau de Bord</h1>
+                        <h1 className='urb-h1'>Analyse Urbaine</h1>
                     </div>
-                    <div className="chart-container">
-                        <div className="chart-item">
-                            <BarChart data={barChartData} legend={{ title: 'Légende des Catégories', items: legendItems }} />
-                        </div>
-                        <div className="chart-item">
-                            <TrendChart data={trendData} legendTitle="Tendances des Valeurs" />
-                        </div>
-                        <div className="map-section">
-                            <div className="description-container">
-                                <p className="description-text">
-                                    Un utilisateur pourrait utiliser cette page pour surveiller la répartition de certains services ou infrastructures dans une ville. En cliquant sur les marqueurs sur la carte, l'utilisateur peut voir où se trouvent ces services et, en utilisant les graphiques, il peut comprendre comment ces services sont distribués ou utilisés. La légende permet à l'utilisateur de filtrer les informations affichées, par exemple, en montrant seulement certains types de services ou en comparant différentes données.
-                                </p>
+                    <div className="input-section">
+                        <div className="input-toolbar">
+                            <input
+                                type="text"
+                                placeholder="Entrez les noms de villes (séparés par des virgules)"
+                                value={locationsInput}
+                                onChange={(e) => setLocationsInput(e.target.value)}
+                            />
+                            <input
+                                type="text"
+                                placeholder="Entrez les coordonnées (lat,lng; séparés par des points-virgules)"
+                                value={coordinatesInput}
+                                onChange={(e) => setCoordinatesInput(e.target.value)}
+                                />
+                                <input
+                                    type="text"
+                                    placeholder="Entrez les quartiers avec valeurs (format: Quartier A:40, Quartier B:30)"
+                                    value={neighborhoodsInput}
+                                    onChange={(e) => setNeighborhoodsInput(e.target.value)}
+                                />
+                                <button onClick={fetchData} disabled={loading}>
+                                    {loading ? 'Chargement...' : 'Traiter'}
+                                </button>
                             </div>
-                            {/*<div className="aff">
-                                <div className="section section-1">MAP</div>
-                                <div className="section section-2">POLLUTION</div>
-                                <div className="section section-3">METEO</div>
+                            {loading && <p>Chargement des données...</p>}
+                            {error && <p style={{ color: 'red' }}>{error}</p>}
+                        </div>
+                        <div className="chart-container">
+                            <div className="chart-item">
+                                <h2 className="pie-chart-title">Répartition des Quartiers</h2> {/* Titre pour le graphique à secteurs */}
+                                <PieChart width={400} height={400}>
+                                    <Pie 
+                                        data={pieChartData} 
+                                        dataKey="value" 
+                                        nameKey="name" 
+                                        cx="50%" 
+                                        cy="50%" 
+                                        outerRadius={150} 
+                                        fill="#8884d8" 
+                                        label
+                                    >
+                                        {pieChartData.map((entry, index) => (
+                                            <Cell key={`cell-${index}`} fill={entry.fill || '#8884d8'} />
+                                        ))}
+                                    </Pie>
+                                    <Legend />
+                                </PieChart>
                             </div>
-                            <div className="map-container">
-                                <MapView markers={mapMarkers} />
-                            </div>*/}
+                            <div className="chart-item">
+                                <TrendChart data={trendData} legendTitle="Évolution des Valeurs" />
+                            </div>
+                            <div className="map-section">
+                                <div className="description-container">
+                                    <p className="description-text">
+                                        Utilisez cette page pour surveiller la répartition des services ou infrastructures dans une ville. Veuillez saisir vos coordonnées et utilisez les graphiques pour comprendre la distribution ou l'utilisation des services.
+                                    </p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-    );
-};
-
-export default UrbanAnalysis;
+        );
+    };
+    
+    export default UrbanAnalysis;
+    
+                                
