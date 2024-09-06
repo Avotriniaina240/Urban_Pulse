@@ -8,31 +8,31 @@ import { Chart as ChartJS, CategoryScale, LinearScale, LineElement, PointElement
 ChartJS.register(CategoryScale, LinearScale, LineElement, PointElement, Title, Tooltip, Legend, Filler, ArcElement);
 
 const VueEnsemble = () => {
-  const [stats, setStats] = useState({ monthlyNewUsers: 0, totalUsers: 0 });
-  const [monthlyStats, setMonthlyStats] = useState([]);
+  const [stats, setStats] = useState({ weeklyNewUsers: 0, totalUsers: 0 });
+  const [weeklyStats, setWeeklyStats] = useState([]);
   const [error, setError] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const statsResponse = await fetch('http://localhost:5000/api/user-stats');
-        const monthlyResponse = await fetch('http://localhost:5000/api/user-monthly-stats');
+        const weeklyResponse = await fetch('http://localhost:5000/api/user-weekly-stats');
         
-        if (!statsResponse.ok || !monthlyResponse.ok) {
+        if (!statsResponse.ok || !weeklyResponse.ok) {
           throw new Error('Erreur lors de la récupération des données');
         }
         
         const statsData = await statsResponse.json();
-        const monthlyData = await monthlyResponse.json();
+        const weeklyData = await weeklyResponse.json();
 
-        console.log('Monthly Stats:', monthlyData);
+        console.log('Weekly Stats:', weeklyData);
 
         setStats({
-          monthlyNewUsers: monthlyData.monthly_new_users || 0,
+          weeklyNewUsers: weeklyData.weekly_new_users || 0,
           totalUsers: statsData.total_users || 0,
         });
 
-        setMonthlyStats(monthlyData.stats || []);  // Assurez-vous que "stats" est un tableau dans la réponse
+        setWeeklyStats(weeklyData.stats || []);  // Assurez-vous que "stats" est un tableau dans la réponse
       } catch (err) {
         setError('Erreur lors de la récupération des données.');
         console.error(err);
@@ -42,13 +42,13 @@ const VueEnsemble = () => {
     fetchData();
   }, []);
 
-  // Vérifiez si monthlyStats contient des données
+  // Vérifiez si weeklyStats contient des données
   const chartData = {
-    labels: monthlyStats.length > 0 ? monthlyStats.map(stat => stat.month) : ['Aucun mois disponible'],
+    labels: weeklyStats.length > 0 ? weeklyStats.map(stat => `Semaine ${stat.week}`) : ['Aucune semaine disponible'],
     datasets: [
       {
         label: 'Utilisateurs inscrits',
-        data: monthlyStats.length > 0 ? monthlyStats.map(stat => stat.userCount) : [0],
+        data: weeklyStats.length > 0 ? weeklyStats.map(stat => stat.userCount) : [0],
         borderColor: 'rgba(75, 192, 192, 1)',
         backgroundColor: 'rgba(75, 192, 192, 0.2)',
         fill: true,
@@ -57,11 +57,11 @@ const VueEnsemble = () => {
   };
 
   const percentageData = {
-    labels: ['Nouveaux Utilisateurs ce mois-ci', 'Autres Utilisateurs'],
+    labels: ['Nouveaux Utilisateurs cette semaine', 'Autres Utilisateurs'],
     datasets: [
       {
         label: 'Répartition des Utilisateurs',
-        data: [stats.monthlyNewUsers, stats.totalUsers - stats.monthlyNewUsers],
+        data: [stats.weeklyNewUsers, stats.totalUsers - stats.weeklyNewUsers],
         backgroundColor: ['#4caf50', '#e6e6e6'],
       },
     ],
@@ -79,7 +79,7 @@ const VueEnsemble = () => {
             <div className="stats-column">
               <div className="percentage-chart">
                 <Doughnut data={percentageData} options={{ maintainAspectRatio: false }} />
-                <div className="percentage-text">{stats.monthlyNewUsers}</div>
+                <div className="percentage-text">{stats.weeklyNewUsers}</div>
               </div>
             </div>
 
@@ -98,7 +98,7 @@ const VueEnsemble = () => {
           </div>
 
           <div className="chart-container">
-            <h2>Graphique des Utilisateurs</h2>
+            <h2>Graphique des Utilisateurs par Semaine</h2>
             <Line data={chartData} />
           </div>
 

@@ -163,8 +163,9 @@
 
 /* Ajustement pour le graphique */
 .chart-container canvas {
-  max-width: 100%;
+  max-width: 89%;
   max-height: 250px;
+  margin-right: 400px;
 }
 
 /* Style pour les messages d'erreur */

@@ -2,115 +2,137 @@ import React, { useState } from 'react';
 import TrendChart from '../Analyse/TrendChart';
 import Navbar from '../StyleBar/Navbar/Navbar';
 import Sidebar from '../StyleBar/Sidebar/SidebarAdmin';
-import { PieChart, Pie, Cell, Legend } from 'recharts'; // Importation des composants de recharts
-import '../styles/Analyse/UrbanAnalysis.css'; // Assurez-vous que ce fichier CSS est correctement configuré
+import { PieChart, Pie, Cell, Legend } from 'recharts';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
+import '../styles/Analyse/UrbanAnalysis.css';
+import { format } from 'date-fns';
 
-const API_KEY = '13c8b873a51de1239ad5606887a1565e'; // Assurez-vous de sécuriser vos clés API
+const API_KEY = '13c8b873a51de1239ad5606887a1565e';
 
 const UrbanAnalysis = () => {
     const [trendData, setTrendData] = useState([]);
     const [pieChartData, setPieChartData] = useState([]);
-    const [locationsInput, setLocationsInput] = useState('');
-    const [coordinatesInput, setCoordinatesInput] = useState('');
-    const [neighborhoodsInput, setNeighborhoodsInput] = useState('');
+    const [locations, setLocations] = useState(['']); // Liste des champs de saisie pour les quartiers
+    const [coordinatePairs, setCoordinatePairs] = useState([{ latitude: '', longitude: '' }]); // Liste des paires de coordonnées
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [dataType, setDataType] = useState('ville'); // Type de données : ville, quartier ou coordonnée
 
-    // Fonction pour récupérer les données de localisation
-    const fetchLocationData = async (query) => {
+    const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+
+    const fetchWeatherData = async (city) => {
         try {
-            const response = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${query}&appid=${API_KEY}`);
+            const response = await fetch(`http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${API_KEY}&units=metric`);
             if (!response.ok) {
                 const errorMessage = await response.text();
                 throw new Error(`Erreur API: ${errorMessage}`);
             }
             const data = await response.json();
             return {
-                lat: data.coord.lat,
-                lon: data.coord.lon
+                city: data.name,
+                temperature: Math.round(data.main.temp), // Arrondir la température
+                humidity: Math.round(data.main.humidity), // Arrondir l'humidité
+                date: format(new Date(), 'yyyy-MM-dd')
             };
         } catch (error) {
-            console.error(`Erreur lors de la récupération des données pour ${query}: ${error.message}`);
+            console.error(`Erreur lors de la récupération des données pour ${city}: ${error.message}`);
             throw error;
         }
     };
-
-    // Fonction pour vérifier les données du graphique à secteurs
-    const verifyPieChartData = (data) => {
-        if (!Array.isArray(data) || data.length === 0) {
-            return 'Les données du graphique à secteurs sont vides ou mal formatées.';
-        }
-
-        for (const item of data) {
-            if (!item.name || typeof item.value !== 'number') {
-                return `Données invalides détectées: ${JSON.stringify(item)}`;
+    
+    const fetchWeatherDataByCoords = async (lat, lon) => {
+        try {
+            const response = await fetch(`http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}&units=metric`);
+            if (!response.ok) {
+                const errorMessage = await response.text();
+                throw new Error(`Erreur API: ${errorMessage}`);
             }
+            const data = await response.json();
+            return {
+                city: data.name,
+                temperature: Math.round(data.main.temp), // Arrondir la température
+                humidity: Math.round(data.main.humidity), // Arrondir l'humidité
+                date: format(new Date(), 'yyyy-MM-dd')
+            };
+        } catch (error) {
+            console.error(`Erreur lors de la récupération des données pour les coordonnées (${lat}, ${lon}): ${error.message}`);
+            throw error;
         }
-
-        return null;
     };
-
-    // Fonction pour créer des données par défaut pour le graphique à secteurs
-    const createDefaultPieChartData = () => {
-        return [
-            
-        ];
-    };
-
-    // Fonction pour transformer les données de quartier en un format utilisable
-    const parseNeighborhoodsInput = (input) => {
-        return input.split(',').map(item => {
-            const [name, value] = item.split(':').map(part => part.trim());
-            return { name, value: parseFloat(value) };
-        }).filter(item => item.name && !isNaN(item.value));
-    };
-
-    // Fonction pour récupérer les données et mettre à jour les états
+    
     const fetchData = async () => {
         setLoading(true);
-        setError(null);
+        setError(null); // Réinitialiser les erreurs avant de commencer la récupération des données
         try {
-            // Traitement des entrées utilisateur
-            const locationList = locationsInput.split(',').map(location => location.trim()).filter(Boolean);
-            const coordinateList = coordinatesInput.split(';').map(coord => coord.trim()).filter(Boolean);
-            const neighborhoodData = parseNeighborhoodsInput(neighborhoodsInput);
-
-            // Récupération des données pour les emplacements
-            const locationData = await Promise.all(locationList.map(async (location) => {
-                const { lat, lon } = await fetchLocationData(location);
-                return { location, lat, lon };
-            }));
-
-            // Traitement des coordonnées
-            const coordinateData = coordinateList.map(coord => {
-                const [lat, lon] = coord.split(',').map(Number);
-                return { location: `Coordonnée (${lat}, ${lon})`, lat, lon };
-            });
-
-            // Préparer les données pour les graphiques
-            const trendData = locationData.map(() => ({
-                date: new Date().toISOString().split('T')[0], // Exemple de date
-                temperature: Math.random() * 30, // Remplacez avec des données réelles
-                humidity: Math.random() * 100   // Remplacez avec des données réelles
-            }));
-
-            // Préparer les données pour le graphique à secteurs
-            let pieChartData = neighborhoodData;
-
-            // Vérifiez les données du graphique à secteurs et utilisez des données par défaut si nécessaire
-            const errorMessage = verifyPieChartData(pieChartData);
-            if (errorMessage) {
-                console.error(errorMessage);
-                pieChartData = createDefaultPieChartData();
+            let weatherData = [];
+    
+            if (dataType === 'ville') {
+                const cityList = locations.filter(city => city.trim()).map(city => city.trim());
+                weatherData = await Promise.all(cityList.map(city => fetchWeatherData(city)));
+            } else if (dataType === 'quartier') {
+                // Traiter les quartiers comme des villes pour cet exemple
+                const neighborhoodList = locations.filter(location => location.trim()).map(location => location.trim());
+                weatherData = await Promise.all(neighborhoodList.map(location => fetchWeatherData(location)));
+            } else if (dataType === 'coordonnées') {
+                const weatherDataPromises = coordinatePairs
+                    .filter(pair => pair.latitude && pair.longitude)
+                    .map(pair => fetchWeatherDataByCoords(pair.latitude, pair.longitude));
+                weatherData = await Promise.all(weatherDataPromises);
             }
-
+    
+            const trendData = weatherData.map((data) => ({
+                city: data.city,
+                temperature: data.temperature,
+                humidity: data.humidity,
+                date: data.date
+            }));
+    
+            const pieChartData = weatherData.map(data => ({
+                name: data.city,
+                value: data.temperature
+            }));
+    
             setTrendData(trendData);
             setPieChartData(pieChartData);
+            setIsModalOpen(false); // Ferme le modal après le traitement
         } catch (err) {
-            setError(`Une erreur est survenue lors de la récupération des données: ${err.message}`);
+            setError('Les informations saisies ne sont pas correctes.'); // Message d'erreur générique
         } finally {
             setLoading(false);
         }
+    };
+
+    const handleLocationChange = (index, value) => {
+        const newLocations = [...locations];
+        newLocations[index] = value;
+        setLocations(newLocations);
+    };
+
+    const addLocationField = () => {
+        setLocations([...locations, '']);
+    };
+
+    const removeLocationField = (index) => {
+        const newLocations = locations.filter((_, i) => i !== index);
+        setLocations(newLocations);
+    };
+
+    const handleCoordinateChange = (index, e) => {
+        const { name, value } = e.target;
+        const newPairs = [...coordinatePairs];
+        newPairs[index] = { ...newPairs[index], [name]: value };
+        setCoordinatePairs(newPairs);
+    };
+
+    const addCoordinatePair = () => {
+        setCoordinatePairs([...coordinatePairs, { latitude: '', longitude: '' }]);
+    };
+
+    const removeCoordinatePair = (index) => {
+        const newPairs = coordinatePairs.filter((_, i) => i !== index);
+        setCoordinatePairs(newPairs);
     };
 
     return (
@@ -120,73 +142,134 @@ const UrbanAnalysis = () => {
                 <Sidebar />
                 <div className="content">
                     <div className="header">
-                        <h1 className='urb-h1'>Analyse Urbaine</h1>
+                        <h1 className='urb-h1'>Analyse des Données Urbaines</h1>
                     </div>
                     <div className="input-section">
-                        <div className="input-toolbar">
-                            <input
-                                type="text"
-                                placeholder="Entrez les noms de villes (séparés par des virgules)"
-                                value={locationsInput}
-                                onChange={(e) => setLocationsInput(e.target.value)}
-                            />
-                            <input
-                                type="text"
-                                placeholder="Entrez les coordonnées (lat,lng; séparés par des points-virgules)"
-                                value={coordinatesInput}
-                                onChange={(e) => setCoordinatesInput(e.target.value)}
-                                />
-                                <input
-                                    type="text"
-                                    placeholder="Entrez les quartiers avec valeurs (format: Quartier A:40, Quartier B:30)"
-                                    value={neighborhoodsInput}
-                                    onChange={(e) => setNeighborhoodsInput(e.target.value)}
-                                />
-                                <button onClick={fetchData} disabled={loading}>
-                                    {loading ? 'Chargement...' : 'Traiter'}
-                                </button>
-                            </div>
-                            {loading && <p>Chargement des données...</p>}
-                            {error && <p style={{ color: 'red' }}>{error}</p>}
-                        </div>
-                        <div className="chart-container">
-                            <div className="chart-item">
-                                <h2 className="pie-chart-title">Répartition des Quartiers</h2> {/* Titre pour le graphique à secteurs */}
-                                <PieChart width={400} height={400}>
-                                    <Pie 
-                                        data={pieChartData} 
-                                        dataKey="value" 
-                                        nameKey="name" 
-                                        cx="50%" 
-                                        cy="50%" 
-                                        outerRadius={150} 
-                                        fill="#8884d8" 
-                                        label
-                                    >
-                                        {pieChartData.map((entry, index) => (
-                                            <Cell key={`cell-${index}`} fill={entry.fill || '#8884d8'} />
+                        <button className='btn-open-modal' onClick={() => setIsModalOpen(true)}>
+                            Ouvrir le Menu
+                        </button>
+                        {isModalOpen && (
+                            <div className="modal-overlay">
+                                <div className="modal-content">
+                                    <button className="btn-close" onClick={() => setIsModalOpen(false)}>×</button>
+                                    <h2>Choisir le type de données</h2>
+                                    <select value={dataType} onChange={(e) => setDataType(e.target.value)}>
+                                        <option value="ville">Ville</option>
+                                        <option value="quartier">Quartier</option>
+                                        <option value="coordonnées">Coordonnées</option>
+                                    </select>
+                                    {dataType === 'ville' && (
+                                    <>
+                                        <h2>Entrez les noms de villes</h2>
+                                        {locations.map((location, index) => (
+                                            <div key={index} className="location-input-group">
+                                                <input
+                                                    type="text"
+                                                    placeholder="Nom de la ville"
+                                                    value={location}
+                                                    onChange={(e) => handleLocationChange(index, e.target.value)}
+                                                />
+                                                <button className="btn-remove" onClick={() => removeLocationField(index)}>
+                                                    <FontAwesomeIcon icon={faTrashAlt} />
+                                                </button>
+                                            </div>
                                         ))}
-                                    </Pie>
-                                    <Legend />
-                                </PieChart>
-                            </div>
-                            <div className="chart-item">
-                                <TrendChart data={trendData} legendTitle="Évolution des Valeurs" />
-                            </div>
-                            <div className="map-section">
-                                <div className="description-container">
-                                    <p className="description-text">
-                                        Utilisez cette page pour surveiller la répartition des services ou infrastructures dans une ville. Veuillez saisir vos coordonnées et utilisez les graphiques pour comprendre la distribution ou l'utilisation des services.
-                                    </p>
+                                        <button className="btn-add" onClick={addLocationField}>
+                                            Ajouter une Ville
+                                        </button>
+                                    </>
+                                )}
+
+                                    {dataType === 'quartier' && (
+                                        <>
+                                            <h2>Entrez les noms de quartiers</h2>
+                                            {locations.map((location, index) => (
+                                                <div key={index} className="location-input-group">
+                                                    <input
+                                                        type="text"
+                                                        placeholder="Nom du quartier"
+                                                        value={location}
+                                                        onChange={(e) => handleLocationChange(index, e.target.value)}
+                                                    />
+                                                    <button className="btn-remove" onClick={() => removeLocationField(index)}>
+                                                        <FontAwesomeIcon icon={faTrashAlt} />
+                                                    </button>
+                                                </div>
+                                            ))}
+                                            <button className="btn-add" onClick={addLocationField}>
+                                                Ajouter un Quartier
+                                            </button>
+                                        </>
+                                    )}
+
+                                    {dataType === 'coordonnées' && (
+                                        <>
+                                            <h2>Entrez les coordonnées</h2>
+                                            {coordinatePairs.map((pair, index) => (
+                                                <div key={index} className="coordinate-input-group">
+                                                    <input
+                                                        type="number"
+                                                        placeholder="Latitude"
+                                                        name="latitude"
+                                                        value={pair.latitude}
+                                                        onChange={(e) => handleCoordinateChange(index, e)}
+                                                    />
+                                                    <input
+                                                        type="number"
+                                                        placeholder="Longitude"
+                                                        name="longitude"
+                                                        value={pair.longitude}
+                                                        onChange={(e) => handleCoordinateChange(index, e)}
+                                                    />
+                                                    <button className="btn-remove" onClick={() => removeCoordinatePair(index)}>
+                                                        <FontAwesomeIcon icon={faTrashAlt} />
+                                                    </button>
+                                                </div>
+                                            ))}
+                                            <button className="btn-add" onClick={addCoordinatePair}>
+                                                Ajouter une Coordonnée
+                                            </button>
+                                        </>
+                                    )}
+
+                                    <button className='btnana' onClick={fetchData} disabled={loading}>
+                                        {loading ? 'Chargement...' : 'Traiter'}
+                                    </button>
+                                    {loading && <p>Chargement des données...</p>}
+                                    {error && <p style={{ color: 'red' }}>{error}</p>}
                                 </div>
                             </div>
+                        )}
+                    </div>
+                    <div className="chart-container">
+                        <div className="chart-item">
+                            <h2 className="pie-chart-title">Répartition des Températures</h2>
+                            <PieChart width={400} height={400}>
+                                <Pie 
+                                    data={pieChartData} 
+                                    dataKey="value" 
+                                    nameKey="name" 
+                                    cx="50%" 
+                                    cy="50%" 
+                                    outerRadius={150} 
+                                    fill="#8884d8" 
+                                    label
+                                >
+                                    {pieChartData.map((entry, index) => (
+                                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                    ))}
+                                </Pie>
+                                <Legend layout="horizontal" verticalAlign="bottom" align="center" />
+                            </PieChart>
+                        </div>
+                        <div className="chart-item-char">
+                            <TrendChart data={trendData} legendTitle="Évolution des Températures" />
                         </div>
                     </div>
                 </div>
             </div>
-        );
-    };
-    
-    export default UrbanAnalysis;
-    
-                                
+        </div>
+    );
+};
+
+export default UrbanAnalysis;

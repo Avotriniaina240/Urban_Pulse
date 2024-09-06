@@ -10,6 +10,17 @@ const AnalyzeReports = () => {
   const [error, setError] = useState(null);
   const [statusFilter, setStatusFilter] = useState('all'); // État pour le filtre de statut
 
+  // Fonction pour récupérer les erreurs
+  const handleFetchError = async (response) => {
+    const contentType = response.headers.get('content-type');
+    if (contentType && contentType.includes('application/json')) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || 'Erreur lors de la récupération des données');
+    } else {
+      throw new Error('Le serveur a renvoyé une réponse non valide.');
+    }
+  };
+
   // Effet pour charger les statistiques lors du premier rendu du composant
   useEffect(() => {
     const fetchStatistics = async () => {
@@ -23,13 +34,7 @@ const AnalyzeReports = () => {
         });
 
         if (!response.ok) {
-          const contentType = response.headers.get('content-type');
-          if (contentType && contentType.includes('application/json')) {
-            const errorData = await response.json();
-            throw new Error(errorData.message || 'Erreur lors de la récupération des données');
-          } else {
-            throw new Error('Le serveur a renvoyé une réponse non valide.');
-          }
+          await handleFetchError(response);
         }
 
         const data = await response.json();
@@ -46,17 +51,21 @@ const AnalyzeReports = () => {
 
   // Fonction pour afficher les statistiques filtrées
   const renderFilteredStatistics = () => {
+    if (error) {
+      return <p>Erreur: {error}</p>;
+    }
+    
     if (!statistics) {
       return <p>Les données ne sont pas disponibles.</p>;
     }
 
     switch (statusFilter) {
       case 'resolved':
-        return <p><strong>Signalements Résolus:</strong> {statistics.resolved}</p>;
+        return statistics.resolved > 0 ? <p><strong>Signalements Résolus:</strong> {statistics.resolved}</p> : null;
       case 'pending':
-        return <p><strong>Signalements En Attente:</strong> {statistics.pending}</p>;
+        return statistics.pending > 0 ? <p><strong>Signalements En Attente:</strong> {statistics.pending}</p> : null;
       case 'in-progress':
-        return <p><strong>Signalements En Cours:</strong> {statistics.inProgress}</p>;
+        return statistics.inProgress > 0 ? <p><strong>Signalements En Cours:</strong> {statistics.inProgress}</p> : null;
       case 'all':
       default:
         return (
@@ -80,15 +89,6 @@ const AnalyzeReports = () => {
 
   if (loading) {
     return <div>Chargement des données...</div>;
-  }
-
-  if (error) {
-    return (
-      <div className="error-message">
-        <p>Erreur: {error}</p>
-        <button onClick={() => window.location.reload()}>Réessayer</button>
-      </div>
-    );
   }
 
   return (
