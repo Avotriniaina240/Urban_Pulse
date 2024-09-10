@@ -3,10 +3,12 @@ import { Link } from 'react-router-dom';
 import Navbar from '../StyleBar/Navbar/Navbar';
 import Sidebar from '../StyleBar/Sidebar/SidebarCarte';
 import '../styles/ATS/ReportsListe.css';
+import { useStatistics } from '../Reports/StatisticsContext'; // Importez le hook
 
 const ReportsListe = () => {
   const [reports, setReports] = useState([]);
-  const [searchText, setSearchText] = useState(''); // État pour le texte de recherche
+  const [searchText, setSearchText] = useState('');
+  const { setStatistics } = useStatistics(); // Utilisez le contexte pour mettre à jour les statistiques
 
   useEffect(() => {
     const fetchReports = async () => {
@@ -15,11 +17,10 @@ const ReportsListe = () => {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
-            'Content-Type': 'application/json',  // Assurez-vous que les en-têtes appropriés sont envoyés
+            'Content-Type': 'application/json',
           }
         });
 
-        // Vérifiez si la réponse n'est pas OK (par exemple, 404 ou 500) et gérez-la
         if (!response.ok) {
           const contentType = response.headers.get("content-type");
           if (contentType && contentType.includes("application/json")) {
@@ -30,28 +31,39 @@ const ReportsListe = () => {
               console.log(e);
             }
           } else {
-            // Si la réponse n'est pas JSON, lancez une erreur générique
             throw new Error('Le serveur a renvoyé une réponse non valide.');
           }
         }
 
-        // Convertir la réponse en JSON
         const data = await response.json();
         setReports(data);
+        
+        // Mettre à jour les statistiques après avoir récupéré les rapports
+        const responseStats = await fetch('http://localhost:5000/api/reports/statistics', {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            'Content-Type': 'application/json',
+          }
+        });
+
+        if (responseStats.ok) {
+          const statsData = await responseStats.json();
+          setStatistics(statsData);
+        }
+
       } catch (error) {
-      
+        console.error('Erreur:', error.message);
       }
     };
 
     fetchReports();
-  }, []);
+  }, [setStatistics]);
 
-  // Filtrer les rapports en fonction du texte de recherche
   const filteredReports = reports.filter(report =>
     (report.description && report.description.toLowerCase().includes(searchText.toLowerCase())) ||
     (report.status && report.status.toLowerCase().includes(searchText.toLowerCase()))
   );
-
 
   return (
     <div>
@@ -73,7 +85,6 @@ const ReportsListe = () => {
         </div>
       </div>
       
-      {/* Nouveau conteneur pour le titre et la barre de recherche */}
       <div className="reports-header-list">
         <h2>Liste des Signalements</h2>
         <input
@@ -85,7 +96,6 @@ const ReportsListe = () => {
         />
       </div>
   
-      {/* Conteneur de la liste des rapports avec scroll */}
       <div className="report-list">
         <ul>
           {filteredReports.length > 0 ? (
@@ -102,7 +112,6 @@ const ReportsListe = () => {
       </div>
     </div>
   );
-  
 };
 
 export default ReportsListe;

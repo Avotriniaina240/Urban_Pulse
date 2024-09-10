@@ -353,12 +353,12 @@ header {
     z-index: 1000;
 }
 
-.modal-content {
+.modal-content-urb {
     background: #fff;
     padding: 20px;
     border-radius: 5px;
     width: 80%;
-    max-width: 500px;
+    max-width: 308px;
     position: relative;
 }
 
@@ -397,15 +397,6 @@ header {
   z-index: 1000;
 }
 
-.modal-content {
-  background: #fff;
-  padding: 20px;
-  border-radius: 5px;
-  width: 80%;
-  max-width: 500px;
-  position: relative;
-}
-
 .btn-close {
   position: absolute;
   top: 10px;
@@ -421,13 +412,13 @@ header {
   padding: 5px;
 }
 
-.btnana {
+.btnana-urb {
   padding: 5px 10px;
   background-color: #00C49F;
   color: #fff;
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  margin-left: 10px;
+  margin-left: 30px;
 }
 

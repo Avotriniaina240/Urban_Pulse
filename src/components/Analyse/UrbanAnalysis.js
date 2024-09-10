@@ -6,6 +6,7 @@ import { PieChart, Pie, Cell, Legend } from 'recharts';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import '../styles/Analyse/UrbanAnalysis.css';
+import { faSpinner } from '@fortawesome/free-solid-svg-icons';
 import { format } from 'date-fns';
 
 const API_KEY = '13c8b873a51de1239ad5606887a1565e';
@@ -150,7 +151,7 @@ const UrbanAnalysis = () => {
                         </button>
                         {isModalOpen && (
                             <div className="modal-overlay">
-                                <div className="modal-content">
+                                <div className="modal-content-urb">
                                     <button className="btn-close" onClick={() => setIsModalOpen(false)}>×</button>
                                     <h2>Choisir le type de données</h2>
                                     <select value={dataType} onChange={(e) => setDataType(e.target.value)}>
@@ -232,8 +233,8 @@ const UrbanAnalysis = () => {
                                         </>
                                     )}
 
-                                    <button className='btnana' onClick={fetchData} disabled={loading}>
-                                        {loading ? 'Chargement...' : 'Traiter'}
+                                    <button className='btnana-urb' onClick={fetchData} disabled={loading}>
+                                        {loading ? <FontAwesomeIcon icon={faSpinner} spin /> : <FontAwesomeIcon icon={faSpinner} />}
                                     </button>
                                     {loading && <p>Chargement des données...</p>}
                                     {error && <p style={{ color: 'red' }}>{error}</p>}

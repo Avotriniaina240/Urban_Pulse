@@ -2,15 +2,15 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '../StyleBar/Navbar/Navbar';
 import Sidebar from '../StyleBar/Sidebar/SidebarCarte';
-import '../styles/ATS/AnalyzeReports.css'; // Assurez-vous que ce fichier contient les styles nécessaires
+import '../styles/ATS/AnalyzeReports.css';
+import { useStatistics } from '../Reports/StatisticsContext'; // Importez le hook
 
 const AnalyzeReports = () => {
-  const [statistics, setStatistics] = useState(null);
+  const { statistics, setStatistics } = useStatistics();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [statusFilter, setStatusFilter] = useState('all'); // État pour le filtre de statut
+  const [statusFilter, setStatusFilter] = useState('all');
 
-  // Fonction pour récupérer les erreurs
   const handleFetchError = async (response) => {
     const contentType = response.headers.get('content-type');
     if (contentType && contentType.includes('application/json')) {
@@ -21,11 +21,10 @@ const AnalyzeReports = () => {
     }
   };
 
-  // Effet pour charger les statistiques lors du premier rendu du composant
   useEffect(() => {
     const fetchStatistics = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/reports/statistics', {
+        const response = await fetch(`http://localhost:5000/api/reports/statistics?status=${statusFilter}`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -38,7 +37,7 @@ const AnalyzeReports = () => {
         }
 
         const data = await response.json();
-        setStatistics(data);
+        setStatistics(data); // Mettez à jour les statistiques dans le contexte
       } catch (error) {
         setError(error.message);
       } finally {
@@ -47,14 +46,13 @@ const AnalyzeReports = () => {
     };
 
     fetchStatistics();
-  }, []);
+  }, [statusFilter]);
 
-  // Fonction pour afficher les statistiques filtrées
   const renderFilteredStatistics = () => {
     if (error) {
       return <p>Erreur: {error}</p>;
     }
-    
+
     if (!statistics) {
       return <p>Les données ne sont pas disponibles.</p>;
     }
@@ -111,14 +109,12 @@ const AnalyzeReports = () => {
         </div>
       </div>
       <div className="analysis-container">
-        {/* Filtres de statut */}
         <div className="status-filters">
           <button onClick={() => setStatusFilter('all')} className={statusFilter === 'all' ? 'active-filter' : ''}>Tous</button>
           <button onClick={() => setStatusFilter('resolved')} className={statusFilter === 'resolved' ? 'active-filter' : ''}>Résolus</button>
           <button onClick={() => setStatusFilter('pending')} className={statusFilter === 'pending' ? 'active-filter' : ''}>En Attente</button>
           <button onClick={() => setStatusFilter('in-progress')} className={statusFilter === 'in-progress' ? 'active-filter' : ''}>En Cours</button>
         </div>
-        {/* Affichage des statistiques filtrées */}
         {renderFilteredStatistics()}
       </div>
     </div>

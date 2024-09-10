@@ -9,11 +9,11 @@ const Reports = () => {
   const [description, setDescription] = useState('');
   const [location, setLocation] = useState('');
   const [image, setImage] = useState(null);
-  const [status, setStatus] = useState('pending'); // Valeur par défaut pour le statut
+  const [status] = useState('soumis'); // Valeur par défaut définie ici
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-  
+
     const formData = new FormData();
     formData.append('description', description);
     formData.append('location', location);
@@ -21,7 +21,7 @@ const Reports = () => {
     if (image) {
       formData.append('image', image);
     }
-  
+
     try {
       const response = await fetch('http://localhost:5000/api/reports', {
         method: 'POST',
@@ -30,14 +30,14 @@ const Reports = () => {
         },
         body: formData,
       });
-  
+
       if (response.ok) {
         const data = await response.json();
         toast.success('Signalement soumis avec succès !');
         setDescription('');
         setLocation('');
         setImage(null);
-        setStatus('pending'); // Réinitialiser le statut
+        // Pas besoin de réinitialiser le statut car il est constant
       } else {
         const error = await response.text(); // Lire comme texte pour éviter les erreurs de parsing JSON
         console.error('Erreur lors de la soumission des données:', error);
@@ -48,7 +48,6 @@ const Reports = () => {
       toast.error('Erreur de réseau');
     }
   };
-  
 
   return (
     <div>

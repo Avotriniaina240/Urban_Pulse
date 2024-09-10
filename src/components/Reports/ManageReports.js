@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify'; // Importer la fonction toast
+import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import Navbar from '../StyleBar/Navbar/Navbar';
 import Sidebar from '../StyleBar/Sidebar/SidebarCarte';
 import '../styles/ATS/ManageReports.css';
@@ -11,9 +11,9 @@ const ManageReports = () => {
   const [error, setError] = useState(null);
   const [selectedReportId, setSelectedReportId] = useState(null);
   const [searchText, setSearchText] = useState('');
-  const [statusFilter, setStatusFilter] = useState('all'); // Nouveau état pour le filtre de statut
+  const [statusFilter, setStatusFilter] = useState('all');
+  const [statusMap, setStatusMap] = useState({});
   const reportListRef = useRef(null);
-  const navigate = useNavigate();
 
   useEffect(() => {
     fetchReports();
@@ -47,15 +47,20 @@ const ManageReports = () => {
 
       const data = await response.json();
       setReports(data);
+      const initialStatusMap = data.reduce((acc, report) => {
+        acc[report.id] = report.status;
+        return acc;
+      }, {});
+      setStatusMap(initialStatusMap);
     } catch (error) {
       setError(error.message);
+      console.error('Erreur lors de la récupération des rapports:', error);
     } finally {
       setLoading(false);
     }
   };
 
   const handleDelete = async (id) => {
-    console.log('ID du rapport à supprimer:', id);
     try {
       const response = await fetch(`http://localhost:5000/api/reports/${id}`, {
         method: 'DELETE',
@@ -64,29 +69,54 @@ const ManageReports = () => {
           'Content-Type': 'application/json',
         },
       });
-  
-      const contentType = response.headers.get('content-type');
-  
+
       if (!response.ok) {
-        if (contentType && contentType.includes('application/json')) {
-          const errorData = await response.json();
-          throw new Error(errorData.message || 'Erreur lors de la suppression du rapport');
-        } else {
-          throw new Error('Le serveur a renvoyé une réponse non valide.');
-        }
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Erreur lors de la suppression du rapport');
       }
-  
+
       setReports(reports.filter((report) => report.id !== id));
-      toast.success('Rapport supprimé !');
+      toast.success('Rapport supprimé !');  // Assurez-vous que cette ligne est appelée une seule fois
       setSelectedReportId(null);
     } catch (error) {
-      console.error('Erreur lors de la suppression du rapport:', error);
       setError(error.message);
+      toast.error(error.message); // Ajouter un toast.error pour les erreurs
+      console.error('Erreur lors de la suppression du rapport:', error);
     }
   };
-  
-  const handleEdit = (id) => {
-    navigate(`/edit-report/${id}`);
+
+  const handleStatusChange = async (id, statusToUpdate) => {
+    const validStatuses = ['soumis', 'en attente', 'en cours', 'résolu'];
+
+    if (!statusToUpdate || !validStatuses.includes(statusToUpdate)) {
+      toast.error('Le statut est requis et doit être valide');
+      console.error('Statut invalide:', statusToUpdate);
+      return;
+    }
+
+    try {
+      const response = await fetch(`http://localhost:5000/api/reports/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          status: statusToUpdate,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Erreur lors de la mise à jour du statut');
+      }
+
+      toast.success('Statut mis à jour avec succès !');  // Assurez-vous que cette ligne est appelée une seule fois
+    } catch (error) {
+      setError(error.message);
+      toast.error(error.message); // Ajouter un toast.error pour les erreurs
+      console.error('Erreur lors de la mise à jour du statut:', error);
+    }
   };
 
   const handleClickOutside = (event) => {
@@ -99,12 +129,20 @@ const ManageReports = () => {
     setSelectedReportId(selectedReportId === id ? null : id);
   };
 
+  const handleStatusSelectChange = (id, value) => {
+    setStatusMap((prevStatusMap) => {
+      const updatedStatusMap = { ...prevStatusMap, [id]: value };
+      handleStatusChange(id, value); // Met à jour immédiatement le statut
+      return updatedStatusMap;
+    });
+  };
+
   const filteredReports = reports
     .filter((report) =>
       (report.description && report.description.toLowerCase().includes(searchText.toLowerCase())) ||
       (report.status && report.status.toLowerCase().includes(searchText.toLowerCase()))
     )
-    .filter((report) => statusFilter === 'all' || report.status === statusFilter); // Filtrer par statu
+    .filter((report) => statusFilter === 'all' || report.status === statusFilter);
 
   return (
     <div>
@@ -135,7 +173,6 @@ const ManageReports = () => {
           onChange={(e) => setSearchText(e.target.value)}
           className="search-input"
         />
-
       </div>
 
       <div className="report-management" ref={reportListRef}>
@@ -153,11 +190,18 @@ const ManageReports = () => {
             </div>
             {selectedReportId === report.id && (
               <div className="report-actions" onClick={(e) => e.stopPropagation()}>
-                <button className="action-button-mod" onClick={() => handleEdit(report.id)}>
-                  Modifier
-                </button>
+                <select
+                  value={statusMap[report.id] || 'soumis'}
+                  onChange={(e) => handleStatusSelectChange(report.id, e.target.value)}
+                  className="status-select"
+                >
+                  <option value="soumis">Soumis</option>
+                  <option value="en attente">En attente</option>
+                  <option value="en cours">En cours</option>
+                  <option value="résolu">Résolu</option>
+                </select>
                 <button className="action-button-supp" onClick={() => handleDelete(report.id)}>
-                  Supprimer
+                  <i className="fas fa-trash"></i> {/* Remplace le texte par une icône */}
                 </button>
               </div>
             )}

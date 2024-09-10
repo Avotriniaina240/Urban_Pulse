@@ -64,7 +64,6 @@
   pointer-events: auto;
 }
 
-.action-button-mod,
 .action-button-supp {
   width: 48%;
   padding: 15px 0;
@@ -75,15 +74,21 @@
   transition: background-color 0.3s ease;
 }
 
-.action-button-mod {
-  background-color: #007bff;
+.status-select {
+  width: 48%;
+  padding: 15px 0;
+  color: rgb(124, 115, 115);
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 14px;
 }
 
 .action-button-supp {
   background-color: #dc3545;
 }
 
-.action-button-mod:hover,
 .action-button-supp:hover {
   background-color: #8d9094;
 }

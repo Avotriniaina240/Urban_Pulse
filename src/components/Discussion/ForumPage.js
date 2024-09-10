@@ -8,10 +8,12 @@ import '../styles/ATS/ForumPage.css';
 function ForumPage() {
   const [selectedDiscussion, setSelectedDiscussion] = useState(null);
   const [discussions, setDiscussions] = useState([
-    { id: 1, title: 'Énergie durable', description: 'Discussion sur les sources d\'énergie durable.', comments: [] },
-    { id: 2, title: 'Transport urbain', description: 'Discussion sur l\'amélioration des transports en commun.', comments: [] },
+    { id: 1, title: 'Énergie durable', description: 'Discussion sur les sources d\'énergie durable.', category: 'Environnement', comments: [] },
+    { id: 2, title: 'Transport urbain', description: 'Discussion sur l\'amélioration des transports en commun.', category: 'Mobilité', comments: [] },
   ]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('Tous');
 
   const handleNewDiscussion = () => {
     setIsModalOpen(true);
@@ -26,12 +28,34 @@ function ForumPage() {
     setSelectedDiscussion(discussion);
   };
 
+  const filteredDiscussions = discussions.filter(discussion => 
+    (discussion.title.toLowerCase().includes(searchTerm.toLowerCase()) || discussion.description.toLowerCase().includes(searchTerm.toLowerCase())) &&
+    (selectedCategory === 'Tous' || discussion.category === selectedCategory)
+  );
+
   return (
     <div className="forum-page">
       <ForumHeader onNewDiscussion={handleNewDiscussion} />
       <div className="forum-content">
+        <div className="forum-filters">
+          <input 
+            type="text" 
+            placeholder="Rechercher..." 
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)} 
+          />
+          <select 
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+          >
+            <option value="Tous">Tous</option>
+            <option value="Environnement">Environnement</option>
+            <option value="Mobilité">Mobilité</option>
+            {/* Ajoute d'autres catégories ici */}
+          </select>
+        </div>
         <DiscussionList 
-          discussions={discussions} 
+          discussions={filteredDiscussions} 
           onSelectDiscussion={handleSelectDiscussion} 
         />
         {selectedDiscussion && <DiscussionDetail discussion={selectedDiscussion} />}
