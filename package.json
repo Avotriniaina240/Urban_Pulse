@@ -37,6 +37,7 @@
     "react-modal": "^3.16.1",
     "react-router-dom": "^6.25.1",
     "react-scripts": "5.0.1",
+    "react-select": "^5.8.0",
     "react-slick": "^0.30.2",
     "react-toastify": "^10.0.5",
     "recharts": "^2.12.7",

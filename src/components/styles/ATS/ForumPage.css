@@ -1,3 +1,4 @@
+/* ForumPage.css */
 .forum-page {
   display: flex;
   flex-direction: column;
@@ -19,9 +20,8 @@
   flex: 1;
   padding: 20px;
   margin-top: 20px;
-  overflow-y: auto;
   gap: 20px;
-  max-width: 50%;
+  max-width: 100%;
 }
 
 .forum-filters {
@@ -50,14 +50,23 @@
   font-size: 1rem;
 }
 
-.discussion-list {
+.discussion-list-container {
   flex: 1;
-  margin-right: 20px;
-  margin-left: 20px;
+  max-width: 540px;
+  overflow-y: auto;  /* Active le défilement vertical */
+  max-height: 710px; /* Ajustez la hauteur maximale selon vos besoins */
+  padding-right: 15px; /* Ajoute un espacement à droite pour éviter les barres de défilement trop proches */
+}
+
+.discussion-item {
+  margin-bottom: 10px; /* Espacement entre les éléments de la liste */
 }
 
 .discussion-detail {
   flex: 2;
+  max-width: 230px;
+  background-color: #fff;
+  max-height: 350px;
 }
 
 .new-discussion-modal {
@@ -78,6 +87,11 @@
   padding: 20px;
   border-radius: 8px;
   width: 90%;
-  max-width: 600px;
+  max-width: 310px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.form-group {
+  margin-bottom: 15px;
+  max-width: 291px;
 }

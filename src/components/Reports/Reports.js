@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '../StyleBar/Navbar/Navbar';
-import Sidebar from '../StyleBar/Sidebar/SidebarCarte';
+import Sidebar from '../StyleBar/Sidebar/Sidebar';
 import { toast } from 'react-toastify'; // Importer la fonction toast
 import '../styles/ATS/Reports.css';
 

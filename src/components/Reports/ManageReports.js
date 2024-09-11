@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Navbar from '../StyleBar/Navbar/Navbar';
-import Sidebar from '../StyleBar/Sidebar/SidebarCarte';
+import Sidebar from '../StyleBar/Sidebar/Sidebar';
 import '../styles/ATS/ManageReports.css';
 
 const ManageReports = () => {

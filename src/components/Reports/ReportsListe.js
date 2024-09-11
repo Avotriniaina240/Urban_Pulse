@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '../StyleBar/Navbar/Navbar';
-import Sidebar from '../StyleBar/Sidebar/SidebarCarte';
+import Sidebar from '../StyleBar/Sidebar/Sidebar';
 import '../styles/ATS/ReportsListe.css';
 import { useStatistics } from '../Reports/StatisticsContext'; // Importez le hook
 

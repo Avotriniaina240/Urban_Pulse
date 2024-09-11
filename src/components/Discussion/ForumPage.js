@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+// ForumPage.js
+import React, { useState, useEffect } from 'react';
 import ForumHeader from './ForumHeader';
 import DiscussionList from './DiscussionList';
 import DiscussionDetail from './DiscussionDetail';
@@ -7,31 +8,72 @@ import '../styles/ATS/ForumPage.css';
 
 function ForumPage() {
   const [selectedDiscussion, setSelectedDiscussion] = useState(null);
-  const [discussions, setDiscussions] = useState([
-    { id: 1, title: 'Énergie durable', description: 'Discussion sur les sources d\'énergie durable.', category: 'Environnement', comments: [] },
-    { id: 2, title: 'Transport urbain', description: 'Discussion sur l\'amélioration des transports en commun.', category: 'Mobilité', comments: [] },
-  ]);
+  const [discussions, setDiscussions] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('Tous');
+
+  // Fetch discussions from the backend
+  useEffect(() => {
+    const fetchDiscussions = async () => {
+      try {
+        const response = await fetch('http://localhost:5000/api/discussions');
+        if (!response.ok) {
+          throw new Error('Erreur lors de la récupération des discussions');
+        }
+        const data = await response.json();
+        setDiscussions(data);
+      } catch (error) {
+        console.error('Erreur:', error.message);
+      }
+    };
+
+    fetchDiscussions();
+  }, []);
 
   const handleNewDiscussion = () => {
     setIsModalOpen(true);
   };
 
-  const handleModalSubmit = (newDiscussion) => {
-    setDiscussions([...discussions, { id: discussions.length + 1, ...newDiscussion, comments: [] }]);
-    setSelectedDiscussion(newDiscussion);
+  const handleModalSubmit = async (newDiscussion) => {
+    try {
+      const response = await fetch('http://localhost:5000/api/discussions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(newDiscussion),
+      });
+
+      if (!response.ok) {
+        const error = await response.text();
+        throw new Error(error || 'Erreur lors de la création de la discussion');
+      }
+
+      const data = await response.json();
+      setDiscussions([...discussions, data]);
+      setSelectedDiscussion(data);
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error('Erreur:', error.message);
+      alert(`Erreur: ${error.message}`);
+    }
   };
 
   const handleSelectDiscussion = (discussion) => {
     setSelectedDiscussion(discussion);
   };
 
-  const filteredDiscussions = discussions.filter(discussion => 
-    (discussion.title.toLowerCase().includes(searchTerm.toLowerCase()) || discussion.description.toLowerCase().includes(searchTerm.toLowerCase())) &&
-    (selectedCategory === 'Tous' || discussion.category === selectedCategory)
-  );
+  const filteredDiscussions = discussions.filter(discussion => {
+    const title = discussion.title ? discussion.title.toLowerCase() : '';
+    const description = discussion.description ? discussion.description.toLowerCase() : '';
+    const searchTermLower = searchTerm.toLowerCase();
+
+    return (
+      (title.includes(searchTermLower) || description.includes(searchTermLower)) &&
+      (selectedCategory === 'Tous' || discussion.category === selectedCategory)
+    );
+  });
 
   return (
     <div className="forum-page">
@@ -54,10 +96,12 @@ function ForumPage() {
             {/* Ajoute d'autres catégories ici */}
           </select>
         </div>
-        <DiscussionList 
-          discussions={filteredDiscussions} 
-          onSelectDiscussion={handleSelectDiscussion} 
-        />
+        <div className="discussion-list-container">
+          <DiscussionList 
+            discussions={filteredDiscussions} 
+            onSelectDiscussion={handleSelectDiscussion} 
+          />
+        </div>
         {selectedDiscussion && <DiscussionDetail discussion={selectedDiscussion} />}
       </div>
       <NewDiscussionModal

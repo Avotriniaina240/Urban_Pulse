@@ -1,56 +1,84 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/ATS/DiscussionDetail.css';
-import { getUser } from '../Analyse/utilis'; // Assurez-vous que le chemin est correct
+import { FaComment, FaSmile } from 'react-icons/fa';
 
 function DiscussionDetail({ discussion }) {
   const [newComment, setNewComment] = useState('');
-  const [username, setUsername] = useState('');
   const [comments, setComments] = useState([]);
+  const [emojiReaction, setEmojiReaction] = useState('😊');
+  const [isEmojiPopupOpen, setIsEmojiPopupOpen] = useState(false);
+  const [isCommentPopupOpen, setIsCommentPopupOpen] = useState(false);
 
+  // Fonction pour charger les commentaires depuis le serveur
+  const fetchCommentsFromServer = async () => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/discussions/${discussion.id}/comments`, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        }
+      });
+      if (!response.ok) throw new Error('Erreur lors du chargement des commentaires');
+      
+      const data = await response.json();
+      setComments(data.comments); // Mettre à jour les commentaires avec ceux du serveur
+
+      // Optionnel: Sauvegarder dans le localStorage
+      localStorage.setItem(`comments-${discussion.id}`, JSON.stringify(data.comments));
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+
+  // Charger les commentaires lors du montage du composant
   useEffect(() => {
-    // Fonction pour charger les commentaires depuis le local storage ou initialiser à partir de la discussion
-    const loadComments = () => {
-      const storedComments = localStorage.getItem(`comments-${discussion.id}`);
-      return storedComments ? JSON.parse(storedComments) : discussion.comments || [];
-    };
-
-    setComments(loadComments());
+    fetchCommentsFromServer();  // Charger les commentaires depuis le serveur
   }, [discussion]);
 
-  useEffect(() => {
-    const fetchUsername = async () => {
-      try {
-        const user = await getUser();
-        setUsername(user.username);
-      } catch (error) {
-        console.error('Erreur lors de la récupération du nom d\'utilisateur:', error);
-      }
-    };
-
-    fetchUsername();
-  }, []);
-
-  useEffect(() => {
-    // Enregistrer les commentaires dans le local storage lorsque les commentaires changent
-    localStorage.setItem(`comments-${discussion.id}`, JSON.stringify(comments));
-  }, [comments, discussion.id]);
-
-  const handleCommentSubmit = (e) => {
+  // Gestion de la soumission d'un commentaire
+  const handleCommentSubmit = async (e) => {
     e.preventDefault();
-    if (newComment && username) {
-      // Vérifier les doublons
-      const isDuplicate = comments.some(comment => comment.text === newComment && comment.username === username);
+    if (newComment) {
+      const isDuplicate = comments.some(comment => comment.text === newComment);
       if (isDuplicate) {
         console.error('Le commentaire est déjà présent.');
         return;
       }
-      const updatedComments = [
-        ...comments,
-        { id: comments.length + 1, text: newComment, username },
-      ];
-      setComments(updatedComments);
-      setNewComment('');
+
+      try {
+        console.log('Token:', localStorage.getItem('token'));
+        const response = await fetch('http://localhost:5000/api/comments', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('token')}`
+          },
+          body: JSON.stringify({
+            discussionId: discussion.id,
+            text: newComment
+          }),
+        });
+
+        if (!response.ok) {
+          const error = await response.text();
+          throw new Error(error || 'Erreur lors de l\'ajout du commentaire');
+        }
+
+        const data = await response.json();
+        console.log('Data from server:', data);
+        setComments([...comments, data.comment]); // Ajouter le nouveau commentaire à la liste des commentaires
+        setNewComment('');
+        setIsCommentPopupOpen(false);
+      } catch (error) {
+        console.error('Erreur:', error.message);
+        alert(`Erreur: ${error.message}`);
+      }
     }
+  };
+
+  // Gestion de la réaction emoji
+  const handleEmojiReaction = (emoji) => {
+    setEmojiReaction(emoji);
+    setIsEmojiPopupOpen(false);
   };
 
   return (
@@ -58,23 +86,43 @@ function DiscussionDetail({ discussion }) {
       <h2>{discussion.title}</h2>
       <p>{discussion.description}</p>
       <div className="comments">
-        <h3>Commentaires</h3>
         <ul>
           {comments.map((comment) => (
             <li key={comment.id}>
-              <strong>{comment.username}:</strong> {comment.text}
+              {comment.text}
             </li>
           ))}
         </ul>
-        <form onSubmit={handleCommentSubmit}>
-          <textarea
-            value={newComment}
-            onChange={(e) => setNewComment(e.target.value)}
-            placeholder="Ajouter un commentaire..."
-            required
-          />
-          <button className='btn-dt' type="submit">Ajouter Commentaire</button>
-        </form>
+        <button className='comment-icon' onClick={() => setIsCommentPopupOpen(!isCommentPopupOpen)}>
+          <FaComment className="blue-comment-icon" />
+        </button>
+        {isCommentPopupOpen && (
+          <div className="comment-popup">
+            <form onSubmit={handleCommentSubmit}>
+              <textarea
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
+                placeholder="Ajouter un commentaire..."
+                required
+              />
+              <button className='btn-dt' type="submit">Envoyer Commentaire</button>
+            </form>
+          </div>
+        )}
+      </div>
+      <div className="discussion-reactions">
+        <button onClick={() => setIsEmojiPopupOpen(!isEmojiPopupOpen)} className="emoji-button">
+          <FaSmile /> {emojiReaction}
+        </button>
+        {isEmojiPopupOpen && (
+          <div className="emoji-popup">
+            {['😊','😢','😂'].map(emoji => (
+              <button key={emoji} onClick={() => handleEmojiReaction(emoji)} className="emoji-option">
+                {emoji}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );

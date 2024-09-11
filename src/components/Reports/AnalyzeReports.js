@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Navbar from '../StyleBar/Navbar/Navbar';
-import Sidebar from '../StyleBar/Sidebar/SidebarCarte';
+import Sidebar from '../StyleBar/Sidebar/Sidebar';
 import '../styles/ATS/AnalyzeReports.css';
 import { useStatistics } from '../Reports/StatisticsContext'; // Importez le hook
 
@@ -10,6 +10,7 @@ const AnalyzeReports = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [statusFilter, setStatusFilter] = useState('all');
+  const [reportDetails, setReportDetails] = useState([]); // État pour stocker les détails des signalements
 
   const handleFetchError = async (response) => {
     const contentType = response.headers.get('content-type');
@@ -24,7 +25,7 @@ const AnalyzeReports = () => {
   useEffect(() => {
     const fetchStatistics = async () => {
       try {
-        const response = await fetch(`http://localhost:5000/api/reports/statistics?status=${statusFilter}`, {
+        const response = await fetch(`http://localhost:5000/api/reports/statistics`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -38,6 +39,27 @@ const AnalyzeReports = () => {
 
         const data = await response.json();
         setStatistics(data); // Mettez à jour les statistiques dans le contexte
+
+        // Récupérez les détails des signalements en fonction du filtre
+        if (statusFilter !== 'all') {
+          const detailsResponse = await fetch(`http://localhost:5000/api/reports?status=${statusFilter}`, {
+            method: 'GET',
+            headers: {
+              'Authorization': `Bearer ${localStorage.getItem('token')}`,
+              'Content-Type': 'application/json',
+            },
+          });
+
+          if (!detailsResponse.ok) {
+            await handleFetchError(detailsResponse);
+          }
+
+          const detailsData = await detailsResponse.json();
+          setReportDetails(detailsData); // Mettez à jour les détails des signalements
+        } else {
+          // Réinitialisez les détails lorsque 'all' est sélectionné
+          setReportDetails([]);
+        }
       } catch (error) {
         setError(error.message);
       } finally {
@@ -85,6 +107,26 @@ const AnalyzeReports = () => {
     }
   };
 
+  const renderReportDetails = () => {
+    if (!reportDetails.length) {
+      return null;
+    }
+
+    return (
+      <div className="report-details">
+        <h3>Détails des Signalements</h3>
+        <ul>
+          {reportDetails.map(report => (
+            <li key={report.id}>
+              <h4>{report.title}</h4>
+              <p>{report.description}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    );
+  };
+
   if (loading) {
     return <div>Chargement des données...</div>;
   }
@@ -116,6 +158,7 @@ const AnalyzeReports = () => {
           <button onClick={() => setStatusFilter('in-progress')} className={statusFilter === 'in-progress' ? 'active-filter' : ''}>En Cours</button>
         </div>
         {renderFilteredStatistics()}
+        {statusFilter !== 'all' && renderReportDetails()}
       </div>
     </div>
   );
