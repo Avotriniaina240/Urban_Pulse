@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Line, Doughnut } from 'react-chartjs-2';
 import Navbar from '../StyleBar/Navbar/Navbar';
-import Sidebar from '../StyleBar/Sidebar/Sidebar';
+import Sidebar from '../StyleBar/Sidebar/SidebarCarte';
 import '../styles/Admin/VueEnsemble.css';
 import { Chart as ChartJS, CategoryScale, LinearScale, LineElement, PointElement, Title, Tooltip, Legend, Filler, ArcElement } from 'chart.js';
 
@@ -70,9 +70,9 @@ const VueEnsemble = () => {
   return (
     <div className="vue">
       <Navbar />
-      <div className="main-content">
+      <div className="main-vue">
         <Sidebar />
-        <div className="content">
+        <div className="content-vue">
           <h1 className='h1-vue'>Tableau de Bord Administrateur</h1>
           
           <div className="stats-overview">

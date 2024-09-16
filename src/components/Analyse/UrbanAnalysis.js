@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import TrendChart from '../Analyse/TrendChart';
 import Navbar from '../StyleBar/Navbar/Navbar';
-import Sidebar from '../StyleBar/Sidebar/SidebarAdmin';
+import Sidebar from '../StyleBar/Sidebar/SidebarCarte';
 import { PieChart, Pie, Cell, Legend } from 'recharts';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
@@ -139,9 +139,9 @@ const UrbanAnalysis = () => {
     return (
         <div className="page-container">
             <Navbar />
-            <div className="main-content">
+            <div className="main-urban">
                 <Sidebar />
-                <div className="content">
+                <div className="content-urban">
                     <div className="header">
                         <h1 className='urb-h1'>Analyse des Données Urbaines</h1>
                     </div>

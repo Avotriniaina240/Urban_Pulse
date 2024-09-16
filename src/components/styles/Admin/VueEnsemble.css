@@ -1,12 +1,4 @@
-/* Style général pour le tableau de bord */
-.vue {
-  background-size: cover; /* Assurez-vous que l'image couvre toute la zone */
-  background-position: center; /* Centrer l'image d'arrière-plan */
-  height: 100vh; /* Assure que le tableau de bord occupe toute la hauteur de la fenêtre */
-  margin: 0; /* Évitez les marges supplémentaires autour du tableau de bord */
-  opacity: 0;
-  animation: fadeIn 1s forwards;
-}
+
 
 /* Animation de fondu en entrée */
 @keyframes fadeIn {
@@ -14,26 +6,25 @@
   to { opacity: 1; }
 }
 
-/* Conteneur principal du tableau de bord */
-.dashboard {
-  display: flex;
-  flex-direction: column;
-  font-family: Arial, sans-serif;
-}
+
 
 /* Conteneur principal avec la sidebar et le contenu */
-.main-content {
+.main-vue {
   display: flex;
-  margin-top: 67px; /* Hauteur de la navbar */
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
 }
 
 /* Contenu principal, espace pour la sidebar */
-.content {
-  flex-grow: 1;
-  padding: 20px;
+.content-vue {
+  flex: 1;
   margin-left: 250px; /* Largeur de la sidebar */
-  overflow: auto; /* Permet le défilement si le contenu dépasse */
-  animation: slideIn 0.5s ease-out forwards;
+  padding: 20px;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+  margin-top: 50px;
 }
 
 /* Animation de slide pour le contenu principal */

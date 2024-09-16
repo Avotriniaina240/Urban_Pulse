@@ -6,7 +6,7 @@
 }
 
 /* Conteneur principal du contenu */
-.main-content {
+.main-urban {
   display: flex;
   flex-direction: column;
   flex: 1;
@@ -19,13 +19,14 @@ header {
 }
 
 /* Contenu principal */
-.content {
+.content-urban {
   flex: 1;
   margin-left: 250px; /* Largeur de la sidebar */
   padding: 20px;
   overflow: auto;
   display: flex;
   flex-direction: column;
+  margin-top: 50px;
 }
 
 /* Section pour les graphiques */
