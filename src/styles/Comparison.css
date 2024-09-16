@@ -154,6 +154,20 @@
     font-family: 'Roboto', sans-serif; /* Application de la police Roboto */
 }
 
+.data-list-title {
+    font-size: 17px;
+    text-transform: uppercase;
+    color: #1a1414;
+    text-align: center;
+    font-weight: bold;
+    font-family: 'Roboto', sans-serif;
+}
+
+.data-item p {
+    font-size: 14px;
+    color: #444;
+}
+
 .comparison-item:hover p {
     color: #444;
 }
@@ -267,4 +281,39 @@
     margin: 4px 2px;
     cursor: pointer;
     border-radius: 4px;
+}
+
+.highlight {
+    background-color: rgba(255, 223, 0, 0.5); /* Couleur jaune transparente pour la mise en surbrillance */
+    border: 2px solid gold;
+    border-radius: 8px;
+    padding: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.highlight-air-quality {
+    background-color: rgba(138, 43, 226, 0.5); /* Violet transparent */
+    margin-top: 20px;
+    border-radius: 8px;
+    padding: 10px;
+    transition: background-color 0.3s ease;
+    font-family: 'Roboto', sans-serif;
+}
+
+.highlight-temperature {
+    background-color: rgba(255, 123, 0, 0.5); /* Jaune transparent */
+    margin-top: 20px;
+    border-radius: 8px;
+    padding: 10px;
+    transition: background-color 0.3s ease;
+    font-family: 'Roboto', sans-serif;
+}
+
+.highlight-humidity {
+    background-color: rgba(0, 255, 0, 0.5);
+    margin-top: 20px;
+    border-radius: 8px;
+    padding: 10px;
+    transition: background-color 0.3s ease;
+    font-family: 'Roboto', sans-serif;
 }

@@ -161,7 +161,7 @@ const UrbanAnalysis = () => {
                                     </select>
                                     {dataType === 'ville' && (
                                     <>
-                                        <h2>Entrez les noms de villes</h2>
+                                        <h2>Entrez les villes</h2>
                                         {locations.map((location, index) => (
                                             <div key={index} className="location-input-group">
                                                 <input
@@ -183,7 +183,7 @@ const UrbanAnalysis = () => {
 
                                     {dataType === 'quartier' && (
                                         <>
-                                            <h2>Entrez les noms de quartiers</h2>
+                                            <h2>Entrez les quartiers</h2>
                                             {locations.map((location, index) => (
                                                 <div key={index} className="location-input-group">
                                                     <input

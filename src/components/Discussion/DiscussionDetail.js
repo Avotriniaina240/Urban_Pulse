@@ -8,8 +8,16 @@ function DiscussionDetail({ discussion }) {
   const [emojiReaction, setEmojiReaction] = useState('😊');
   const [isEmojiPopupOpen, setIsEmojiPopupOpen] = useState(false);
   const [isCommentPopupOpen, setIsCommentPopupOpen] = useState(false);
+  const [username, setUsername] = useState(''); // Ajouter état pour stocker le nom d'utilisateur
 
-  // Fonction pour charger les commentaires depuis le serveur
+  useEffect(() => {
+    // Charger le nom d'utilisateur depuis le localStorage
+    const storedUsername = localStorage.getItem('username');
+    if (storedUsername) {
+      setUsername(storedUsername);
+    }
+  }, []);
+
   const fetchCommentsFromServer = async () => {
     try {
       const response = await fetch(`http://localhost:5000/api/discussions/${discussion.id}/comments`, {
@@ -20,21 +28,17 @@ function DiscussionDetail({ discussion }) {
       if (!response.ok) throw new Error('Erreur lors du chargement des commentaires');
       
       const data = await response.json();
-      setComments(data.comments); // Mettre à jour les commentaires avec ceux du serveur
-
-      // Optionnel: Sauvegarder dans le localStorage
+      setComments(data.comments);
       localStorage.setItem(`comments-${discussion.id}`, JSON.stringify(data.comments));
     } catch (error) {
       console.error(error.message);
     }
   };
 
-  // Charger les commentaires lors du montage du composant
   useEffect(() => {
-    fetchCommentsFromServer();  // Charger les commentaires depuis le serveur
+    fetchCommentsFromServer();
   }, [discussion]);
 
-  // Gestion de la soumission d'un commentaire
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
     if (newComment) {
@@ -45,7 +49,6 @@ function DiscussionDetail({ discussion }) {
       }
 
       try {
-        console.log('Token:', localStorage.getItem('token'));
         const response = await fetch('http://localhost:5000/api/comments', {
           method: 'POST',
           headers: {
@@ -54,7 +57,8 @@ function DiscussionDetail({ discussion }) {
           },
           body: JSON.stringify({
             discussionId: discussion.id,
-            text: newComment
+            text: newComment,
+            username: username // Ajouter le nom d'utilisateur au commentaire
           }),
         });
 
@@ -64,8 +68,7 @@ function DiscussionDetail({ discussion }) {
         }
 
         const data = await response.json();
-        console.log('Data from server:', data);
-        setComments([...comments, data.comment]); // Ajouter le nouveau commentaire à la liste des commentaires
+        setComments([...comments, data.comment]);
         setNewComment('');
         setIsCommentPopupOpen(false);
       } catch (error) {
@@ -75,7 +78,6 @@ function DiscussionDetail({ discussion }) {
     }
   };
 
-  // Gestion de la réaction emoji
   const handleEmojiReaction = (emoji) => {
     setEmojiReaction(emoji);
     setIsEmojiPopupOpen(false);
@@ -89,7 +91,7 @@ function DiscussionDetail({ discussion }) {
         <ul>
           {comments.map((comment) => (
             <li key={comment.id}>
-              {comment.text}
+              <strong>{comment.username}: </strong>{comment.text} {/* Afficher le nom d'utilisateur */}
             </li>
           ))}
         </ul>

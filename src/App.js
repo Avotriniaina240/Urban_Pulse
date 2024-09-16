@@ -3,17 +3,18 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import './i18n';
+import LoginPage from './pages/LoginPage';
+import { ROUTES } from './constants/routes';
+import RegisterPage from './pages/RegisterPage';
 import SettingsPannel from './components/Parametres/SettingsPannel'; 
 import Page from './components/Parametres/page'; 
-import Login from './components/Authentification/Login'; 
-import Register from './components/Authentification/Register'; 
 import AdminDashboard from './components/Dashboard/AdminDashboard'; 
 import UrbanistDashboard from './components/Dashboard/UrbanistDashboard';
 import VueEnsemble from './components/Dashboard/VueEnsemble';
 import GestionUser from './components/Dashboard/GestionUser';
 import Profile from './components/Parametres/Profile';
 import DashboardCitizen from './components/Dashboard/DashboardCitizen';
-import RegisterAdmin from './components/Authentification/RegisterAdmin';
+import RegisterAdminPage from './pages/RegisterAdminPage';
 import UrbanAnalysis from './components/Analyse/UrbanAnalysis';
 import Map from './components/Maps/Map';
 import ForgotPassword from './components/Authentification/ForgotPassword'; 
@@ -23,7 +24,7 @@ import Reports from './components/Reports/Reports';
 import ReportsListe from './components/Reports/ReportsListe';
 import ManageReports from './components/Reports/ManageReports';
 import AnalyzeReports from './components/Reports/AnalyzeReports';
-import Comparison from './components/Analyse/Comparison';
+import Comparison from './pages/Comparison';
 import ForumHeader from './components/Discussion/ForumHeader';
 import DiscussionDetail from './components/Discussion/DiscussionDetail';
 import DiscussionItem from './components/Discussion/DiscussionItem';
@@ -34,24 +35,24 @@ import TimeSeriesChart from './components/Prediction/TimeSeriesChart';
 import IndicatorSelector from './components/Prediction/IndicatorSelector';
 import DateRangePicker from './components/Prediction/DateRangePicker';
 import HistoricalAndPrediction from './components/Prediction/HistoricalAndPrediction';
-import { StatisticsProvider } from './components/Reports/StatisticsContext'; // Importez le provider
+import { StatisticsProvider } from './components/Reports/StatisticsContext'
 
 const App = () => {
   return (
     <StatisticsProvider>
       <Router>
         <Routes>
+          <Route path={ROUTES.LOGIN} element={<LoginPage />} />
           <Route path="settings/*" element={<SettingsPannel />} /> 
           <Route path="/" element={<Page />} /> 
-          <Route path="/login" element={<Login />} /> 
-          <Route path="/register" element={<Register />} /> 
+          <Route path="/register" element={<RegisterPage />} />
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
           <Route path="/urbanist-dashboard" element={<UrbanistDashboard />} />
           <Route path="/dashboard-citizen/*" element={<DashboardCitizen />} /> 
           <Route path="/vue-ensemble/*" element={<VueEnsemble />} />
           <Route path="/gestion-user" element={<GestionUser />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/register-admin" element={<RegisterAdmin />} />
+          <Route path="/register-admin" element={<RegisterAdminPage />} />
           <Route path="/urban-analysis" element={<UrbanAnalysis />} />
           <Route path="/map/*" element={<Map />} />
           <Route path="/forgot-password" element={<ForgotPassword />} />

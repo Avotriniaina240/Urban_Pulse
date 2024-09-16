@@ -1,70 +1,43 @@
-import React from 'react';
-import '../styles/Admin/Profile.css';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
-const Profile = () => {
-  return (
-    <div className="user-profile">
-      <div className="profile-header">
-        <img src="profile-picture-url" alt="Profile" className="profile-picture" />
-        <h2>Nom d'utilisateur</h2>
-        <button>Modifier le Profil</button>
-      </div>
+const UserProfile = () => {
+    const [userData, setUserData] = useState(null);
+    const [error, setError] = useState(null);
 
-      <div className="profile-section">
-        <h3>Informations Personnelles</h3>
-        <p>Email: user@example.com</p>
-        <p>Numéro de téléphone: +123456789</p>
-      </div>
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const response = await axios.get('/api/users/profile', {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+                setUserData(response.data);
+            } catch (err) {
+                setError('Erreur lors de la récupération des données du profil');
+                console.error(err);
+            }
+        };
 
-      <div className="profile-section">
-        <h3>Détails du Compte</h3>
-        <p>Date de création du compte: 01/01/2023</p>
-        <p>Dernière connexion: 05/08/2024</p>
-      </div>
+        fetchUserData();
+    }, []);
 
-      <div className="profile-section">
-        <h3>Préférences</h3>
-        <p>Langue: Français</p>
-        <p>Notifications: Activées</p>
-      </div>
+    if (error) return <div>{error}</div>;
+    if (!userData) return <div>Chargement...</div>;
 
-      <div className="profile-section">
-        <h3>Sécurité</h3>
-        <button>Changer le mot de passe</button>
-        <p>2FA: Activé</p>
-      </div>
-
-      <div className="profile-section">
-        <h3>Activités Récentes</h3>
-        <ul>
-          <li>Connexion à 10:00 le 05/08/2024</li>
-          <li>Modification du profil à 09:30 le 01/08/2024</li>
-        </ul>
-      </div>
-
-      <div className="profile-section">
-        <h3>Rôles et Permissions</h3>
-        <p>Rôle: Citoyen</p>
-      </div>
-
-      <div className="profile-section">
-        <h3>Informations Additionnelles</h3>
-        <p>Adresse: 123 Rue Principale</p>
-        <p>Date de naissance: 15/07/1990</p>
-      </div>
-
-      <div className="profile-section">
-        <h3>Intégrations et Connexions</h3>
-        <p>Compte Google: Connecté</p>
-      </div>
-
-      <div className="profile-section">
-        <h3>Centre de Support</h3>
-        <button>Contacter le Support</button>
-        <p>Tickets de support: 3 ouverts</p>
-      </div>
-    </div>
-  );
+    return (
+        <div>
+            <h1>Profil de {userData.username}</h1>
+            <img src={userData.profile_picture_url} alt="Photo de profil" />
+            <p>Email: {userData.email}</p>
+            <p>Téléphone: {userData.phone_number}</p>
+            <p>Adresse: {userData.address}</p>
+            <p>Date de naissance: {new Date(userData.date_of_birth).toLocaleDateString()}</p>
+            <p>Thème: {userData.theme}</p>
+            <pre>Disposition: {JSON.stringify(userData.layout, null, 2)}</pre>
+        </div>
+    );
 };
 
-export default Profile;
+export default UserProfile;

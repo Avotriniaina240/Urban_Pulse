@@ -92,7 +92,7 @@
     left: 50%; /* Centrage horizontal */
     transform: translate(-50%, -50%); /* Déplace le bouton pour centrer exactement */
     width: 450px; /* Augmente la largeur */
-    height: 450px; /* Augmente la hauteur */
+    height: 300px; /* Augmente la hauteur */
     margin-top: -300px;
     margin-left: 80px;
     border: none;

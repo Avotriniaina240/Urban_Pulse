@@ -201,7 +201,7 @@ const ManageReports = () => {
                   <option value="résolu">Résolu</option>
                 </select>
                 <button className="action-button-supp" onClick={() => handleDelete(report.id)}>
-                  <i className="fas fa-trash"></i> {/* Remplace le texte par une icône */}
+                  <i className="fas fa-trash"></i> {/* Remplace le texte par une icône */}Supprimer
                 </button>
               </div>
             )}

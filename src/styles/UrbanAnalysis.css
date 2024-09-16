@@ -1,0 +1,424 @@
+/* Structure de la page */
+.page-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+/* Conteneur principal du contenu */
+.main-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  overflow: hidden;
+}
+
+/* En-tête */
+header {
+  width: 100%;
+}
+
+/* Contenu principal */
+.content {
+  flex: 1;
+  margin-left: 250px; /* Largeur de la sidebar */
+  padding: 20px;
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Section pour les graphiques */
+.chart-container {
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  margin-top: 20px;
+  width: 97%;
+  align-items: flex-start; /* Alignement des éléments au début */
+}
+
+/* Éléments de graphique */
+.chart-item {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(173, 169, 169, 0.1);
+  padding: 15px; /* Réduit le padding */
+  transition: transform 0.3s ease-in-out;
+  margin-top: 20px;
+  height: 480px; /* Ajustement de la hauteur pour uniformité */
+  flex: 1; /* Les éléments s'étendent */
+  max-width: 400px; /* Largeur maximale pour éviter une trop grande largeur */
+}
+
+.chart-item-char {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 15px; /* Réduit le padding */
+  margin-top: 20px;
+  transition: transform 0.3s ease-in-out;
+  height: 480px; /* Ajustement de la hauteur pour uniformité */
+  flex: 1; /* Les éléments s'étendent */
+  max-width: 740px; /* Largeur maximale pour éviter une trop grande largeur */
+}
+
+
+.chart-item:hover {
+  transform: scale(1.03); /* Zoom plus léger au survol */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Ombre plus marquée */
+}
+
+.chart-item-char:hover {
+  transform: scale(1.03); /* Zoom plus léger au survol */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Ombre plus marquée */
+}
+
+/* Section pour la description */
+.description-container {
+  width: 98%; /* Prend toute la largeur disponible */
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-top: 5px;
+}
+
+.description-container1 {
+  width: 98%;
+  padding: 10px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-top: -27px;
+  height: 140px; /* Ajustement de la hauteur */
+  margin-left: -6px;
+}
+
+/* Texte de description */
+.description-text {
+  font-size: 14px;
+  color: #555;
+}
+
+
+/* Titre pour la description */
+.urb-h1 {
+  background: linear-gradient(90deg, #d9e0e6, #f0f4f8);
+  color: #464343;
+  padding: 10px;
+  border-radius: 5px;
+  margin: 15px 0; /* Marge au-dessus et en-dessous */
+  animation: bounceIn 0.6s ease-out forwards;
+  width: 97%;
+  font-family: Arial, sans-serif;
+}
+
+/* Animation d'apparition avec rebond */
+@keyframes bounceIn {
+  0% { transform: scale(0.5); opacity: 0; }
+  60% { transform: scale(1.1); opacity: 1; }
+  100% { transform: scale(1); }
+}
+
+/* Styles pour les graphiques */
+.bar {
+  transition: fill 0.3s ease, transform 0.3s ease;
+  height: 450px;
+}
+
+.bar:hover {
+  fill: orange; /* Couleur au survol */
+  transform: scale(1.05);
+}
+
+/* Styles pour la légende */
+.legend-container {
+  background: #f9f9f9;
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  width: 214px;
+  height: 192px;
+}
+
+.legend-title {
+  font-size: 1.2rem;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.legend-list {
+  list-style: none;
+  padding: 0;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.legend-color {
+  width: 16px;
+  height: 16px;
+  border-radius: 4px;
+  margin-right: 8px;
+}
+
+.legend-abbreviation {
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.legend-description {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+/* Styles pour le titre du pie chart */
+.pie-chart-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 10px;
+  text-align: left;
+  animation: fadeInTitle 1s ease-in-out forwards; /* Animation d'apparition du titre */
+}
+
+/* Animation d'apparition du titre */
+@keyframes fadeInTitle {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Effet de survol pour les secteurs du pie chart */
+.recharts-pie-sector {
+  transition: transform 0.4s ease, filter 0.4s ease;
+  cursor: pointer; /* Curseur en forme de main pour indiquer l'interactivité */
+}
+
+/* Agrandir légèrement les secteurs au survol et appliquer une ombre colorée */
+.recharts-pie-sector:hover {
+  transform: scale(1.1);
+  filter: drop-shadow(0px 0px 10px rgba(0, 0, 0, 0.2));
+}
+
+/* Effet d'apparition pour les secteurs du pie chart */
+.recharts-pie-sector {
+  opacity: 0;
+  animation: sectorEntry 0.8s ease-out forwards;
+}
+
+/* Animation des secteurs du pie chart */
+@keyframes sectorEntry {
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Style pour les éléments de légende */
+.recharts-legend-item {
+  font-size: 14px;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+/* Effet de survol pour les éléments de légende */
+.recharts-legend-item:hover {
+  color: #007bff; /* Change la couleur au survol */
+  transition: color 0.3s ease-in-out;
+}
+
+/* Style pour les labels des secteurs du pie chart */
+.recharts-pie-label {
+  font-size: 12px;
+  font-weight: bold;
+  fill: #fff;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* Effet de survol pour les labels */
+.recharts-pie-label:hover {
+  opacity: 0.9; /* Augmente légèrement la visibilité */
+  transform: scale(1.05); /* Agrandir les labels au survol */
+}
+
+/* Styles pour le champ de saisie */
+.input-section .input-toolbar input {
+  width: 30%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.input-section .input-toolbar input:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 8px rgba(0, 123, 255, 0.25);
+  outline: none;
+}
+
+/* Styles pour le bouton */
+.input-section .input-toolbar .btnana {
+  padding: 10px 20px;
+  font-size: 16px;
+  color: #fff;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.input-section .input-toolbar .btnana:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+.input-section .input-toolbar .btnana:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+/* Styles pour les groupes d'entrée des villes */
+.location-input-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    justify-content: center;
+}
+
+.location-input-group input {
+    margin-right: 10px;
+    padding: 5px;
+    flex-grow: 1;
+    margin-top: 15px;
+}
+
+.btn-remove {
+    background: #FF4D4D;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 8px 10px;
+    cursor: pointer;
+    margin-top: 5px;
+}
+
+.btn-add {
+    background: #00C49F;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 5px 10px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.btn-open-modal {
+    margin: 10px;
+    padding: 10px;
+    background-color: #0088FE;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-content-urb {
+    background: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    width: 80%;
+    max-width: 308px;
+    position: relative;
+}
+
+.btn-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* Styles pour le bouton d'ouverture du modal */
+.btn-open-modal {
+  margin: 10px;
+  padding: 10px;
+  background-color: #0088FE;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Styles pour le modal */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.btn-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.input-menu input {
+  margin-right: 10px;
+  padding: 5px;
+}
+
+.btnana-urb {
+  padding: 5px 10px;
+  background-color: #00C49F;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: 30px;
+}
+
