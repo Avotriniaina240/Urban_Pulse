@@ -22,7 +22,7 @@
     background-color: #ffffff;
     overflow-y: auto;
     margin-left: 255px;
-    margin-top: 90px;
+    margin-top: 62px;
     max-height: 100%;
     transition: margin-left 0.3s ease-in-out, margin-top 0.3s ease-in-out;
     font-family: 'Roboto', sans-serif; /* Application de la police Roboto */
@@ -30,15 +30,17 @@
 
 /* Titre de la page */
 .h1-cp {
-    background: linear-gradient(90deg, #e0eaff, #c0d6ff);
-    color: #2c3e50;
-    padding: 15px;
-    border-radius: 8px;
-    margin: 20px 0;
-    animation: bounceIn 0.6s ease-out forwards;
-    width: 98%;
-    font-family: 'Roboto', sans-serif; /* Application de la police Roboto */
-    text-align: center;
+    font-size: 1.6rem;
+    color: #333;
+    letter-spacing: 2px;
+    background: linear-gradient(90deg, #d9e0e6, #f0f4f8);
+    padding: 10px;
+    border-radius: 5px;
+    margin: 15px 0;
+    margin-top: 10px;
+    font-family: 'Roboto', sans-serif;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
 /* Barre d'outils pour la comparaison */
@@ -63,12 +65,12 @@
 }
 
 .comparison-toolbar input {
-    width: 25%;
+    width: 20%;
     background-color: #ffffff;
 }
 
 .comparison-toolbar select {
-    width: 20%;
+    width: 15%;
     background-color: #f9f9f9;
     color: #333;
     cursor: pointer;
@@ -78,7 +80,6 @@
 .comparison-toolbar select:hover {
     background-color: #e6e6e6;
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
-    transform: translateY(-2px);
 }
 
 .comparison-toolbar select:focus {
@@ -92,8 +93,8 @@
     border: none;
     cursor: pointer;
     font-weight: bold;
-    width: 20%;
-    margin-top: -5px;
+    width: 12%;
+    margin-top: -4.5px;
 }
 
 .comparison-toolbar button:hover {
@@ -214,75 +215,6 @@
     }
 }
 
-/* Style pour le bouton d'ouverture du menu */
-.btn-open-modal {
-    background-color: #008CBA;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-    border-radius: 4px;
-}
-
-/* Styles pour le modal */
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.modal-content {
-    background: white;
-    padding: 20px;
-    border-radius: 5px;
-    width: 80%;
-    max-width: 500px;
-    position: relative;
-}
-
-.btn-close {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: none;
-    border: none;
-    font-size: 20px;
-    cursor: pointer;
-}
-
-.location-input-group, .coordinate-input-group {
-    margin-bottom: 10px;
-}
-
-.btn-add, .btn-remove {
-    margin: 5px;
-}
-
-.btn-submit {
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    font-size: 16px;
-    margin: 4px 2px;
-    cursor: pointer;
-    border-radius: 4px;
-}
-
 .highlight {
     background-color: rgba(255, 223, 0, 0.5); /* Couleur jaune transparente pour la mise en surbrillance */
     border: 2px solid gold;
@@ -292,7 +224,7 @@
 }
 
 .highlight-air-quality {
-    background-color: rgba(138, 43, 226, 0.5); /* Violet transparent */
+    background-color: rgba(188, 151, 223, 0.5); /* Violet transparent */
     margin-top: 20px;
     border-radius: 8px;
     padding: 10px;
@@ -301,7 +233,7 @@
 }
 
 .highlight-temperature {
-    background-color: rgba(255, 123, 0, 0.5); /* Jaune transparent */
+    background-color: rgba(223, 184, 147, 0.5); /* Jaune transparent */
     margin-top: 20px;
     border-radius: 8px;
     padding: 10px;
@@ -310,10 +242,134 @@
 }
 
 .highlight-humidity {
-    background-color: rgba(0, 255, 0, 0.5);
+    background-color: rgba(163, 223, 163, 0.5);
     margin-top: 20px;
     border-radius: 8px;
     padding: 10px;
     transition: background-color 0.3s ease;
     font-family: 'Roboto', sans-serif;
 }
+
+/* ComparisonToolbar.css */
+
+.input-field {
+    width: 100%; 
+    max-width: 600px; 
+    padding: 8px;
+    box-sizing: border-box; 
+  }
+  
+/* Masquer le bouton de fermeture par défaut */
+.modal-content .btn-close {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  
+  /* Afficher le bouton de fermeture lorsqu'il est survolé */
+  .btn-close:hover {
+    opacity: 1;
+  }
+  
+  /* Style pour le bouton de fermeture */
+  .btn-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: transparent;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    color: #333;
+  }
+  
+  /* Autres styles pour le modal */
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modal-content {
+    position: relative;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 500px;
+    width: 100%;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  
+  h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  input[type="text"] {
+    width: 70%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s ease;
+  }
+  
+  input[type="text"]:focus {
+    border-color: #0088cc; /* Changer la couleur de la bordure au focus */
+  }
+
+  
+  /* Styles pour le bouton d'ouverture du modal */
+  .btn-open-modal {
+    background-color: #0088cc;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .btn-open-modal:hover {
+    background-color: #005f99; /* Couleur différente au survol */
+  }
+  
+  /* Bouton de soumission */
+  .btn-submit {
+    background-color: #0088cc;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+    height: 35px; 
+    margin-left: 10px;
+  }
+  
+  .btn-submit:hover {
+    background-color: #005f99;
+  }
+
+  .data-list-comparison {
+    max-height: 400px; 
+    overflow-y: auto; 
+    padding: 10px; 
+    border: 1px solid #ddd; 
+    border-radius: 4px; 
+    background-color: #f9f9f9; 
+    margin-top: 20px;
+  }
+  

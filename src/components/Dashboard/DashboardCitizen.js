@@ -1,7 +1,6 @@
 // src/components/AdminDashboard.js
 import React from 'react';
 import Navbar from '../StyleBar/Navbar/NavbarCitizen';
-import Sidebar from '../StyleBar/Sidebar/SidebarCitizen';
 import '../styles/Dash/DashboardCitizen.css'; // Gardez cette ligne si vous avez des styles pour la mise en page
 
 const DashboardCitizen = () => {
@@ -9,7 +8,6 @@ const DashboardCitizen = () => {
     <div className="dashboardCitizen">
       <Navbar />
       <div className="main-content-Citizen">
-        <Sidebar />
         <div className="content-Citizen">
           <h1 className='h1-Citizen'>Citizen - Dashboard</h1>
           {/* Ajout du composant UrbanPulseInfo */}

@@ -1,29 +1,34 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { FaTachometerAlt, FaChartBar, FaUsers, FaFileAlt, FaBalanceScale,FaChartLine, FaMapMarkedAlt, FaSignOutAlt } from 'react-icons/fa';
+import { FaTachometerAlt, FaChartBar, FaUsers, FaFileAlt, FaBalanceScale, FaChartLine, FaMapMarkedAlt, FaSignOutAlt } from 'react-icons/fa';
 import { Link, Route, Routes } from 'react-router-dom';
 import '../../styles/Bar/SideCss/SidebarRA.css';
-import RegisterAdmin from '../../Authentification/RegisterAdmin'; // Assurez-vous que le chemin est correct
+import RegisterAdmin from '../../Authentification/RegisterAdmin'; // Vérifiez que le chemin est correct
 
 const SidebarRA = () => {
   const [showUserMenu, setShowUserMenu] = useState(false);
   const userMenuRef = useRef(null);
 
+  // Gestion de la déconnexion
   const handleLogout = () => {
     localStorage.removeItem('token');
     window.location.href = '/login';
   };
 
+  // Gestion du clic sur le menu utilisateur
   const handleUserMenuClick = (event) => {
     event.preventDefault();
-    setShowUserMenu(!showUserMenu);
+    setShowUserMenu((prevShowUserMenu) => !prevShowUserMenu);
   };
 
+  // Gestion de la sortie de la souris du menu utilisateur
   const handleMouseLeave = (event) => {
-    if (userMenuRef.current && !userMenuRef.current.contains(event.relatedTarget)) {
+    if (!event.relatedTarget || !userMenuRef.current) return;
+    if (!userMenuRef.current.contains(event.relatedTarget)) {
       setShowUserMenu(false);
     }
   };
 
+  // Utilisation d'un effet pour détecter les clics en dehors du menu utilisateur
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
@@ -37,17 +42,20 @@ const SidebarRA = () => {
 
   return (
     <div className="sideRA">
-    {/* <div>
-     <img src="../image/pul.png" alt="Urban Pulse Logo" className="sidebar-logo" 
-        width={10} height={65}  />
-      </div>*/}
+      {/* Logo optionnel */}
+      {/* <div>
+        <img src="../image/pul.png" alt="Urban Pulse Logo" className="sidebar-logo" width={10} height={65} />
+      </div> */}
+      
       <ul>
         <li><Link to="/vue-ensemble"><FaTachometerAlt /> Vue d'Ensemble</Link></li>
         <li><Link to="/urban-analysis"><FaChartBar /> Analyse des Données Urbaines</Link></li>
         <li><Link to="/home-reports"><FaFileAlt /> Rapports et Analyses</Link></li>
         <li><Link to="/comparison"><FaBalanceScale /> Comparaison</Link></li>
-        <li><Link to="/historique-prediction"><FaChartLine /> Données Historique et Prediction</Link></li>
+        <li><Link to="/historique-prediction"><FaChartLine /> Données Historique et Prédiction</Link></li>
         <li><Link to="/map"><FaMapMarkedAlt /> Cartographie et Géolocalisation</Link></li>
+
+        {/* Menu utilisateur */}
         <li
           ref={userMenuRef}
           onMouseLeave={handleMouseLeave}
@@ -62,14 +70,17 @@ const SidebarRA = () => {
             </ul>
           )}
         </li>
+
+        {/* Déconnexion */}
         <li>
-          <div className="sidebar-logout-RA">
+          <div className="sidebar-logout-RA" onClick={handleLogout}>
             <FaSignOutAlt />
-            <span onClick={handleLogout} className="logout-text-RA"><strong>Déconnexion</strong></span>
+            <span className="logout-text-RA"><strong>Déconnexion</strong></span>
           </div>
         </li>
       </ul>
 
+      {/* Gestion des routes */}
       <Routes>
         <Route path="/nouveau-utilisateur" element={<RegisterAdmin />} />
       </Routes>

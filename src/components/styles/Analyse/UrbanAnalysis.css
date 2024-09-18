@@ -30,7 +30,7 @@ header {
 }
 
 /* Section pour les graphiques */
-.chart-container {
+.chart-container-urb {
   flex: 1;
   display: flex;
   flex-direction: row;

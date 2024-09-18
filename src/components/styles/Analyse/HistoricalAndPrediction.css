@@ -32,7 +32,7 @@
 
 /* Titre de l'en-tête */
 .urb-h1-pre {
-    font-size: 2rem;
+    font-size: 1.6rem;
     color: #333;
     letter-spacing: 2px;
     background: linear-gradient(90deg, #d9e0e6, #f0f4f8);
@@ -67,7 +67,7 @@
 }
 
 /* Style des champs de texte */
-input[type="text"] {
+input-pred {
     flex-grow: 1;
     padding: 10px;
     border-radius: 5px;
@@ -77,7 +77,7 @@ input[type="text"] {
     background-color: #fff;
 }
 
-input[type="text"]:focus {
+input-pred:focus {
     border-color: #4f73e6;
     box-shadow: 0 0 10px rgba(79, 115, 230, 0.3);
     background-color: #f0f4ff;

@@ -1,30 +1,37 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { FaTachometerAlt, FaChartBar, FaUsers, FaFileAlt, FaBalanceScale,FaChartLine, FaMapMarkedAlt, FaSignOutAlt } from 'react-icons/fa';
+import { FaTachometerAlt, FaChartBar, FaUsers, FaFileAlt, FaBalanceScale, FaChartLine, FaMapMarkedAlt, FaSignOutAlt } from 'react-icons/fa';
 import { Link, Route, Routes } from 'react-router-dom';
 import '../../styles/Bar/SideCss/Sidebar.css';
 import RegisterAdminPage from '../../../pages/RegisterAdminPage';
-
 
 const Sidebar = () => {
   const [showUserMenu, setShowUserMenu] = useState(false);
   const userMenuRef = useRef(null);
 
+  // Fonction de déconnexion
   const handleLogout = () => {
     localStorage.removeItem('token');
     window.location.href = '/login';
   };
 
+  // Fonction pour gérer le clic sur le menu utilisateur
   const handleUserMenuClick = (event) => {
     event.preventDefault();
-    setShowUserMenu(!showUserMenu);
+    setShowUserMenu((prevShowUserMenu) => !prevShowUserMenu);
   };
 
+  // Fonction pour gérer la sortie de la souris du menu utilisateur
   const handleMouseLeave = (event) => {
-    if (userMenuRef.current && !userMenuRef.current.contains(event.relatedTarget)) {
+    // Vérifie si 'relatedTarget' est un noeud DOM valide
+    if (!event.relatedTarget || !userMenuRef.current) return;
+
+    // Si la souris quitte l'élément et qu'il n'est pas contenu dans 'userMenuRef', on cache le menu
+    if (!userMenuRef.current.contains(event.relatedTarget)) {
       setShowUserMenu(false);
     }
   };
 
+  // Utilisation d'un effet pour détecter les clics en dehors du menu utilisateur
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
@@ -38,10 +45,6 @@ const Sidebar = () => {
 
   return (
     <div className="side">
-      {/* <div>
-     <img src="../image/pul.png" alt="Urban Pulse Logo" className="sidebar-logo" 
-        width={10} height={65}  />
-      </div>*/}
       <ul>
         <li><Link to="/vue-ensemble"><FaTachometerAlt /> Vue d'Ensemble</Link></li>
         <li><Link to="/urban-analysis"><FaChartBar /> Analyse des Données Urbaines</Link></li>
@@ -63,14 +66,17 @@ const Sidebar = () => {
             </ul>
           )}
         </li>
+        
+        {/* Déconnexion */}
         <li>
-          <div className="sidebar-logout">
+          <div className="sidebar-logout" onClick={handleLogout}>
             <FaSignOutAlt />
-            <span onClick={handleLogout} className="logout-text"><strong>Déconnexion</strong></span>
+            <span className="logout-text"><strong>Déconnexion</strong></span>
           </div>
         </li>
       </ul>
 
+      {/* Routes pour gérer la navigation */}
       <Routes>
         <Route path="/nouveau-utilisateur" element={<RegisterAdminPage />} />
       </Routes>

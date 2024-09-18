@@ -1,5 +1,6 @@
 import React from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import '../../styles/Comparison.css';
 
 const ComparisonResults = ({ data, sortBy }) => {
   console.log('ComparisonResults received data:', data);

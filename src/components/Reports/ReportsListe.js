@@ -92,7 +92,7 @@ const ReportsListe = () => {
           placeholder="Rechercher par description ou statut..."
           value={searchText}
           onChange={(e) => setSearchText(e.target.value)}
-          className="search-input"
+          className="search-input-manage"
         />
       </div>
   

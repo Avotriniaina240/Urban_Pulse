@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { FaTachometerAlt, FaChartBar, FaUsers, FaFileAlt, FaBalanceScale,FaChartLine, FaMapMarkedAlt, FaSignOutAlt } from 'react-icons/fa';
+import { FaTachometerAlt, FaChartBar, FaUsers, FaFileAlt, FaBalanceScale, FaChartLine, FaMapMarkedAlt, FaSignOutAlt } from 'react-icons/fa';
 import { Link, Route, Routes } from 'react-router-dom';
 import '../../styles/Bar/SideCss/SidebarCarte.css';
 import RegisterAdminPage from '../../../pages/RegisterAdminPage';
@@ -9,21 +9,26 @@ const SidebarCarte = () => {
   const [showUserMenu, setShowUserMenu] = useState(false);
   const userMenuRef = useRef(null);
 
+  // Fonction pour afficher/masquer le formulaire de déconnexion
   const handleLogoutClick = () => {
-    setShowLogoutForm(!showLogoutForm);
+    setShowLogoutForm((prevShowLogoutForm) => !prevShowLogoutForm);
   };
 
+  // Fonction pour afficher/masquer le menu utilisateur
   const handleUserMenuClick = (event) => {
     event.preventDefault();
-    setShowUserMenu(!showUserMenu);
+    setShowUserMenu((prevShowUserMenu) => !prevShowUserMenu);
   };
 
+  // Fonction pour gérer la sortie de la souris du menu utilisateur
   const handleMouseLeave = (event) => {
-    if (userMenuRef.current && !userMenuRef.current.contains(event.relatedTarget)) {
+    if (!event.relatedTarget || !userMenuRef.current) return;
+    if (!userMenuRef.current.contains(event.relatedTarget)) {
       setShowUserMenu(false);
     }
   };
 
+  // Utilisation d'un effet pour détecter les clics en dehors du menu utilisateur
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
@@ -37,10 +42,11 @@ const SidebarCarte = () => {
 
   return (
     <div className="sideCarte">
+      {/* Option pour ajouter un logo */}
       {/* <div>
-     <img src="../image/pul.png" alt="Urban Pulse Logo" className="sidebar-logo" 
-        width={10} height={65}  />
-      </div>*/}
+        <img src="../image/pul.png" alt="Urban Pulse Logo" className="sidebar-logo" width={10} height={65} />
+      </div> */}
+      
       <ul>
         <li><Link to="/vue-ensemble"><FaTachometerAlt /> Vue d'Ensemble</Link></li>
         <li><Link to="/urban-analysis"><FaChartBar /> Analyse des Données Urbaines</Link></li>
@@ -48,6 +54,8 @@ const SidebarCarte = () => {
         <li><Link to="/comparison"><FaBalanceScale /> Comparaison</Link></li>
         <li><Link to="/historique-prediction"><FaChartLine /> Données Historique et Prediction</Link></li>
         <li><Link to="/map"><FaMapMarkedAlt /> Cartographie et Géolocalisation</Link></li>
+
+        {/* Menu utilisateur */}
         <li
           ref={userMenuRef}
           onMouseLeave={handleMouseLeave}
@@ -62,14 +70,17 @@ const SidebarCarte = () => {
             </ul>
           )}
         </li>
+
+        {/* Déconnexion */}
         <li>
-          <div className="sidebar-logout-Carte">
+          <div className="sidebar-logout-Carte" onClick={handleLogoutClick}>
             <FaSignOutAlt />
-            <span onClick={handleLogoutClick} className="logout-text-Carte"><strong>Déconnexion</strong></span>
+            <span className="logout-text-Carte"><strong>Déconnexion</strong></span>
           </div>
         </li>
       </ul>
 
+      {/* Gestion des routes */}
       <Routes>
         <Route path="/nouveau-utilisateur" element={<RegisterAdminPage />} />
       </Routes>

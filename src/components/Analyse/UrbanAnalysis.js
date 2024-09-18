@@ -242,7 +242,7 @@ const UrbanAnalysis = () => {
                             </div>
                         )}
                     </div>
-                    <div className="chart-container">
+                    <div className="chart-container-urb">
                         <div className="chart-item">
                             <h2 className="pie-chart-title">Répartition des Températures</h2>
                             <PieChart width={400} height={400}>

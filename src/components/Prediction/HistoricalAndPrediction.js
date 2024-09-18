@@ -20,6 +20,7 @@ const HistoricalAndPrediction = () => {
     const [selectedPoint, setSelectedPoint] = useState(null);
     const [cityName, setCityName] = useState(''); // Nouvel état pour stocker le nom de la ville
 
+
     const fetchWeatherData = async (city) => {
         try {
             const response = await axios.get(`http://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${API_KEY}&units=metric`);
@@ -123,16 +124,15 @@ const HistoricalAndPrediction = () => {
                     </div>
                     <div className="input-section-pre">
                         <div className="input-toolbar-pre">
-                            <input
+                            <input className='input-pred'
                                 type="text"
-                                placeholder="Entrez les noms de villes (séparés par des virgules)"
+                                placeholder="Entrez le nom de la ville "
                                 value={locationsInput}
                                 onChange={(e) => setLocationsInput(e.target.value)}
                             />
-                            <button className='btnpre' onClick={() => fetchData(locationsInput)} enabled={loading}>
-                                <FontAwesomeIcon icon={faSpinner} />
+                            <button className="btnpre" onClick={() => fetchData(locationsInput)} disabled={loading}>
+                                <FontAwesomeIcon icon={faSpinner} className={loading ? "fa-spin" : ""} />
                             </button>
-
                         </div>
                         {loading && <p>Chargement des données...</p>}
                         {error && <p style={{ color: 'red' }}>{error}</p>}
@@ -163,20 +163,30 @@ const HistoricalAndPrediction = () => {
                         {/* Deuxième graphique linéaire */}
                         <div className="chart-item-pre">
                             <div className="chart-wrapper-pre">
-                                <LineChart
-                                    width={1000}
-                                    height={400}
-                                    data={trendData}
-                                    onClick={(e) => setSelectedPoint(e.activePayload ? e.activePayload[0].payload : null)} // Capturer les clics
-                                >
-                                    <CartesianGrid strokeDasharray="3 3" />
-                                    <XAxis dataKey="time" tick={{ fontSize: 12 }} />
-                                    <YAxis />
-                                    <Tooltip />
-                                    <Legend />
-                                    <Line type="monotone" dataKey="temperature" stroke="#8884d8" />
-                                    <Line type="monotone" dataKey="humidity" stroke="#82ca9d" />
-                                </LineChart>
+                            <LineChart
+                                width={1000}
+                                height={400}
+                                data={trendData}
+                                onClick={(e) => setSelectedPoint(e.activePayload ? e.activePayload[0].payload : null)} // Capturer les clics
+                            >
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="time" tick={{ fontSize: 12 }} />
+                                <YAxis />
+                                <Tooltip />
+                                <Legend />
+                                <Line
+                                    type="monotone"
+                                    dataKey="temperature"
+                                    stroke="#8884d8"
+                                    activeDot={{ r: 8, fill: '#ff0000' }}
+                                />
+                                <Line
+                                    type="monotone"
+                                    dataKey="humidity"
+                                    stroke="#82ca9d"
+                                />
+                            </LineChart>
+
                                 <div className="chart-legend-pre">
                                     <h3>Détails du Graphique Linéaire</h3>
                                     <p><strong>Zone étudiée :</strong> {cityName}</p> {/* Nom de la zone étudiée */}
