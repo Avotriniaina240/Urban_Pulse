@@ -144,6 +144,7 @@
   margin-bottom: 10px;
   margin-left: 1px;
   margin-right: 20px;
+  width: 97.5%;
   opacity: 0;
   height: 470px;
   animation: zoomIn 1s forwards;
@@ -164,9 +165,10 @@
 
 /* Ajustement pour le graphique */
 .chart-container-vue canvas {
-  max-width: 89%;
-  height: 400px;
-  margin-right: 300px;
+  width: 100%;
+  height: 500px;
+  margin-right: 150px;
+  margin-top: 0px;
 }
 
 /* Style pour les messages d'erreur */
@@ -193,52 +195,193 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-.table-element {
-  opacity: 0;
-  animation: slideInFromBottom 0.6s forwards;
-  animation-delay: 1.2s;
-  transition: transform 0.3s, box-shadow 0.3s;
-}
+.chart-with-legend {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-top: 20px;
 
-.table-element:hover {
-  transform: scale(1.03);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-/* Effets de survol pour les boutons */
-.button {
-  background-color: #007bff;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s, transform 0.3s;
-}
-
-.button:hover {
-  background-color: #0056b3;
-  transform: scale(1.05);
-}
-
-/* Effet de focus pour les champs de formulaire */
-input:focus, textarea:focus {
-  border-color: #007bff;
-  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-  transition: border-color 0.3s, box-shadow 0.3s;
-}
-
-/* Effet de focus pour les boutons */
-.button:focus {
-  outline: none;
-  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
 }
 
 .chart-wrapper {
-  position: relative;
-  transition: opacity 1s ease-in-out;
+  margin-top: 70px;
+  width: 100%;
 }
 
-.chart-wrapper .chart-container-vue {
+.chart-legend {
+  font-size: 14px;
+  width: 35%;
+  padding: 25px;
+  background: linear-gradient(145deg, #f3f4f6, #e5e7eb);
+  border-radius: 15px;
+  box-shadow: 
+    0 10px 15px -3px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  font-family: 'Poppins', sans-serif;
+  color: #374151;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  margin-top: -40px;
+  height: 410px;
+}
+
+.chart-legend::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%);
+  transform: rotate(30deg);
+  pointer-events: none;
+}
+
+.chart-legend:hover {
+  transform: translateY(-5px);
+  box-shadow: 
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+}
+
+.chart-legend h3 {
+  margin-top: 0;
+  color: #1f2937;
+  font-size: 1.4rem;
+  margin-bottom: 20px;
+  position: relative;
+  padding-bottom: 10px;
+}
+
+.chart-legend h3::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 40px;
+  height: 4px;
+  background: linear-gradient(90deg, #3b82f6, #60a5fa);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.chart-legend:hover h3::after {
+  width: 60px;
+}
+
+.chart-legend ul {
+  list-style-type: none;
+  padding: 0;
+  margin-bottom: 20px;
+}
+
+.chart-legend li {
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  transition: transform 0.2s ease;
+}
+
+.chart-legend li:hover {
+  transform: translateX(5px);
+}
+
+.chart-legend li span {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin-right: 12px;
+  border-radius: 50%;
+  position: relative;
+  overflow: hidden;
+}
+
+.chart-legend li span::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 50%;
+  transition: all 0.3s ease;
+}
+
+.chart-legend li:hover span::after {
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+.chart-legend p {
+  margin-bottom: 12px;
+  line-height: 1.6;
+  position: relative;
+  padding-left: 20px;
+}
+
+.chart-legend p::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  color: #3b82f6;
+  transition: transform 0.2s ease;
+}
+
+.chart-legend p:hover::before {
+  transform: translateX(5px);
+}
+
+/* Animation améliorée pour la légende */
+@keyframes fadeInRight {
+  from { 
+    opacity: 0;
+    transform: translateX(30px) scale(0.9);
+  }
+  to { 
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+.chart-legend {
+  animation: fadeInRight 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+  animation-delay: 0.5s;
+}
+
+/* Animation pour les éléments de la liste */
+@keyframes slideInFromBottom {
+  from { 
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to { 
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.chart-legend li {
+  opacity: 0;
+  animation: slideInFromBottom 0.5s ease forwards;
+}
+
+.chart-legend li:nth-child(1) { animation-delay: 0.7s; }
+.chart-legend li:nth-child(2) { animation-delay: 0.9s; }
+.chart-legend li:nth-child(3) { animation-delay: 1.1s; }
+
+
+.chart-wrapper, .chart-legend {
+  transition: opacity 0.3s ease-in-out;
+}
+
+.fade-in {
   opacity: 1;
+}
+
+.fade-out {
+  opacity: 0;
 }

@@ -152,7 +152,7 @@ const HistoricalAndPrediction = () => {
                                 </BarChart>
                                 <div className="chart-legend-pre">
                                     <h3>Détails du Graphique à Barres</h3>
-                                    <p><strong>Zone étudiée :</strong> {cityName}</p> {/* Nom de la zone étudiée */}
+                                    <p><strong>Zone étudiée :</strong> {cityName}</p> 
                                     <p><strong>Jours étudiés :</strong> {daysStudied} jours</p>
                                     <p><strong>Variation de température :</strong> Min: {temperatureRange.min}°C, Max: {temperatureRange.max}°C</p>
                                     <p><strong>Variation de l'humidité :</strong> Min: {humidityRange.min}%, Max: {humidityRange.max}%</p>

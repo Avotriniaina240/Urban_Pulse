@@ -1,69 +1,57 @@
-import { useState } from 'react';
-import { fetchWeatherData, fetchWeatherDataByCoords } from '../services/weatherApi';
+import { useState, useEffect } from 'react';
+import { fetchWeatherData, fetchWeatherDataByCoordinates } from '../services/weatherApi';
 
-const useWeatherData = (dataType) => {
-    const [trendData, setTrendData] = useState([]);
-    const [pieChartData, setPieChartData] = useState([]);
+export const useWeatherData = (position) => {
+    const [weatherData, setWeatherData] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [cityName, setCityName] = useState('');
+    const [daysStudied, setDaysStudied] = useState(0);
+    const [temperatureRange, setTemperatureRange] = useState({ min: null, max: null });
+    const [humidityRange, setHumidityRange] = useState({ min: null, max: null });
 
-    const fetchData = async (locations, coordinatePairs) => {
+    const fetchData = async (city) => {
         setLoading(true);
         setError(null);
-        console.log('Début de fetchData', { dataType, locations, coordinatePairs });
-
         try {
-            let weatherData = [];
-
-            if (dataType === 'ville' || dataType === 'quartier') {
-                console.log('Récupération des données pour les villes/quartiers');
-                weatherData = await Promise.all(locations.map(async location => {
-                    try {
-                        return await fetchWeatherData(location);
-                    } catch (err) {
-                        console.error(`Erreur pour ${location}:`, err);
-                        throw err;
-                    }
-                }));
-            } else if (dataType === 'coordonnées') {
-                console.log('Récupération des données pour les coordonnées');
-                weatherData = await Promise.all(coordinatePairs.map(async pair => {
-                    try {
-                        return await fetchWeatherDataByCoords(pair.latitude, pair.longitude);
-                    } catch (err) {
-                        console.error(`Erreur pour (${pair.latitude}, ${pair.longitude}):`, err);
-                        throw err;
-                    }
-                }));
-            }
-
-            console.log('Données météo récupérées:', weatherData);
-
-            const processedTrendData = weatherData.map(data => ({
-                city: data.city,
-                temperature: data.temperature,
-                humidity: data.humidity,
-                date: data.date
-            }));
-
-            const processedPieChartData = weatherData.map(data => ({
-                name: data.city,
-                value: data.temperature
-            }));
-
-            console.log('Données traitées:', { processedTrendData, processedPieChartData });
-
-            setTrendData(processedTrendData);
-            setPieChartData(processedPieChartData);
+            const data = await fetchWeatherData(city);
+            processWeatherData(data);
+            setCityName(city);
         } catch (err) {
-            console.error('Erreur lors de la récupération des données:', err);
-            setError(`Erreur lors de la récupération des données: ${err.message}`);
+            setError(`Une erreur est survenue lors de la récupération des données: ${err.message}`);
         } finally {
             setLoading(false);
         }
     };
 
-    return { trendData, pieChartData, loading, error, fetchData };
-};
+    useEffect(() => {
+        if (position) {
+            const fetchDataByCoordinates = async () => {
+                setLoading(true);
+                try {
+                    const data = await fetchWeatherDataByCoordinates(position.latitude, position.longitude);
+                    processWeatherData(data);
+                    setCityName(`Coordonnées: [${position.latitude}, ${position.longitude}]`);
+                } catch (err) {
+                    setError(`Erreur lors de la récupération des données météo: ${err.message}`);
+                } finally {
+                    setLoading(false);
+                }
+            };
+            fetchDataByCoordinates();
+        }
+    }, [position]);
 
-export default useWeatherData;
+    const processWeatherData = (data) => {
+        setWeatherData(data);
+        const startDate = new Date(data[0]?.time);
+        const endDate = new Date(data[data.length - 1]?.time);
+        setDaysStudied(Math.ceil(Math.abs(endDate - startDate) / (1000 * 60 * 60 * 24)));
+        const temperatures = data.map(d => d.temperature);
+        const humidities = data.map(d => d.humidity);
+        setTemperatureRange({ min: Math.min(...temperatures), max: Math.max(...temperatures) });
+        setHumidityRange({ min: Math.min(...humidities), max: Math.max(...humidities) });
+    };
+
+    return { weatherData, loading, error, fetchData, cityName, daysStudied, temperatureRange, humidityRange };
+};

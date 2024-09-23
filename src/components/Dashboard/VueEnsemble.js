@@ -13,6 +13,7 @@ const VueEnsemble = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [chartType, setChartType] = useState('bar');
   const [isPaused, setIsPaused] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const intervalRef = useRef(null);
 
   useEffect(() => {
@@ -47,7 +48,11 @@ const VueEnsemble = () => {
   useEffect(() => {
     const startInterval = () => {
       intervalRef.current = setInterval(() => {
-        setChartType(prevType => (prevType === 'bar' ? 'line' : 'bar'));
+        setIsTransitioning(true);
+        setTimeout(() => {
+          setChartType(prevType => (prevType === 'bar' ? 'line' : 'bar'));
+          setIsTransitioning(false);
+        }, 300);
       }, 5000);
     };
 
@@ -64,7 +69,11 @@ const VueEnsemble = () => {
   const handleMouseLeave = () => {
     setIsPaused(false);
     intervalRef.current = setInterval(() => {
-      setChartType(prevType => (prevType === 'bar' ? 'line' : 'bar'));
+      setIsTransitioning(true);
+      setTimeout(() => {
+        setChartType(prevType => (prevType === 'bar' ? 'line' : 'bar'));
+        setIsTransitioning(false);
+      }, 300);
     }, 5000);
   };
 
@@ -76,7 +85,7 @@ const VueEnsemble = () => {
         data: [stats.citizenCount, stats.adminCount, stats.urbanistCount],
         backgroundColor: ['rgba(75, 192, 192, 0.6)', 'rgba(255, 99, 132, 0.6)', 'rgba(54, 162, 235, 0.6)'],
         borderColor: 'rgba(75, 192, 192, 1)',
-        borderWidth: 2,
+        borderWidth: 0.5,
         tension: chartType === 'line' ? 0.4 : 0,
         fill: false,
       },
@@ -160,11 +169,33 @@ const VueEnsemble = () => {
   };
 
   const renderChart = () => {
-    if (chartType === 'bar') {
-      return <Bar data={chartData} options={chartOptions} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} />;
-    } else {
-      return <Line data={chartData} options={chartOptions} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} />;
-    }
+    const ChartComponent = chartType === 'bar' ? Bar : Line;
+    return (
+      <div className={`chart-wrapper ${isTransitioning ? 'fade-out' : 'fade-in'}`}>
+        <ChartComponent data={chartData} options={chartOptions} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave} />
+      </div>
+    );
+  };
+
+  const renderLegend = () => {
+    return (
+      <div className={`chart-legend ${isTransitioning ? 'fade-out' : 'fade-in'}`}>
+        <h3>Légende détaillée</h3>
+        <p>Ce graphique représente la répartition des utilisateurs par catégorie.</p>
+        <ul>
+          <li><span style={{color: 'rgba(75, 192, 192, 0.6)'}}>■</span> Citoyens: {stats.citizenCount} ({((stats.citizenCount / stats.totalUsers) * 100).toFixed(2)}%)</li>
+          <li><span style={{color: 'rgba(255, 99, 132, 0.6)'}}>■</span> Administrateurs: {stats.adminCount} ({((stats.adminCount / stats.totalUsers) * 100).toFixed(2)}%)</li>
+          <li><span style={{color: 'rgba(54, 162, 235, 0.6)'}}>■</span> Urbanistes: {stats.urbanistCount} ({((stats.urbanistCount / stats.totalUsers) * 100).toFixed(2)}%)</li>
+        </ul>
+        <p>Total des utilisateurs: {stats.totalUsers}</p>
+        <p>Type de graphique actuel: {chartType === 'bar' ? 'Histogramme' : 'Courbe'}</p>
+        {chartType === 'bar' ? (
+          <p>L'histogramme permet de comparer facilement les quantités entre les différentes catégories.</p>
+        ) : (
+          <p>La courbe met en évidence la tendance et la progression entre les catégories.</p>
+        )}
+      </div>
+    );
   };
 
   return (
@@ -174,8 +205,6 @@ const VueEnsemble = () => {
         <Sidebar />
         <div className="content-vue">
           <h1 className='h1-vue'>Tableau de Bord Administrateur</h1>
-
-          {isLoading && <p>Chargement des données...</p>}
 
           {!isLoading && !error && (
             <>
@@ -189,8 +218,11 @@ const VueEnsemble = () => {
               </div>
 
               <div className="chart-container-vue">
-                <h2 className="chart-container-h2">Graphique des Utilisateurs par Rôles</h2>
-                {renderChart()}
+                <h2 className="chart-container-h2">Graphique des Utilisateurs</h2>
+                <div className="chart-with-legend">
+                  {renderChart()}
+                  {renderLegend()}
+                </div>
               </div>
             </>
           )}
