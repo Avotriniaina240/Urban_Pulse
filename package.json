@@ -21,6 +21,7 @@
     "dotenv": "^16.4.5",
     "framer-motion": "^11.5.5",
     "i18next": "^23.14.0",
+    "jwt-decode": "^4.0.0",
     "leaflet": "^1.9.4",
     "leaflet-control-geocoder": "^2.4.0",
     "leaflet-draw": "^1.0.4",
