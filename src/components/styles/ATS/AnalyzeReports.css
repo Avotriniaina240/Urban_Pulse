@@ -245,7 +245,7 @@
 }
 
 .table-container {
-  margin-top: 20px;
+  margin-left: 45px;
   border-radius: 10px;
   max-height: 360px; /* Ajustez la hauteur selon vos besoins */
   overflow-y: auto; /* Ajoute une barre de défilement verticale si nécessaire */
