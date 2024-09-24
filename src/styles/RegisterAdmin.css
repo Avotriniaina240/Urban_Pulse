@@ -3,7 +3,6 @@
 /* Styles pour le body et le formulaire */
 .body {
     font-family: Arial, sans-serif;
-    background-image: url('C:\Users\CHRIS-06\Desktop\Projet_Urban_pulse\Front_Urban_pulse\projet_frontend\public\image\blanc.jpg');
     background-size: cover; /* Pour couvrir toute la surface */
     background-position: center; /* Centrer l'image */
     display: flex;

@@ -1,7 +1,7 @@
 .analysis-container {
   display: flex;
   flex-direction: column;
-  max-width: 76.4%; /* Augmenté pour un meilleur alignement */
+  max-width: 75%; /* Augmenté pour un meilleur alignement */
   margin: auto;
   padding: 40px;
   border-radius: 12px; /* Légèrement plus arrondi pour un look plus moderne */
@@ -245,7 +245,7 @@
 }
 
 .table-container {
-  margin-top: 20px;
+  margin-left: 45px;
   border-radius: 10px;
   max-height: 360px; /* Ajustez la hauteur selon vos besoins */
   overflow-y: auto; /* Ajoute une barre de défilement verticale si nécessaire */
@@ -278,6 +278,3 @@
   color: white; /* Couleur du texte de l'en-tête */
   text-align: left;
 }
-
-
-

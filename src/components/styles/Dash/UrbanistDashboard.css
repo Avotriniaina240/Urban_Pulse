@@ -1,6 +1,5 @@
 /* Style général pour le tableau de bord */
 .dashboard-Urbanist {
-    background-image: url('C:\Users\CHRIS-06\Desktop\Projet_Urban_pulse\Front_Urban_pulse\projet_frontend\public\image/blanc.jpg');
     background-size: cover; /* Assurez-vous que l'image couvre toute la zone */
     background-position: center; /* Centrer l'image d'arrière-plan */
     height: 100vh; /* Assure que le tableau de bord occupe toute la hauteur de la fenêtre */
