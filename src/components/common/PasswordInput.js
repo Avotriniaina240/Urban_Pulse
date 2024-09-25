@@ -13,12 +13,6 @@ const PasswordInput = ({ value, onChange }) => {
         placeholder="Mot de passe"
         required
       />
-      <span
-        className="password-toggle-icon"
-        onClick={() => setShowPassword(!showPassword)}
-      >
-        {showPassword ? <FaEyeSlash /> : <FaEye />}
-      </span>
     </div>
   );
 };

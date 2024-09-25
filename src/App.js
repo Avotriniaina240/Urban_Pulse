@@ -25,11 +25,11 @@ import ReportsListe from './components/Reports/ReportsListe';
 import ManageReports from './components/Reports/ManageReports';
 import AnalyzeReports from './components/Reports/AnalyzeReports';
 import Comparison from './pages/Comparison';
-/*import ForumHeader from './components/Discussion/ForumHeader';
-import DiscussionDetail from './components/Discussion/DiscussionDetail';
 import DiscussionItem from './components/Discussion/DiscussionItem';
 import DiscussionList from './components/Discussion/DiscussionList';
-import ForumPage from './components/Discussion/ForumPage';*/
+/*import ForumHeader from './components/Discussion/ForumHeader';
+import DiscussionDetail from './components/Discussion/DiscussionDetail';*/
+import ForumPage from './components/Discussion/ForumPage';
 import CitySelector from './components/Prediction/CitySelector';
 import TimeSeriesChart from './components/Prediction/TimeSeriesChart';
 import IndicatorSelector from './components/Prediction/IndicatorSelector';
@@ -63,11 +63,11 @@ const App = () => {
           <Route path="/reports/*" element={<Reports />} />
           <Route path="/analyze-reports/*" element={<AnalyzeReports />} />
           <Route path="/comparison/*" element={<Comparison />} />
-          {/*<Route path="/forum-header/*" element={<ForumHeader />} />
           <Route path="/forum-page/*" element={<ForumPage />} />
-          <Route path="/discussion-detail/*" element={<DiscussionDetail />} />
           <Route path="/discussion-item/*" element={<DiscussionItem />} />
-          <Route path="/discussion-list/*" element={<DiscussionList />} />*/}
+          <Route path="/discussion-list/*" element={<DiscussionList />} />
+          {/*<Route path="/forum-header/*" element={<ForumHeader />} />
+          <Route path="/discussion-detail/*" element={<DiscussionDetail />} />*/}
           <Route path="/city-selector/*" element={<CitySelector />} />
           <Route path="/time-serie-chart/*" element={<TimeSeriesChart />} />
           <Route path="/indicator-selector/*" element={<IndicatorSelector />} />

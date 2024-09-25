@@ -16,7 +16,6 @@ const SettingsPanel = ({ onClose }) => {
   const navigate = useNavigate(); // Initialiser le hook useNavigate
   const { t, i18n } = useTranslation(); // Utiliser useTranslation pour obtenir t et i18n
 
-  // Utiliser useEffect pour gérer l'application du mode sombre
   useEffect(() => {
     if (typeof document !== 'undefined') {
       document.body.classList.toggle('dark-mode', isDarkMode);

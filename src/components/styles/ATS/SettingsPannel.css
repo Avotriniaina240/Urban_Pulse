@@ -47,9 +47,8 @@
 }
 
 .settings-section-header:hover {
-  color: #007bff;
+  background-color: #a1bee0;
   transform: translateY(-10px); /* Élever l'élément */
-  box-shadow: 0 4px 8px rgba(39, 52, 226, 0.5); /* Ajouter une ombre pour un effet de profondeur */
 }
 
 .settings-section-content {

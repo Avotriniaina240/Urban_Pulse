@@ -122,12 +122,12 @@ button:active {
 }
 
 .search-bar-container {
-    margin-top: 16px;
+    margin-top: 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           6px;
     width: 300px;
 }
 
 .refresh-button {
-    height: 40px;
+    height: 40px; 
     margin-left: 70%;
     width: 12%;
     border: none;
