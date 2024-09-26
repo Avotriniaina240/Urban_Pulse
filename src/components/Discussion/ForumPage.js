@@ -81,7 +81,8 @@ const ForumPage = () => {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ likes: newLikes }),
+            // Envoyer un booléen au lieu de likes
+            body: JSON.stringify({ increment: !post.liked }), // true si on aime, false sinon
         });
 
         if (!response.ok) {
@@ -211,8 +212,8 @@ const ForumPage = () => {
 
       <div className="post-list">
         {filteredPosts.length > 0 ? (
-          filteredPosts.map(post => (
-            <div key={post.id} className="post-card">
+          filteredPosts.map((post, index) => (
+            <div key={index} className="post-card">
               <div className="post-header">
                 <h2 className="post-title">{post.title}</h2>
                 <div className="post-author">
@@ -242,7 +243,7 @@ const ForumPage = () => {
                   {post.commentList.length > 0 && (
                     <div className="comments-list">
                       {post.commentList.map((comment, index) => (
-                        <p key={index} className="comment">{comment}</p>
+                        <p key={`${index}-${comment}`} className="comment">{comment}</p>
                       ))}
                     </div>
                   )}
@@ -254,7 +255,7 @@ const ForumPage = () => {
                       value={newComment} 
                       onChange={(e) => setNewComment(e.target.value)} 
                     />
-                    <button onClick={() => handleAddComment(post.id)}>Envoyer</button>
+                    <button onClick={() => handleAddComment(post.id)} className='btn-fr'>Envoyer</button>
                   </div>
                 </div>
               )}
