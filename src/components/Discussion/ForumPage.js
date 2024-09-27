@@ -10,23 +10,27 @@ const ForumPage = () => {
   const [newPost, setNewPost] = useState({ title: '', content: '' });
   const popupRef = useRef(null);
 
-  // Récupérer les posts lors du premier rendu
   useEffect(() => {
     const fetchPosts = async () => {
       try {
         const response = await fetch('http://localhost:5000/api/posts');
         if (response.ok) {
           const data = await response.json();
-          setPosts(data.map(post => ({
-            ...post,
-            likes: post.likes || 0, // S'assurer que les likes sont définis
-            liked: false,
-            comments: post.comments || 0,
-            isExpanded: false,
-            showCommentInput: false,
-            commentList: [],
-            author: post.username // Utiliser le nom d'utilisateur récupéré
-          })));
+          const postsWithComments = await Promise.all(data.map(async (post) => {
+            const commentsResponse = await fetch(`http://localhost:5000/api/posts/${post.id}/comments`);
+            const comments = await commentsResponse.json();
+            return {
+              ...post,
+              likes: post.likes || 0,
+              liked: false,
+              comments: comments.length,
+              isExpanded: false,
+              showCommentInput: false,
+              commentList: comments,
+              author: post.username,
+            };
+          }));
+          setPosts(postsWithComments);
         } else {
           console.error('Failed to fetch posts:', response.statusText);
         }
@@ -50,23 +54,51 @@ const ForumPage = () => {
     ));
   };
 
-  const handleAddComment = (postId) => {
+  const handleAddComment = async (postId) => {
     if (newComment.trim() === '') return;
-
-    setPosts(posts.map(post => {
-      if (post.id === postId) {
-        const updatedCommentList = [...post.commentList, newComment];
-        return { 
-          ...post, 
-          commentList: updatedCommentList, 
-          comments: post.comments + 1 
-        };
+  
+    const userId = localStorage.getItem('userId');
+    const username = localStorage.getItem('username') || 'Auteur par défaut'; 
+  
+    try {
+      const response = await fetch(`http://localhost:5000/api/posts/${postId}/comments`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          content: newComment,
+          author_id: userId ? parseInt(userId, 10) : 1,
+          author: username, 
+        }),
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(`Failed to save comment: ${errorData.message}`);
       }
-      return post;
-    }));
-
-    setNewComment('');
+  
+      const savedComment = await response.json();
+  
+      // Mettre à jour les posts pour inclure le nouveau commentaire
+      setPosts(posts.map(post => {
+        if (post.id === postId) {
+          const updatedCommentList = [...post.commentList, savedComment];
+          return {
+            ...post,
+            commentList: updatedCommentList,
+            comments: post.comments + 1,
+          };
+        }
+        return post;
+      }));
+  
+      setNewComment('');
+    } catch (error) {
+      console.error('Error saving comment:', error.message);
+    }
   };
+  
 
   const handleLikePost = async (postId) => {
     const post = posts.find(p => p.id === postId); 
@@ -76,32 +108,30 @@ const ForumPage = () => {
     console.log("Nouveaux likes:", newLikes);
 
     try {
-        const response = await fetch(`http://localhost:5000/api/posts/${postId}/like`, {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            // Envoyer un booléen au lieu de likes
-            body: JSON.stringify({ increment: !post.liked }), // true si on aime, false sinon
-        });
+      const response = await fetch(`http://localhost:5000/api/posts/${postId}/like`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ increment: !post.liked }),
+      });
 
-        if (!response.ok) {
-            throw new Error(`Failed to update likes: ${response.status}`);
-        }
+      if (!response.ok) {
+        throw new Error(`Failed to update likes: ${response.status}`);
+      }
 
-        const updatedPost = await response.json();
+      const updatedPost = await response.json();
 
-        setPosts((prevPosts) => 
-            prevPosts.map((p) => 
-                p.id === postId ? { ...p, likes: updatedPost.likes, liked: !post.liked } : p
-            )
-        );
+      setPosts((prevPosts) => 
+        prevPosts.map((p) => 
+          p.id === postId ? { ...p, likes: updatedPost.likes, liked: !post.liked } : p
+        )
+      );
 
     } catch (error) {
-        console.error('Erreur:', error.message);
+      console.error('Erreur:', error.message);
     }
-};
-
+  };
 
   const filteredPosts = posts.filter(post => 
     post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -129,20 +159,17 @@ const ForumPage = () => {
       });
 
       if (response.ok) {
-        const newPostData = {
-          id: posts.length + 1, // Génération d'un ID fictif
-          title: newPost.title,
-          author: username || "Auteur par défaut", // Utiliser le nom de l'utilisateur
+        const newPostData = await response.json();
+        setPosts([...posts, {
+          ...newPostData,
+          author: username || "Auteur par défaut",
           likes: 0,
           liked: false,
           comments: 0,
-          content: newPost.content,
           isExpanded: false,
           showCommentInput: false,
           commentList: [],
-        };
-
-        setPosts([...posts, newPostData]);
+        }]);
         setShowNewPostPopup(false);
         setNewPost({ title: '', content: '' });
       } else {
@@ -186,7 +213,6 @@ const ForumPage = () => {
         </button>
       </div>
 
-      {/* Popup pour nouvelle discussion */}
       {showNewPostPopup && (
         <div className="popup-overlay">
           <div className="popup-content" ref={popupRef}>
@@ -240,29 +266,26 @@ const ForumPage = () => {
 
               {post.showCommentInput && (
                 <div className="comments-section">
-                  {post.commentList.length > 0 && (
-                    <div className="comments-list">
-                      {post.commentList.map((comment, index) => (
-                        <p key={`${index}-${comment}`} className="comment">{comment}</p>
-                      ))}
-                    </div>
-                  )}
-
-                  <div className="add-comment-section">
-                    <input 
-                      type="text" 
-                      placeholder="Ajouter un commentaire..." 
-                      value={newComment} 
-                      onChange={(e) => setNewComment(e.target.value)} 
-                    />
-                    <button onClick={() => handleAddComment(post.id)} className='btn-fr'>Envoyer</button>
+                  <div className="comments-list">
+                  {post.commentList.map((comment, index) => (
+                    <p key={`${index}-${comment.content}`} className="comment">
+                      <strong>{comment.author || 'Anonyme'} :</strong> {comment.content}
+                    </p>
+                  ))}
                   </div>
+                  <input 
+                    type="text" 
+                    placeholder="Ajouter un commentaire..." 
+                    value={newComment} 
+                    onChange={(e) => setNewComment(e.target.value)} 
+                  />
+                  <button onClick={() => handleAddComment(post.id)}>Envoyer</button>
                 </div>
               )}
             </div>
           ))
         ) : (
-          <p>Aucune discussion trouvée.</p>
+          <p>Aucun résultat trouvé.</p>
         )}
       </div>
     </div>

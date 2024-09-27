@@ -170,6 +170,13 @@
   color: #9ca3af;
 }
 
+.comments-section input {
+  width: 67%;
+}
+
+.comments-section button {
+  margin-left: 5px;
+}
 
 /* Styles des sections de commentaires */
 .comments-section {
