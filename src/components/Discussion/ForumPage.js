@@ -13,7 +13,12 @@ const ForumPage = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/posts');
+        const token = localStorage.getItem('token');
+        const response = await fetch('http://localhost:5000/api/posts', {
+          headers: {
+            'Authorization': `Bearer ${token}`
+          }
+        });
         if (response.ok) {
           const data = await response.json();
           const postsWithComments = await Promise.all(data.map(async (post) => {
@@ -22,7 +27,7 @@ const ForumPage = () => {
             return {
               ...post,
               likes: post.likes || 0,
-              liked: false,
+              liked: post.user_liked,
               comments: comments.length,
               isExpanded: false,
               showCommentInput: false,
@@ -38,9 +43,10 @@ const ForumPage = () => {
         console.error('Error fetching posts:', error);
       }
     };
-
+    
     fetchPosts();
   }, []);
+  
 
   const toggleContent = (id) => {
     setPosts(posts.map(post => 
@@ -101,33 +107,31 @@ const ForumPage = () => {
   
 
   const handleLikePost = async (postId) => {
-    const post = posts.find(p => p.id === postId); 
-    const newLikes = post.liked ? post.likes - 1 : post.likes + 1;
-
-    console.log("Tentative de mise à jour des likes pour le post ID:", postId);
-    console.log("Nouveaux likes:", newLikes);
-
+    const post = posts.find(p => p.id === postId);
+    const token = localStorage.getItem('token');
+    
     try {
       const response = await fetch(`http://localhost:5000/api/posts/${postId}/like`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ increment: !post.liked }),
       });
-
+  
       if (!response.ok) {
         throw new Error(`Failed to update likes: ${response.status}`);
       }
-
+  
       const updatedPost = await response.json();
-
+  
       setPosts((prevPosts) => 
         prevPosts.map((p) => 
-          p.id === postId ? { ...p, likes: updatedPost.likes, liked: !post.liked } : p
+          p.id === postId ? { ...p, likes: updatedPost.likes, liked: !p.liked } : p
         )
       );
-
+  
     } catch (error) {
       console.error('Erreur:', error.message);
     }
@@ -254,15 +258,23 @@ const ForumPage = () => {
               </div>
 
               <div className="post-footer">
-                <div className="post-likes" onClick={() => handleLikePost(post.id)}>
-                  <ThumbsUp className="like-icon" style={{ color: post.liked ? 'blue' : 'black' }} />
-                  <span>{post.likes} J'aime</span>
-                </div>
+              <div className="post-likes" onClick={() => handleLikePost(post.id)}>
+                    <ThumbsUp 
+                      className="like-icon" 
+                      style={{ color: post.likes > 0 ? 'blue' : 'black' }} // Garder en bleu si likes > 0
+                    />
+                    {post.likes ? (
+                      <span>{post.likes} J'aime</span>
+                    ) : (
+                      <span>J'aime</span>
+                    )}
+                  </div>
                 <div className="post-comments" onClick={() => toggleCommentInput(post.id)}>
                   <MessageSquare className="comment-icon" />
                   <span>{post.comments} Commentaires</span>
                 </div>
               </div>
+
 
               {post.showCommentInput && (
                 <div className="comments-section">

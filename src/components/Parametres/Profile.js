@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Plus } from 'lucide-react';
 import '../styles/Admin/Profile.css';
 
-const UserProfile = () => {
+const UserProfile = () => { 
     const [userData, setUserData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -10,27 +10,31 @@ const UserProfile = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     useEffect(() => {
+        const userId = localStorage.getItem('userId'); // Récupérer l'ID utilisateur du local storage
+
+        // Vérifier si l'ID est valide
+        if (!userId || isNaN(userId)) {
+            setError('ID utilisateur non valide dans le stockage local.');
+            setLoading(false);
+            return;
+        }
+
         const fetchUserData = async () => {
             try {
-                const fakeUserData = {
-                    username: 'Avotriniaina',
-                    profile_picture_url: 'https://via.placeholder.com/150',
-                    email: 'jean.dupont@example.com',
-                    phone_number: '+33 6 12 34 56 78',
-                    address: '123 Rue de la Paix, Paris, France',
-                    date_of_birth: '1990-05-15',
-                    description: "Je suis un développeur web PHP créatif avec une expérience dans les techniques de front-end.",
-                };
-
-                setTimeout(() => {
-                    setUserData(fakeUserData);
-                    setLoading(false);
-                }, 1000);
+                const response = await fetch(`http://localhost:5000/api/users/${userId}`);
+                if (!response.ok) {
+                    throw new Error('Erreur lors du chargement des données');
+                }
+                const data = await response.json();
+                console.log('Données reçues:', data); // Ajoutez cette ligne pour voir les données reçues
+                setUserData(data);
+                setLoading(false);
             } catch (err) {
-                setError('Erreur lors du chargement des données');
+                setError(err.message);
                 setLoading(false);
             }
         };
+              
 
         fetchUserData();
     }, []);
@@ -56,6 +60,14 @@ const UserProfile = () => {
 
     if (loading) return <div className="loading-pro">Chargement...</div>;
     if (error) return <div className="error-pro">{error}</div>;
+
+    const email = localStorage.getItem('email');
+    const phoneNumber = localStorage.getItem('phone_number');
+    const address = localStorage.getItem('address');
+    const dateOfBirth = localStorage.getItem('date_of_birth');
+
+    console.log('Données du stockage local:', { email, phoneNumber, address, dateOfBirth });
+
 
     return (
         <div className="container-pro">
@@ -87,10 +99,10 @@ const UserProfile = () => {
             <div className="info-section-pro">
                 <h3 className="section-title-pro">Des détails</h3>
                 <ul className="details-list-pro">
-                    <li><strong>Email:</strong> {userData.email}</li>
-                    <li><strong>Téléphone:</strong> {userData.phone_number}</li>
-                    <li><strong>Adresse:</strong> {userData.address}</li>
-                    <li><strong>Date de naissance:</strong> {new Date(userData.date_of_birth).toLocaleDateString()}</li>
+                    <li><strong>Email:</strong> {userData?.email || 'Non spécifié'}</li>
+                    <li><strong>Téléphone:</strong> {userData?.phone_number || 'Non spécifié'}</li>
+                    <li><strong>Adresse:</strong> {userData?.address || 'Non spécifié'}</li>
+                    <li><strong>Date de naissance:</strong> {userData?.date_of_birth ? new Date(userData.date_of_birth).toLocaleDateString() : 'Non spécifié'}</li>
                 </ul>
             </div>
 
