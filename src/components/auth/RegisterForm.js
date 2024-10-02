@@ -73,14 +73,6 @@ const RegisterForm = () => {
           placeholder="Date de naissance"
         />
 
-        {/* Nouveau champ pour l'URL de l'image de profil */}
-        <input
-          type="text"
-          value={profilePictureUrl}
-          onChange={(e) => setProfilePictureUrl(e.target.value)}
-          placeholder="URL de l'image de profil"
-        />
-
         <select value={role} disabled>
           <option value="citizen">citizen</option>
         </select>

@@ -14,7 +14,7 @@
   border-radius: 5px;
   padding: 15px;
   z-index: 1000; /* Assure que le dropdown soit au-dessus des autres éléments */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ombre pour un effet de profondeur */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
   opacity: 0; /* Initialement caché */
   visibility: hidden; /* Initialement caché */
   transform: translateY(-10px); /* Initialement décalé vers le haut */
@@ -42,7 +42,7 @@
 
 /* Animation de survol des paragraphes */
 .notifications-dropdown p:hover {
-  color: #007bff; /* Couleur au survol */
+  color: #ffffff; /* Couleur au survol */
   cursor: pointer; /* Curseur pointer pour indiquer que c'est cliquable */
   transform: translateX(5px); /* Déplacer légèrement le texte au survol */
 }

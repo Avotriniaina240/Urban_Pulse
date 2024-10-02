@@ -256,3 +256,8 @@
 .modal-content-pro:hover .close-modal-pro {
   opacity: 1; /* Le bouton apparaît lorsque l'on survole le contenu */
 }
+
+.detail-item-pro {
+  margin: 8px 0;
+  font-size: 16px; /* Ajustez la taille de la police selon votre design */
+}

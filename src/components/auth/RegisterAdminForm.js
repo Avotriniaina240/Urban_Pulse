@@ -78,14 +78,6 @@ const RegisterAdminForm = () => {
           placeholder="Date de naissance"
         />
 
-        {/* Nouveau champ pour l'URL de l'image de profil */}
-        <input
-          type="text"
-          value={profilePictureUrl}
-          onChange={(e) => setProfilePictureUrl(e.target.value)}
-          placeholder="URL de l'image de profil"
-        />
-
         <button type="submit" disabled={loading}>S'inscrire</button>
       </form>
       <div className="signin-option">
