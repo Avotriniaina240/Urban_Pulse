@@ -12,14 +12,22 @@ const useAuth = () => {
 
   const login = async (email, password) => {
     setLoading(true);
+    setError('');
     try {
       const data = await loginService(email, password);
-      setMessage(data.message);
-      
-      // Stockage des données utilisateur
+      if (data.message) {
+        setMessage(data.message);
+      }
+
+      // Stockage des données utilisateur dans le localStorage
       localStorage.setItem('userId', data.id);
       localStorage.setItem('username', data.username);
+      localStorage.setItem('email', data.email);
       localStorage.setItem('role', data.role);
+      localStorage.setItem('phoneNumber', data.phoneNumber);
+      localStorage.setItem('address', data.address);
+      localStorage.setItem('dateOfBirth', data.dateOfBirth);
+      localStorage.setItem('profilePictureUrl', data.profilePictureUrl);
       localStorage.setItem('token', data.token);
 
       // Redirection basée sur le rôle
@@ -36,12 +44,12 @@ const useAuth = () => {
         }
       }, 2000);
 
-      return true;
+      return true; // Indique que la connexion a réussi
     } catch (error) {
-      setError(handleError(error));
-      return false;
+      setError(handleError(error)); // Gérer et afficher l'erreur
+      return false; // Indique que la connexion a échoué
     } finally {
-      setLoading(false);
+      setLoading(false); // Réinitialiser l'état de chargement
     }
   };
 
