@@ -24,6 +24,10 @@ const ForumPage = () => {
           const postsWithComments = await Promise.all(data.map(async (post) => {
             const commentsResponse = await fetch(`http://localhost:5000/api/posts/${post.id}/comments`);
             const comments = await commentsResponse.json();
+            
+            // Récupérer la photo de profil de l'auteur du post
+            const postAuthorProfilePicture = localStorage.getItem(`userProfilePicture_${post.author_id}`) || null;
+            
             return {
               ...post,
               likes: post.likes || 0,
@@ -31,8 +35,16 @@ const ForumPage = () => {
               comments: comments.length,
               isExpanded: false,
               showCommentInput: false,
-              commentList: comments,
+              commentList: await Promise.all(comments.map(async (comment) => {
+                // Récupérer la photo de profil de l'auteur du commentaire
+                const commentAuthorProfilePicture = localStorage.getItem(`userProfilePicture_${comment.author_id}`) || null;
+                return {
+                  ...comment,
+                  authorProfilePicture: commentAuthorProfilePicture
+                };
+              })),
               author: post.username,
+              authorProfilePicture: postAuthorProfilePicture
             };
           }));
           setPosts(postsWithComments);
@@ -46,25 +58,25 @@ const ForumPage = () => {
     
     fetchPosts();
   }, []);
-  
 
   const toggleContent = (id) => {
     setPosts(posts.map(post => 
       post.id === id ? { ...post, isExpanded: !post.isExpanded } : post
     ));
   };
-
+  
   const toggleCommentInput = (id) => {
     setPosts(posts.map(post => 
       post.id === id ? { ...post, showCommentInput: !post.showCommentInput } : post
     ));
-  };
+  }; 
 
   const handleAddComment = async (postId) => {
     if (newComment.trim() === '') return;
   
     const userId = localStorage.getItem('userId');
     const username = localStorage.getItem('username') || 'Auteur par défaut'; 
+    const userProfilePicture = localStorage.getItem(`userProfilePicture_${userId}`) || null;
   
     try {
       const response = await fetch(`http://localhost:5000/api/posts/${postId}/comments`, {
@@ -75,7 +87,7 @@ const ForumPage = () => {
         body: JSON.stringify({
           content: newComment,
           author_id: userId ? parseInt(userId, 10) : 1,
-          author: username, 
+          author: username,
         }),
       });
   
@@ -86,10 +98,9 @@ const ForumPage = () => {
   
       const savedComment = await response.json();
   
-      // Mettre à jour les posts pour inclure le nouveau commentaire
       setPosts(posts.map(post => {
         if (post.id === postId) {
-          const updatedCommentList = [...post.commentList, savedComment];
+          const updatedCommentList = [...post.commentList, {...savedComment, authorProfilePicture: userProfilePicture}];
           return {
             ...post,
             commentList: updatedCommentList,
@@ -104,7 +115,6 @@ const ForumPage = () => {
       console.error('Error saving comment:', error.message);
     }
   };
-  
 
   const handleLikePost = async (postId) => {
     const post = posts.find(p => p.id === postId);
@@ -137,18 +147,13 @@ const ForumPage = () => {
     }
   };
 
-  const filteredPosts = posts.filter(post => 
-    post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    post.content.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    post.author.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
   const handleAddPost = async () => {
     if (newPost.title.trim() === '' || newPost.content.trim() === '') return;
 
     try {
       const userId = localStorage.getItem('userId'); 
       const username = localStorage.getItem('username');
+      const userProfilePicture = localStorage.getItem(`userProfilePicture_${userId}`) || null;
 
       const response = await fetch('http://localhost:5000/api/posts', {
         method: 'POST',
@@ -167,6 +172,7 @@ const ForumPage = () => {
         setPosts([...posts, {
           ...newPostData,
           author: username || "Auteur par défaut",
+          authorProfilePicture: userProfilePicture,
           likes: 0,
           liked: false,
           comments: 0,
@@ -196,6 +202,13 @@ const ForumPage = () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+
+  const filteredPosts = posts.filter(post => 
+    (post.title && post.title.toLowerCase().includes(searchTerm.toLowerCase())) ||
+    (post.content && post.content.toLowerCase().includes(searchTerm.toLowerCase())) ||
+    (post.author && post.author.toLowerCase().includes(searchTerm.toLowerCase()))
+  );
+  
 
   return (
     <div className="forum-container">
@@ -247,7 +260,11 @@ const ForumPage = () => {
               <div className="post-header">
                 <h2 className="post-title">{post.title}</h2>
                 <div className="post-author">
-                  <User className="author-icon" />
+                  {post.authorProfilePicture ? (
+                    <img src={post.authorProfilePicture} alt={post.author} className="author-profile-picture" />
+                  ) : (
+                    <User className="author-icon" />
+                  )}
                   <span>{post.author}</span>
                 </div>
               </div>
@@ -258,31 +275,35 @@ const ForumPage = () => {
               </div>
 
               <div className="post-footer">
-              <div className="post-likes" onClick={() => handleLikePost(post.id)}>
-                    <ThumbsUp 
-                      className="like-icon" 
-                      style={{ color: post.likes > 0 ? 'blue' : 'black' }} // Garder en bleu si likes > 0
-                    />
-                    {post.likes ? (
-                      <span>{post.likes} J'aime</span>
-                    ) : (
-                      <span>J'aime</span>
-                    )}
-                  </div>
+                <div className="post-likes" onClick={() => handleLikePost(post.id)}>
+                  <ThumbsUp 
+                    className="like-icon" 
+                    style={{ color: post.likes > 0 ? 'blue' : 'black' }}
+                  />
+                  {post.likes ? (
+                    <span>{post.likes} J'aime</span>
+                  ) : (
+                    <span>J'aime</span>
+                  )}
+                </div>
                 <div className="post-comments" onClick={() => toggleCommentInput(post.id)}>
                   <MessageSquare className="comment-icon" />
                   <span>{post.comments} Commentaires</span>
                 </div>
               </div>
 
-
               {post.showCommentInput && (
                 <div className="comments-section">
                   <div className="comments-list">
                   {post.commentList.map((comment, index) => (
-                    <p key={`${index}-${comment.content}`} className="comment">
-                      <strong>{comment.author || 'Anonyme'} :</strong> {comment.content}
-                    </p>
+                    <div key={`${index}-${comment.content}`} className="comment">
+                      {comment.authorProfilePicture ? (
+                        <img src={comment.authorProfilePicture} alt={comment.author} className="comment-author-profile-picture" />
+                      ) : (
+                        <User className="comment-author-icon" />
+                      )}
+                        <strong>{comment.author || 'Anonyme'} :</strong> {comment.content}
+                    </div>
                   ))}
                   </div>
                   <input 

@@ -1,5 +1,5 @@
 import React from 'react';
-import ComparisonComponent from '../components/feature-specific/ComparisonComponent';
+import ComparisonComponent from '../components/feature-specific/Comparaison/ComparisonComponent';
 import Navbar from '../components/layouts/Navbar/Navbar';
 import Sidebar from '../components/layouts/Sidebar/SidebarCarte';
 import '../styles/Comparison.css';

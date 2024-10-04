@@ -143,6 +143,11 @@
   cursor: pointer;
 }
 
+.comment-author-icon {
+  width: 20px;
+  height: 15px;
+  margin-top: -4px;
+}
 
 /* Ajustement spécifique pour certains éléments */
 .post-title {

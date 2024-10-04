@@ -2,12 +2,11 @@ import React, { useState, useEffect } from 'react';
 import '../styles/ATS/SettingsPannel.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSun, faMoon, faBell, faGlobe, faLock, faUser } from '@fortawesome/free-solid-svg-icons';
-import { useNavigate } from 'react-router-dom'; // Importer le hook useNavigate
-import { useTranslation } from 'react-i18next'; // Importer useTranslation
+import { useNavigate } from 'react-router-dom'; 
+import { useTranslation } from 'react-i18next'; 
 
 const SettingsPanel = ({ onClose }) => {
   const [isThemeOpen, setIsThemeOpen] = useState(false);
-  const [isNotificationsOpen, setIsNotificationsOpen] = useState(false);
   const [isLanguageOpen, setIsLanguageOpen] = useState(false);
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -77,28 +76,7 @@ const SettingsPanel = ({ onClose }) => {
           </div>
         )}
       </div>
-
-      {/* Notifications */}
-      <div className="settings-section">
-        <div
-          className="settings-section-header"
-          onClick={() => setIsNotificationsOpen(!isNotificationsOpen)}
-        >
-          <h4>
-            <FontAwesomeIcon icon={faBell} className="icon" /> {t('notifications')}
-          </h4>
-          <span className="toggle-icon">{isNotificationsOpen ? '-' : '+'}</span>
-        </div>
-        {isNotificationsOpen && (
-          <div className="settings-section-content show">
-            <label>
-              <input type="checkbox" />
-              {t('enable_notifications')}
-            </label>
-          </div>
-        )}
-      </div>
-
+      
       {/* Langue */}
       <div className="settings-section">
         <div
@@ -130,7 +108,7 @@ const SettingsPanel = ({ onClose }) => {
                 checked={language === 'en'}
                 onChange={handleLanguageChange}
               />
-              Anglais
+              English
             </label>
           </div>
         )}

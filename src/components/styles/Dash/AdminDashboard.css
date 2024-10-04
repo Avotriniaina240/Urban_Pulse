@@ -9,7 +9,6 @@
 /* Conteneur principal avec la sidebar et le contenu */
 .main-content-Admin-P {
   display: flex;
-  margin-top: 67px; /* Hauteur de la navbar */
 }
 
 /* Contenu principal, espace pour la sidebar */
@@ -17,9 +16,8 @@
   flex-grow: 1;
   padding: 20px;
   margin-left: 250px; /* Largeur de la sidebar */
-  margin-top: 60px; /* Hauteur de la navbar */
   overflow: auto; /* Permet le défilement si le contenu dépasse */
-  margin-top: 1px;
+  margin-top: 60px;
 }
 
 /* Styles pour le titre */

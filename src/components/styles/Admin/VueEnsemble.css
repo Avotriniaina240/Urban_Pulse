@@ -6,8 +6,6 @@
   to { opacity: 1; }
 }
 
-
-
 /* Conteneur principal avec la sidebar et le contenu */
 .main-vue {
   display: flex;
@@ -197,49 +195,31 @@
 
 .chart-with-legend {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: flex-start;
-  margin-top: 20px;
-
 }
 
-.chart-wrapper {
+
+.ChartComponent {
   margin-top: 70px;
   width: 100%;
 }
 
 .chart-legend {
-  font-size: 14px;
-  width: 35%;
+  font-size: 13px;
+  width: 70%;
   padding: 25px;
   background: linear-gradient(145deg, #f3f4f6, #e5e7eb);
   border-radius: 15px;
-  box-shadow: 
-    0 10px 15px -3px rgba(0, 0, 0, 0.1),
-    0 4px 6px -2px rgba(0, 0, 0, 0.05);
   font-family: 'Poppins', sans-serif;
   color: #374151;
-  position: relative;
   overflow: hidden;
-  transition: all 0.3s ease;
+  height: 410px; 
   margin-top: -40px;
-  height: 410px;
-}
-
-.chart-legend::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%);
-  transform: rotate(30deg);
-  pointer-events: none;
+  margin-left: 80px;
 }
 
 .chart-legend:hover {
-  transform: translateY(-5px);
   box-shadow: 
     0 20px 25px -5px rgba(0, 0, 0, 0.1),
     0 10px 10px -5px rgba(0, 0, 0, 0.04);
@@ -378,10 +358,17 @@
   transition: opacity 0.3s ease-in-out;
 }
 
+.transition {
+  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+/* Classes pour contrôler l'affichage */
 .fade-in {
   opacity: 1;
+  transform: scale(1);
 }
 
 .fade-out {
   opacity: 0;
+  transform: scale(1);
 }

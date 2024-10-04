@@ -10,8 +10,8 @@ import SettingsPannel from './components/Parametres/SettingsPannel';
 import Page from './components/Parametres/page'; 
 import AdminDashboard from './components/Dashboard/AdminDashboard'; 
 import UrbanistDashboard from './components/Dashboard/UrbanistDashboard';
-import VueEnsemble from './components/Dashboard/VueEnsemble';
-import GestionUser from './components/Dashboard/GestionUser';
+import VueEnsemble from './components/Dash-personnalise/VueEnsemble/VueEnsemble';
+import GestionUser from './components/Dash-personnalise/GestionUser/GestionUser';
 import Profile from './components/Parametres/Profile';
 import DashboardCitizen from './components/Dashboard/DashboardCitizen';
 import RegisterAdminPage from './pages/RegisterAdminPage';
@@ -26,10 +26,6 @@ import ManageReports from './components/Reports/ManageReports';
 import AnalyzeReports from './components/Reports/AnalyzeReports';
 import Comparison from './pages/Comparison';
 import ForumPage from './components/Discussion/ForumPage';
-import CitySelector from './components/Prediction/CitySelector';
-import TimeSeriesChart from './components/Prediction/TimeSeriesChart';
-import IndicatorSelector from './components/Prediction/IndicatorSelector';
-import DateRangePicker from './components/Prediction/DateRangePicker';
 import HistoricalAndPrediction from './components/Prediction/HistoricalAndPrediction';
 import { StatisticsProvider } from './components/Reports/StatisticsContext'
 
@@ -60,10 +56,6 @@ const App = () => {
           <Route path="/analyze-reports/*" element={<AnalyzeReports />} />
           <Route path="/comparison/*" element={<Comparison />} />
           <Route path="/forum-page/*" element={<ForumPage />} />
-          <Route path="/city-selector/*" element={<CitySelector />} />
-          <Route path="/time-serie-chart/*" element={<TimeSeriesChart />} />
-          <Route path="/indicator-selector/*" element={<IndicatorSelector />} />
-          <Route path="/date-range-piker/*" element={<DateRangePicker />} />
           <Route path="/historique-prediction/*" element={<HistoricalAndPrediction />} />
         </Routes>
       </Router>

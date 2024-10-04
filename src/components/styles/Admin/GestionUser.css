@@ -9,32 +9,32 @@
 /* Conteneur principal avec la sidebar et le contenu */
 .main-content-gu {
   display: flex;
-  margin-top: 67px; /* Hauteur de la navbar */
 }
 
 /* Contenu principal, espace pour la sidebar */
 .content-gu {
-  flex-grow: 1;
-  padding: 20px;
   margin-left: 250px; /* Largeur de la sidebar */
-  margin-top: 60px; /* Hauteur de la navbar */
   overflow: auto; /* Permet le défilement si le contenu dépasse */
-  margin-top: 1px;
 }
 
 /* Styles pour le titre */
 .h1-gu {
-  background: linear-gradient(45deg, #d7dce6, #a2b2c1);
-  padding: 10px;
-  border-radius: 5px;
   margin-left: 20px; 
-  margin-top: 15px;
-  width: 90.8%;
-  font-weight: bold; 
-  color: #534e4e;
+  margin-top: 85px;
+  width: 76vw;
+  flex: 1;
   text-align: center;
   position: relative;
   overflow: hidden;
+  font-size: 1.6rem;
+  color: #333;
+  letter-spacing: 2px;
+  background: linear-gradient(90deg, #d9e0e6, #f0f4f8);
+  padding: 10px;
+  border-radius: 5px;
+  font-family: 'Roboto', sans-serif;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
 }
 
 /* Style de la grille */
@@ -42,15 +42,16 @@
   display: grid; /* Utiliser le grid layout */
   grid-template-columns: repeat(3, 1fr); /* Créer trois colonnes de taille égale */
   gap: 20px; /* Espacement entre les colonnes */
-  background-color: #f4f4f4;
+  background: linear-gradient(90deg, #ffffff, #f0f4f8);
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin-bottom: 20px;
   margin-left: 20px; 
   margin-right: 57px;
-  font-family: Arial, sans-serif;
+  font-family: 'Roboto', sans-serif;
   font-weight: bold; 
+  width: 74.5vw;
   opacity: 0; /* Commence caché pour l'animation */
   animation: fadeIn 1s forwards; /* Animation d'apparition */
 }
@@ -82,7 +83,7 @@
 
 /* Styles spécifiques pour chaque section */
 .section-1 {
-  background-color: #d0e2d1;
+  background-color: #e7f0e8;
   color: #4caf50; 
 }
 
@@ -96,21 +97,7 @@
   color: #910f06; 
 }
 
-/* Styles pour la barre de recherche */
-.search-input {
-  width: 100%;
-  padding: 8px;
-  border-radius: 4px;
-  border: 1px solid #ddd;
-  box-sizing: border-box;
-  margin-bottom: -1px;
-}
 
-.search-input:focus {
-  outline: none;
-  border-color: #4CAF50;
-  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
-}
 
 /* Styles pour la table des utilisateurs */
 /* Style de base du tableau */
@@ -118,26 +105,29 @@ table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Ombre portée pour le tableau */
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   border-radius: 8px; /* Coins arrondis */
   overflow: hidden; /* Cache les coins arrondis */
 }
 
 /* Style des cellules d'en-tête et de données */
-table th, table td {
+  table td {
   border: 1px solid transparent;
   padding: 12px;
   text-align: center;
-  font-family: Arial, sans-serif;
-  transition: background-color 0.3s, transform 0.3s; /* Transition pour les effets */
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  font-weight: bold;
+  color: #636568;
 }
 
 /* Style des cellules d'en-tête */
 table th {
-  border: 1px solid #ddd;
-  background-color: #a2b2c1;
-  color: rgb(247, 241, 241);
+  background: linear-gradient(90deg, #6f8ca8, #f0f4f8);
+  color: rgb(17, 28, 51);
   font-weight: bold;
+  font-family: 'Roboto', sans-serif;
+  border-radius: 2px;
 }
 
 /* Style des lignes paires */
@@ -160,7 +150,7 @@ table td:hover {
 
 /* Styles pour les boutons d'action */
 .btm {
-  background-color: #4CAF50;
+  background: linear-gradient(90deg, #6f8ca8, #8a9bac);
   color: white;
   border: none;
   padding: 10px 15px;
@@ -171,10 +161,16 @@ table td:hover {
   margin: 4px 2px;
   cursor: pointer;
   border-radius: 5px;
+  font-family: 'Roboto', sans-serif;
+  transition: background-color 0.3s;
+}
+
+.btm:hover {
+  background: rgb(16, 141, 37);
 }
 
 .bts {
-  background-color: #9c0606;
+  background: linear-gradient(90deg, #6f8ca8, #8a9bac);
   color: white;
   border: none;
   padding: 10px 15px;
@@ -185,10 +181,12 @@ table td:hover {
   margin: 4px 2px;
   cursor: pointer;
   border-radius: 5px;
+  font-family: 'Roboto', sans-serif;
+  transition: background-color 0.3s;
 }
 
-button:hover {
-  background-color: #7c8a7d;
+.bts:hover {
+  background: rgb(141, 56, 16);
 }
 
 /* Styles pour le message d'erreur */
@@ -256,13 +254,13 @@ button:hover {
 }
 
 .edit-forms button[type="submit"] {
-  background-color: #4caf50;
+  background-color: #6c796c;
   color: white;
   font-family: Arial, sans-serif;
 }
 
 .edit-forms button[type="button"] {
-  background-color: #f44336;
+  background-color: #585656;
   color: white;
   font-family: Arial, sans-serif;
 }
@@ -279,6 +277,6 @@ button:hover {
 .tableau {
   margin-left: 20px; 
   margin-right: 20px;
-  width: 93.3%;
+  width: 77.4vw;
   margin-top: 50px;
 }
