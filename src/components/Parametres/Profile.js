@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Mail, Phone, MapPin, Calendar, User, ArrowLeft } from 'lucide-react';
+import { Plus, Mail, Phone, MapPin, Calendar, User, ArrowLeft, Edit, Save } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useNavigate } from 'react-router-dom'; // Import du hook useNavigate
+import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import '../styles/Admin/Profile.css';
 
 const UserProfile = () => {
@@ -16,89 +18,83 @@ const UserProfile = () => {
   });
   const [modalOuvert, setModalOuvert] = useState(false);
   const [chargement, setChargement] = useState(false);
-  const [messageErreur, setMessageErreur] = useState('');
-  const navigate = useNavigate(); // Utilisation du hook useNavigate
+  const [modeEdition, setModeEdition] = useState(false);
+  const [infoModifiee, setInfoModifiee] = useState({});
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const username = localStorage.getItem('username');
-    const email = localStorage.getItem('email');
-    const phoneNumber = localStorage.getItem('phoneNumber');
-    const address = localStorage.getItem('address');
-    const dateOfBirth = localStorage.getItem('dateOfBirth');
-    const profilePictureUrl = localStorage.getItem('profilePictureUrl');
-    const role = localStorage.getItem('role');
-
-    if (username && email) {
-      setInfoUtilisateur({
-        username,
-        email,
-        phoneNumber,
-        address,
-        dateOfBirth,
-        profilePictureUrl,
-        role
-      });
-    } else {
-      setMessageErreur("Les informations de l'utilisateur ne sont pas disponibles.");
-    }
+    loadUserInfo();
   }, []);
+
+  const loadUserInfo = () => {
+    const userInfo = {
+      username: localStorage.getItem('username') || '',
+      email: localStorage.getItem('email') || '',
+      phoneNumber: localStorage.getItem('phoneNumber') || '',
+      address: localStorage.getItem('address') || '',
+      dateOfBirth: localStorage.getItem('dateOfBirth') || '',
+      profilePictureUrl: localStorage.getItem('profilePictureUrl') || '',
+      role: localStorage.getItem('role') || ''
+    };
+
+    setInfoUtilisateur(userInfo);
+  };
 
   const handleImageChange = async (event) => {
     const file = event.target.files[0];
     if (file) {
       setChargement(true);
-      setMessageErreur('');
 
       const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onloadend = async () => {
-        const img = new Image();
-        img.src = reader.result;
-
-        img.onload = async () => {
-          const canvas = document.createElement('canvas');
-          const ctx = canvas.getContext('2d');
-          const MAX_WIDTH = 300;
-          const scaleFactor = MAX_WIDTH / img.width;
-          canvas.width = MAX_WIDTH;
-          canvas.height = img.height * scaleFactor;
-          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-          const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
-
-          try {
-            const response = await fetch(`http://localhost:5000/api/users/${localStorage.getItem('userId')}/upload-profile-picture`, {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json'
-              },
-              body: JSON.stringify({ imageData: compressedBase64 }),
-            });
-
-            if (!response.ok) {
-              throw new Error("Erreur lors du téléchargement de l'image");
-            }
-
-            const data = await response.json();
-            setInfoUtilisateur((prev) => ({
-              ...prev,
-              profilePictureUrl: data.imageUrl || compressedBase64
-            }));
-
-            localStorage.setItem('profilePictureUrl', data.imageUrl || compressedBase64);
-          } catch (error) {
-            console.error("Erreur lors du téléchargement de l'image:", error);
-            setMessageErreur("Impossible de charger l'image. Veuillez réessayer.");
-          } finally {
-            setChargement(false);
-          }
-        };
+      reader.onloadend = () => {
+        const base64String = reader.result;
+        localStorage.setItem('profilePictureUrl', base64String);
+        setInfoUtilisateur(prev => ({ ...prev, profilePictureUrl: base64String }));
+        setChargement(false);
+        toast.success("Image de profil mise à jour avec succès");
       };
+      reader.onerror = () => {
+        toast.error("Erreur lors du chargement de l'image");
+        setChargement(false);
+      };
+      reader.readAsDataURL(file);
     }
+  };
+
+  const handleEditClick = () => {
+    setModeEdition(true);
+    setInfoModifiee({ ...infoUtilisateur });
+  };
+
+  const handleSaveClick = () => {
+    setChargement(true);
+
+    try {
+      // Mise à jour du localStorage
+      Object.entries(infoModifiee).forEach(([key, value]) => {
+        localStorage.setItem(key, value);
+      });
+
+      // Mise à jour de l'état
+      setInfoUtilisateur(infoModifiee);
+      setModeEdition(false);
+      toast.success('Profil mis à jour avec succès');
+    } catch (error) {
+      console.error("Erreur lors de la mise à jour du profil:", error);
+      toast.error("Impossible de mettre à jour le profil. Veuillez réessayer.");
+    } finally {
+      setChargement(false);
+    }
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setInfoModifiee(prev => ({ ...prev, [name]: value }));
   };
 
   return (
     <div className="container-box">
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} />
       <div className="container-pro">
         <h1 className="title-pro">Profil Utilisateur</h1>
 
@@ -133,7 +129,6 @@ const UserProfile = () => {
             </div>
             <h2 className="subtitle-pro">{infoUtilisateur.username}</h2>
             {chargement && <p>Chargement en cours...</p>}
-            {messageErreur && <p className="error-message">{messageErreur}</p>}
           </motion.div>
 
           <div className="box-info">
@@ -144,13 +139,56 @@ const UserProfile = () => {
               transition={{ duration: 0.5 }}
             >
               <ul className="details-list-pro">
-                <InfoItem icon={<Mail />} label="Email" value={infoUtilisateur.email} />
-                <InfoItem icon={<Phone />} label="Téléphone" value={infoUtilisateur.phoneNumber} />
-                <InfoItem icon={<MapPin />} label="Adresse" value={infoUtilisateur.address} />
-                <InfoItem icon={<Calendar />} label="Date de naissance" value={infoUtilisateur.dateOfBirth ? new Date(infoUtilisateur.dateOfBirth).toLocaleDateString() : 'Non disponible'} />
+                <InfoItem 
+                  icon={<Mail />} 
+                  label="Email" 
+                  value={modeEdition ? infoModifiee.email : infoUtilisateur.email} 
+                  isEditing={modeEdition}
+                  name="email"
+                  onChange={handleInputChange}
+                />
+                <InfoItem 
+                  icon={<Phone />} 
+                  label="Téléphone" 
+                  value={modeEdition ? infoModifiee.phoneNumber : infoUtilisateur.phoneNumber} 
+                  isEditing={modeEdition}
+                  name="phoneNumber"
+                  onChange={handleInputChange}
+                />
+                <InfoItem 
+                  icon={<MapPin />} 
+                  label="Adresse" 
+                  value={modeEdition ? infoModifiee.address : infoUtilisateur.address} 
+                  isEditing={modeEdition}
+                  name="address"
+                  onChange={handleInputChange}
+                />
+                <InfoItem 
+                  icon={<Calendar />} 
+                  label="Date de naissance" 
+                  value={modeEdition ? infoModifiee.dateOfBirth : infoUtilisateur.dateOfBirth} 
+                  isEditing={modeEdition}
+                  name="dateOfBirth"
+                  onChange={handleInputChange}
+                  type="date"
+                />
                 <InfoItem icon={<User />} label="Rôle" value={infoUtilisateur.role} />
               </ul>
             </motion.div>
+          </div>
+          
+          <div className="edit-button-container">
+            {!modeEdition ? (
+              <button className="back-button" onClick={handleEditClick}>
+                <Edit size={20} />
+                Modifier
+              </button>
+            ) : (
+              <button className="back-button" onClick={handleSaveClick}>
+                <Save size={20} />
+                Enregistrer
+              </button>
+            )}
           </div>
         </div>
 
@@ -170,11 +208,22 @@ const UserProfile = () => {
   );
 };
 
-const InfoItem = ({ icon, label, value }) => (
+const InfoItem = ({ icon, label, value, isEditing, name, onChange, type = "text" }) => (
   <li className="info-item">
     <span className="info-icon">{icon}</span>
     <div>
-      <strong>{label}:</strong> {value || 'Non disponible'}
+      <strong>{label}:</strong>
+      {isEditing ? (
+        <input
+          type={type}
+          name={name}
+          value={value}
+          onChange={onChange}
+          className="edit-input"
+        />
+      ) : (
+        value || 'Non disponible'
+      )}
     </div>
   </li>
 );

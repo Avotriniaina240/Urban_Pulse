@@ -61,7 +61,7 @@ const UrbanAnalysis = () => {
                         <h1 className='urb-h1'>Analyse des Données Urbaines</h1>
                     </div>
                     <button className='btn-open-modal' onClick={() => setIsModalOpen(true)}>
-                        Ouvrir le Menu
+                    📋Menu
                     </button>
                     <ModalEntreeDonnees 
                         isOpen={isModalOpen} 

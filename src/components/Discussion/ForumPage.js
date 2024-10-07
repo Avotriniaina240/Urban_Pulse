@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Search, MessageSquare, ThumbsUp, User, X } from 'lucide-react';
+import { Search, MessageSquare, ThumbsUp, ArrowLeft, User, X } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import '../styles/ATS/ForumPage.css';
 
 const ForumPage = () => {
@@ -9,6 +11,7 @@ const ForumPage = () => {
   const [showNewPostPopup, setShowNewPostPopup] = useState(false);
   const [newPost, setNewPost] = useState({ title: '', content: '' });
   const popupRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -213,7 +216,10 @@ const ForumPage = () => {
   return (
     <div className="forum-container">
       <h1 className="forum-title">Forum de Discussion</h1>
-      
+      <button className="button-retour-forum" onClick={() => navigate(-1)}>
+              <ArrowLeft size={10} />
+              Retour
+      </button>
       <div className="search-bar">
         <input 
           type="text" 

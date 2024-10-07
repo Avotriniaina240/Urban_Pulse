@@ -44,7 +44,7 @@ const ComparisonToolbar = ({ onFetchData, onSortChange }) => {
             />
 
             <button className="btn-submit" onClick={handleSubmit}>
-              {isLoading && <span className="loader"></span>}
+              {isLoading && <span className="loader"></span>} ⚙️
             </button>
           </div>
         </div>

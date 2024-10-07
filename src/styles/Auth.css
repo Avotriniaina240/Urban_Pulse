@@ -124,21 +124,15 @@ option[disabled] {
 
 .password-container {
   position: relative;
-  max-width: 251px;
+  width: 221px;
 }
 
-.password-container input {
-  width: 100%;
-  padding-right: 10px; /* Ajuster pour laisser de l'espace pour l'icône */
-}
-
-.password-toggle-icon {
+.password-container span {
   position: absolute;
-  top: 41%;
-  right: 10px;
-  transform: translateY(-50%);
+  right: -36px;
+  margin-top: -4px;
+  top: 50%;
+  transform: translateY(-50%); 
   cursor: pointer;
-  user-select: none;
-  color : silver;
+  z-index: 1; 
 }
-
