@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import Navbar from '../StyleBar/Navbar/Navbar';
-import Sidebar from '../StyleBar/Sidebar/SidebarCarte';
+import Navbar from '../layouts/Navbar/Navbar';
+import Sidebar from '../layouts/Sidebar/SidebarCarte';
 import ModalEntreeDonnees from './ModalEntreeDonnees';
 import GraphiquesUrbains from './GraphiquesUrbains';
 import { fetchWeatherData, fetchWeatherDataByCoords } from './serviceMeteo';

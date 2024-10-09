@@ -93,7 +93,7 @@
 }
 
 .info-section-pro {
-  margin-top: 20px;
+  margin-top: -10px;
   margin-bottom: 2rem;
   background-color: white;
   border-radius: 1rem;
@@ -284,7 +284,7 @@
 }
 
 .info-section-pro {
-  margin-top: 20px;
+  margin-top: 11px;
   flex: 50%;
 }
 
@@ -295,8 +295,8 @@
   font-family: 'Roboto', sans-serif;
 }
 :root {
-  --primary-color: #4a90e2;
-  --secondary-color: #f39c12;
+  --primary-color: #3f89dd;
+  --secondary-color: #e49413;
   --text-color: #333;
   --bg-color: #f4f4f4;
   --card-bg: #ffffff;
@@ -410,6 +410,14 @@
   padding: 0;
 }
 
+.info-value-pro {
+  margin-left: 10px;
+  font-family: 'roboto', sans-serif;
+  font-weight: bold;
+  color: #606a73;
+}
+
+
 .info-item {
   display: flex;
   align-items: center;
@@ -455,6 +463,10 @@
   border-radius: 1rem;
   max-width: 90%;
   max-height: 90%;
+}
+
+.modal-image {
+  width: 295px;
 }
 
 .modal-image-pro {

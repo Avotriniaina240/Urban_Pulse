@@ -65,7 +65,7 @@
 }
 
 .comparison-toolbar input {
-    width: 20%;
+    width: 78%;
     background-color: #ffffff;
 }
 
@@ -311,17 +311,6 @@
     font-size: 24px;
     font-weight: 600;
     color: #333;
-  }
-  
-  input[type="text"] {
-    width: 70%;
-    padding: 10px;
-    margin-bottom: 20px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 16px;
-    outline: none;
-    transition: border-color 0.3s ease;
   }
   
   input[type="text"]:focus {

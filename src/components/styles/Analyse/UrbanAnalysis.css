@@ -23,7 +23,6 @@ header {
   flex: 1;
   margin-left: 250px; /* Largeur de la sidebar */
   padding: 20px;
-  overflow: auto;
   display: flex;
   flex-direction: column;
   margin-top: 50px;
@@ -35,7 +34,7 @@ header {
   display: flex;
   flex-direction: row;
   gap: 20px;
-  margin-top: 20px;
+  margin-top: -24px;
   width: 97%;
   align-items: flex-start; /* Alignement des éléments au début */
 }
@@ -112,7 +111,7 @@ header {
   border-radius: 5px;
   margin: 15px 0; /* Marge au-dessus et en-dessous */
   animation: bounceIn 0.6s ease-out forwards;
-  width: 97%;
+  width: 95.5%;
   font-family: Arial, sans-serif;
 }
 
@@ -331,16 +330,6 @@ header {
     margin-top: 10px;
 }
 
-.btn-open-modal {
-    margin: 10px;
-    padding: 10px;
-    background-color: #0088FE;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
 .modal-overlay {
     position: fixed;
     top: 0;
@@ -375,7 +364,7 @@ header {
 
 /* Styles pour le bouton d'ouverture du modal */
 .btn-open-modal {
-  margin: 10px;
+  margin-top: -3px;
   padding: 10px;
   background-color: #0088FE;
   color: #fff;

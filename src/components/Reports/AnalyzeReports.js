@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import Navbar from '../StyleBar/Navbar/Navbar';
-import Sidebar from '../StyleBar/Sidebar/SidebarCarte';
+import Navbar from '../layouts/Navbar/Navbar';
+import Sidebar from '../layouts/Sidebar/SidebarCarte';
 import '../styles/ATS/AnalyzeReports.css';
 import { useStatistics } from '../Reports/StatisticsContext';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, Legend } from 'recharts';

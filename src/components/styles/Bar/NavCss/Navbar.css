@@ -23,22 +23,12 @@
 }
 
 .logo-letter {
-  font-size: 1.5rem; /* Taille de la lettre du logo */
+  font-size: 1.6rem;
   font-weight: bold;
-  color: #f39c12;
-  margin-right: 8px;
-  animation: pulse 1.5s infinite ease-in-out; /* Animation infinie de pulsation */
-}
-
-.logo-text {
-  font-size: 1.2rem; /* Taille du texte du logo */
-  font-weight: 600;
-  color: white;
-  background: linear-gradient(45deg, #301e08, #72369b, #340d7c, #1e90ff);
-  background-size: 400% 400%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: gradientAnimation 5s ease infinite; /* Animation infinie du dégradé */
+  color: #597481;
+  font-family: 'roboto', sans-serif;
+  margin-left: 27px;
+  animation: pulse 5s infinite ease-in-out; /* Animation infinie de pulsation */
 }
 
 /* Animation de pulsation pour la lettre du logo */

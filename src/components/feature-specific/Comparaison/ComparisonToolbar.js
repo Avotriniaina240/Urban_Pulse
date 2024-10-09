@@ -37,6 +37,7 @@ const ComparisonToolbar = ({ onFetchData, onSortChange }) => {
             <h2>Comparer les Données</h2>
 
             <input
+              className='recherche-comparison'
               type="text"
               placeholder="Entrez les noms de villes (,) "
               value={locationsInput}

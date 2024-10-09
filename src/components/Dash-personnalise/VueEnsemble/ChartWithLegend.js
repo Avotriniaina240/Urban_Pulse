@@ -9,10 +9,8 @@ const ChartWithLegend = ({ stats, chartType, setChartType }) => {
       <div className="ChartComponent">
         <ChartComponent stats={stats} chartType={chartType} setChartType={setChartType} />
       </div>
-      <div className="legend-Legend">
         <Legend stats={stats} chartType={chartType} />
       </div>
-    </div>
   );
 };
 

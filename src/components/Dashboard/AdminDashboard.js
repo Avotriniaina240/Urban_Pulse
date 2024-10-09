@@ -1,7 +1,7 @@
 // src/components/AdminDashboard.js
 import React from 'react';
-import Navbar from '../StyleBar/Navbar/Navbar';
-import Sidebar from '../StyleBar/Sidebar/SidebarCarte';
+import Navbar from '../layouts/Navbar/Navbar';
+import Sidebar from '../layouts/Sidebar/SidebarCarte';
 import UrbanPulseInfo from '../Parametres/UrbanPulseInfo';
 import '../styles/Dash/AdminDashboard.css'; // Gardez cette ligne si vous avez des styles pour la mise en page
 

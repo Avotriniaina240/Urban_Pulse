@@ -1,81 +1,58 @@
-// src/components/Authentification/ResetPassword.js
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import '../styles/Admin/Auth.css';
 
 const ResetPassword = () => {
-  const { token } = useParams();
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [message, setMessage] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
-  const navigate = useNavigate();
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
+  const location = useLocation();
+  const token = new URLSearchParams(location.search).get('token');
 
+  const handleResetPassword = async () => {
+    if (password.length < 6) {
+      setErrorMessage('Le mot de passe doit contenir au moins 6 caractères.');
+      return;
+    }
+    
     if (password !== confirmPassword) {
-      setError('Les mots de passe ne correspondent pas.');
-      setLoading(false);
+      setErrorMessage('Les mots de passe ne correspondent pas.');
       return;
     }
 
     try {
-      const response = await axios.post(`http://localhost:5000/api/auth/reset-password/${token}`, { password });
-      setMessage(response.data.message);
-
-      // Redirection après la réinitialisation réussie
-      setTimeout(() => {
-        navigate('/login');
-      }, 2000);
+      const response = await axios.post('http://localhost:5000/api/reset-password', { token, password });
+      setSuccessMessage(response.data.message);
+      setPassword(''); 
+      setConfirmPassword(''); 
     } catch (error) {
-      if (error.response) {
-        setError(error.response.data.message || 'Erreur lors de la réinitialisation du mot de passe.');
-      } else if (error.request) {
-        setError('Aucune réponse du serveur.');
-      } else {
-        setError('Erreur de configuration de la requête.');
-      }
-    } finally {
-      setLoading(false);
+      console.error('Erreur lors de la réinitialisation', error);
+      setErrorMessage('Erreur lors de la réinitialisation du mot de passe. Veuillez réessayer.');
     }
   };
 
   return (
-    <div className='body'>
-      <div className="form-container">
-        <h1>Réinitialiser le mot de passe</h1>
-        {error && <div className="error-message">{error}</div>}
-        {message && <div className="success-message">{message}</div>}
-        {loading && (
-          <div className="loading">
-            <div className="spinner"></div>
-          </div>
-        )}
-        <form onSubmit={handleSubmit}>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Nouveau mot de passe"
-            required
-          />
-          <input
-            type="password"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            placeholder="Confirmer le mot de passe"
-            required
-          />
-          <button type="submit" disabled={loading}>Réinitialiser</button>
-        </form>
-        <div className="signin-option">
-          Retour à la connexion
-        </div>
-      </div>
+    <div className="reset-password"> 
+      <h2>Réinitialiser votre mot de passe</h2>
+      <input
+        type="password"
+        placeholder="Nouveau mot de passe"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
+      <input
+        type="password"
+        placeholder="Confirmer le mot de passe"
+        value={confirmPassword}
+        onChange={(e) => setConfirmPassword(e.target.value)}
+      />
+      <button onClick={handleResetPassword}>Réinitialiser le mot de passe</button>
+
+      {successMessage && <p className="success-message">{successMessage}</p>}
+      {errorMessage && <p className="error-message">{errorMessage}</p>}
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Doughnut } from 'react-chartjs-2';
-import Navbar from '../../StyleBar/Navbar/Navbar';
-import Sidebar from '../../StyleBar/Sidebar/SidebarCarte';
+import Navbar from '../../layouts/Navbar/Navbar';
+import Sidebar from '../../layouts/Sidebar/SidebarCarte';
 import '../../styles/Admin/VueEnsemble.css';
 import { fetchUserStats } from '../../../services/userStatsService'; 
 import ChartWithLegend from './ChartWithLegend'; 

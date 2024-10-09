@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import Navbar from '../../StyleBar/Navbar/Navbar';
-import Sidebar from '../../StyleBar/Sidebar/SidebarCarte';
+import Navbar from '../../layouts/Navbar/Navbar';
+import Sidebar from '../../layouts/Sidebar/SidebarCarte';
 import UserTable from './UserTable';  
 import UserForm from './UserForm';    
 import UserStats from './UserStats';  

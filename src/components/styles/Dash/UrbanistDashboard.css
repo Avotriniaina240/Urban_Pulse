@@ -15,7 +15,6 @@
   /* Conteneur principal avec la sidebar et le contenu */
   .main-content-Urbanist {
     display: flex;
-    margin-top: 67px; /* Hauteur de la navbar */
   }
   
   /* Style de la barre latérale */
@@ -52,7 +51,7 @@
     padding: 10px;
     border-radius: 5px;
     margin-left: 30px; 
-    margin-top: -10px;
+    margin-top: 70px;
     font-family: Arial, sans-serif;
   }
   

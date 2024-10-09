@@ -1,64 +1,36 @@
-// src/components/Authentification/ForgotPassword.js
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
 import '../styles/Admin/Auth.css';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
-  const [message, setMessage] = useState('');
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-
+  const handleForgotPassword = async () => {
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/forgot-password', { email });
-      setMessage(response.data.message);
-      setEmail('');
+      const response = await axios.post('http://localhost:5000/api/forgot-password', { email });
+      setSuccessMessage(response.data.message);
+      setEmail(''); // Réinitialiser le champ d'email après l'envoi
     } catch (error) {
-      if (error.response) {
-        setError(error.response.data.message || 'Erreur lors de la demande de réinitialisation.');
-      } else if (error.request) {
-        setError('Aucune réponse du serveur.');
-      } else {
-        setError('Erreur de configuration de la requête.');
-      }
-    } finally {
-      setLoading(false);
-      setTimeout(() => {
-        setError('');
-        setMessage('');
-      }, 5000); // Clear messages after 5 seconds
+      setErrorMessage('Erreur lors de la demande de réinitialisation. Veuillez réessayer.');
     }
   };
 
   return (
-    <div className="body">
-      <div className="form-container">
-        <h1>Réinitialiser le mot de passe</h1>
-        {error && <div className="error-message">{error}</div>}
-        {message && <div className="success-message">{message}</div>}
-        {loading && (
-          <div className="loading">
-            <div className="spinner"></div>
-          </div>
-        )}
-        <form onSubmit={handleSubmit}>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Email"
-            required
-          />
-          <button type="submit" disabled={loading}>Envoyer</button>
-        </form>
-        <div className="signin-option">
-          <Link to="/login">Retour à la connexion</Link>
-        </div>
+    <div className="forgot-password-container">
+      <div className="forgot-password-box">
+        <h2>Mot de passe oublié</h2>
+        <p>Entrez votre adresse e-mail pour recevoir un lien de réinitialisation de mot de passe.</p>
+        <input
+          type="email"
+          placeholder="Adresse e-mail"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <button onClick={handleForgotPassword}>Envoyer</button>
+        {successMessage && <p className="success-message">{successMessage}</p>}
+        {errorMessage && <p className="error-message">{errorMessage}</p>}
       </div>
     </div>
   );

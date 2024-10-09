@@ -30,16 +30,18 @@
   display: flex;
   justify-content: space-between;
   margin-bottom: 20px;
+  width: 43.5%;
 }
 
 .status-filters button {
   background-color: #e0e0e0;
   border: none;
-  border-radius: 20px; /* Bordure plus arrondie */
+  border-radius: 20px; 
   color: #333;
   font-size: 14px;
   padding: 10px 20px;
   cursor: pointer;
+  font-family: 'Roboto', sans-serif;
   transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -85,6 +87,7 @@
   padding: 10px 20px;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.2s ease;
+  font-family: 'Roboto', sans-serif;
 }
 
 .home-button:hover {

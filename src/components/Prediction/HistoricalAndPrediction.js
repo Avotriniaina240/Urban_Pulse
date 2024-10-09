@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'; 
-import Navbar from '../StyleBar/Navbar/Navbar';
-import Sidebar from '../StyleBar/Sidebar/SidebarCarte';
+import Navbar from '../layouts/Navbar/Navbar';
+import Sidebar from '../layouts/Sidebar/SidebarCarte';
 import '../styles/Analyse/HistoricalAndPrediction.css';
 import { fetchWeatherDataByCity, fetchWeatherDataByCoordinates } from '../../services/ServicePrediction';
 import InputToolbar from './InputToolbar';

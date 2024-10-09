@@ -18,8 +18,7 @@
 .content-vue {
   flex: 1;
   margin-left: 250px; /* Largeur de la sidebar */
-  padding: 20px;
-  overflow: auto;
+  padding: 20px;;
   display: flex;
   flex-direction: column;
   margin-top: 50px;
@@ -95,7 +94,7 @@
 /* Style pour le texte central du graphique de pourcentage */
 .percentage-text {
   position: absolute;
-  top: 50%;
+  top: 75%;
   left: 50%;
   transform: translate(-50%, -50%);
   font-size: 18px;
@@ -207,7 +206,7 @@
 
 .chart-legend {
   font-size: 13px;
-  width: 70%;
+  width: 40%;
   padding: 25px;
   background: linear-gradient(145deg, #f3f4f6, #e5e7eb);
   border-radius: 15px;
@@ -371,4 +370,8 @@
 .fade-out {
   opacity: 0;
   transform: scale(1);
+}
+
+.legend-Legend {
+  width: 10px;
 }

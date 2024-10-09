@@ -13,6 +13,7 @@ import UrbanistDashboard from './components/Dashboard/UrbanistDashboard';
 import VueEnsemble from './components/Dash-personnalise/VueEnsemble/VueEnsemble';
 import GestionUser from './components/Dash-personnalise/GestionUser/GestionUser';
 import Profile from './components/Parametres/Profile';
+import AirQualitySimulation from './components/Parametres/AirQualitySimulation';
 import DashboardCitizen from './components/Dashboard/DashboardCitizen';
 import RegisterAdminPage from './pages/RegisterAdminPage';
 import UrbanAnalysis from './components/Analyse/UrbanAnalysis';
@@ -44,6 +45,7 @@ const App = () => {
           <Route path="/vue-ensemble/*" element={<VueEnsemble />} />
           <Route path="/gestion-user" element={<GestionUser />} />
           <Route path="/profile" element={<Profile />} />
+          <Route path="/simulation" element={<AirQualitySimulation />} />
           <Route path="/register-admin" element={<RegisterAdminPage />} />
           <Route path="/urban-analysis" element={<UrbanAnalysis />} />
           <Route path="/map/*" element={<Map />} />

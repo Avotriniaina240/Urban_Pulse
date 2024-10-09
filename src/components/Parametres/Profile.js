@@ -1,10 +1,26 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Plus, Mail, Phone, MapPin, Calendar, User, ArrowLeft, Edit, Save } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify'; 
+import { jwtDecode } from 'jwt-decode'; 
 import 'react-toastify/dist/ReactToastify.css';
 import '../styles/Admin/Profile.css';
+
+const Modal = ({ children, onClose }) => (
+  <motion.div
+    className="modal-pro"
+    initial={{ opacity: 0 }}
+    animate={{ opacity: 1 }}
+    exit={{ opacity: 0 }}
+  >
+    <div className="modal-content-pro">
+      <button className="modal-close" onClick={onClose}>✕</button>
+      {children}
+    </div>
+  </motion.div>
+);
 
 const UserProfile = () => {
   const [infoUtilisateur, setInfoUtilisateur] = useState({
@@ -19,64 +35,105 @@ const UserProfile = () => {
   const [modalOuvert, setModalOuvert] = useState(false);
   const [chargement, setChargement] = useState(false);
   const [modeEdition, setModeEdition] = useState(false);
-  const [infoModifiee, setInfoModifiee] = useState({});
+  const [infoModifiee, setInfoModifiee] = useState({
+    username: '',
+    email: '',
+    phoneNumber: '',
+    address: '',
+    dateOfBirth: '',
+    profilePictureUrl: ''
+  });
   const navigate = useNavigate();
 
   useEffect(() => {
     loadUserInfo();
   }, []);
 
-  const loadUserInfo = () => {
-    const userInfo = {
-      username: localStorage.getItem('username') || '',
-      email: localStorage.getItem('email') || '',
-      phoneNumber: localStorage.getItem('phoneNumber') || '',
-      address: localStorage.getItem('address') || '',
-      dateOfBirth: localStorage.getItem('dateOfBirth') || '',
-      profilePictureUrl: localStorage.getItem('profilePictureUrl') || '',
-      role: localStorage.getItem('role') || ''
-    };
+  const loadUserInfo = async () => {
+    setChargement(true);
 
-    setInfoUtilisateur(userInfo);
+    try {
+      const token = localStorage.getItem('token');
+
+      if (!token) {
+        toast.error("Token manquant. Veuillez vous reconnecter."); 
+        navigate('/login'); // Rediriger vers la page de connexion
+        return;
+      }
+
+      const decodedToken = jwtDecode(token);
+      const userId = decodedToken.id;
+
+      const response = await axios.get(`http://localhost:5000/api/users/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const userInfo = {
+        ...response.data,
+        phoneNumber: response.data.phone_number,
+      };
+      delete userInfo.phone_number;
+
+      setInfoUtilisateur(userInfo);
+      setInfoModifiee(userInfo); 
+
+    } catch (error) {
+      console.error("Erreur lors du chargement des informations utilisateur:", error);
+      toast.error("Impossible de charger les informations utilisateur."); 
+    } finally {
+      setChargement(false);
+    }
   };
 
-  const handleImageChange = async (event) => {
-    const file = event.target.files[0];
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
     if (file) {
-      setChargement(true);
-
       const reader = new FileReader();
       reader.onloadend = () => {
-        const base64String = reader.result;
-        localStorage.setItem('profilePictureUrl', base64String);
-        setInfoUtilisateur(prev => ({ ...prev, profilePictureUrl: base64String }));
-        setChargement(false);
-        toast.success("Image de profil mise à jour avec succès");
-      };
-      reader.onerror = () => {
-        toast.error("Erreur lors du chargement de l'image");
-        setChargement(false);
+        //console.log('Image convertie en Base64:', reader.result);
+        setInfoModifiee(prev => ({
+          ...prev,
+          profilePictureUrl: reader.result, // Enregistre l'image en Base64
+        }));
       };
       reader.readAsDataURL(file);
+    } else {
+      console.log("Aucun fichier sélectionné.");
     }
   };
 
   const handleEditClick = () => {
     setModeEdition(true);
-    setInfoModifiee({ ...infoUtilisateur });
   };
 
-  const handleSaveClick = () => {
+  const handleSaveClick = async () => {
     setChargement(true);
-
+  
     try {
-      // Mise à jour du localStorage
-      Object.entries(infoModifiee).forEach(([key, value]) => {
-        localStorage.setItem(key, value);
+      const token = localStorage.getItem('token');
+      const decodedToken = jwtDecode(token);
+      const userId = decodedToken.id;
+
+      console.log(infoModifiee.profilePictureUrl)
+
+      const updatedUserData = {
+        username: infoModifiee.username,
+        email: infoModifiee.email,
+        phoneNumber: infoModifiee.phoneNumber,
+        address: infoModifiee.address,
+        dateOfBirth: infoModifiee.dateOfBirth,
+        profile_picture_url: infoModifiee.profilePictureUrl,
+      };    
+
+      await axios.put(`http://localhost:5000/api/users/${userId}`, updatedUserData, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
       });
 
-      // Mise à jour de l'état
-      setInfoUtilisateur(infoModifiee);
+      setInfoUtilisateur(updatedUserData);
       setModeEdition(false);
       toast.success('Profil mis à jour avec succès');
     } catch (error) {
@@ -94,7 +151,6 @@ const UserProfile = () => {
 
   return (
     <div className="container-box">
-      <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} />
       <div className="container-pro">
         <h1 className="title-pro">Profil Utilisateur</h1>
 
@@ -111,7 +167,7 @@ const UserProfile = () => {
             </button>
             <div className="profile-picture-container">
               <img
-                src={infoUtilisateur.profilePictureUrl || 'default-avatar.png'}
+                src={infoModifiee.profilePictureUrl || '/image/profil-defaut.jpg'}
                 alt="Avatar"
                 className="avatar-pro"
                 onClick={() => setModalOuvert(true)}
@@ -127,7 +183,7 @@ const UserProfile = () => {
                 />
               </label>
             </div>
-            <h2 className="subtitle-pro">{infoUtilisateur.username}</h2>
+            <h2 className="subtitle-pro">{infoUtilisateur.username || 'Utilisateur non défini'}</h2>
             {chargement && <p>Chargement en cours...</p>}
           </motion.div>
 
@@ -139,6 +195,14 @@ const UserProfile = () => {
               transition={{ duration: 0.5 }}
             >
               <ul className="details-list-pro">
+                <InfoItem 
+                  icon={<User />} 
+                  label="Utilisateur" 
+                  value={modeEdition ? infoModifiee.username : infoUtilisateur.username} 
+                  isEditing={modeEdition}
+                  name="username"
+                  onChange={handleInputChange}
+                />
                 <InfoItem 
                   icon={<Mail />} 
                   label="Email" 
@@ -178,75 +242,49 @@ const UserProfile = () => {
           </div>
           
           <div className="edit-button-container">
-            {!modeEdition ? (
-              <button className="back-button" onClick={handleEditClick}>
-                <Edit size={20} />
-                Modifier
+            {modeEdition ? (
+              <button className="save-button" onClick={handleSaveClick} disabled={chargement}>
+                <Save size={16} /> Sauvegarder
               </button>
             ) : (
-              <button className="back-button" onClick={handleSaveClick}>
-                <Save size={20} />
-                Enregistrer
+              <button className="edit-button" onClick={handleEditClick}>
+                <Edit size={16} /> Éditer
               </button>
             )}
           </div>
         </div>
-
-        <AnimatePresence>
-          {modalOuvert && (
-            <Modal onClose={() => setModalOuvert(false)}>
-              <img
-                src={infoUtilisateur.profilePictureUrl || 'default-avatar.png'}
-                alt="Image de profil agrandie"
-                className="modal-image-pro"
-              />
-            </Modal>
-          )}
-        </AnimatePresence>
       </div>
+
+      <ToastContainer />
+      <AnimatePresence>
+        {modalOuvert && (
+          <Modal onClose={() => setModalOuvert(false)}>
+            <img src={infoModifiee.profilePictureUrl} alt="Avatar" className="modal-image" />
+          </Modal>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
 
-const InfoItem = ({ icon, label, value, isEditing, name, onChange, type = "text" }) => (
+const InfoItem = ({ icon, label, value, isEditing, name, onChange, type = 'text' }) => (
   <li className="info-item">
-    <span className="info-icon">{icon}</span>
-    <div>
-      <strong>{label}:</strong>
+    {icon}
+    <div className="info-details">
+      <span className="info-label">{label}:</span>
       {isEditing ? (
-        <input
+        <input 
           type={type}
           name={name}
           value={value}
           onChange={onChange}
-          className="edit-input"
+          className="info-input"
         />
       ) : (
-        value || 'Non disponible'
+        <span className="info-value">{value || 'Non défini'}</span>
       )}
     </div>
   </li>
-);
-
-const Modal = ({ children, onClose }) => (
-  <motion.div
-    className="modal-pro"
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    exit={{ opacity: 0 }}
-    onClick={onClose}
-  >
-    <motion.div
-      className="modal-content-pro"
-      onClick={(e) => e.stopPropagation()}
-      initial={{ scale: 0.8 }}
-      animate={{ scale: 1 }}
-      exit={{ scale: 0.8 }}
-    >
-      {children}
-      <button className="close-modal-pro" onClick={onClose}>&times;</button>
-    </motion.div>
-  </motion.div>
 );
 
 export default UserProfile;

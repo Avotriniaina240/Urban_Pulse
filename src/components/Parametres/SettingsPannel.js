@@ -10,10 +10,10 @@ const SettingsPanel = ({ onClose }) => {
   const [isLanguageOpen, setIsLanguageOpen] = useState(false);
   const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const [language, setLanguage] = useState('fr'); // État pour la langue
+  const [language, setLanguage] = useState('fr');
 
-  const navigate = useNavigate(); // Initialiser le hook useNavigate
-  const { t, i18n } = useTranslation(); // Utiliser useTranslation pour obtenir t et i18n
+  const navigate = useNavigate();
+  const { t, i18n } = useTranslation(); 
 
   useEffect(() => {
     if (typeof document !== 'undefined') {
@@ -21,26 +21,25 @@ const SettingsPanel = ({ onClose }) => {
     }
   }, [isDarkMode]);
 
-  // Utiliser useEffect pour appliquer la langue
   useEffect(() => {
-    i18n.changeLanguage(language); // Changer la langue avec i18n
+    i18n.changeLanguage(language); 
   }, [language, i18n]);
 
   const handleToggleDarkMode = () => setIsDarkMode(!isDarkMode);
 
-  // Fonction pour gérer les clics sur le profil
+
   const handleProfileClick = () => {
-    navigate('/Profile'); // Rediriger vers la page de profil
+    navigate('/Profile'); 
   };
 
-  // Fonction pour gérer la sélection de langue
+
   const handleLanguageChange = (event) => {
     setLanguage(event.target.value);
   };
 
   return (
     <div className="settings-panel show">
-      {/* Section Profil */}
+
       <div className="settings-section">
         <div
           className="settings-section-header"
@@ -52,7 +51,7 @@ const SettingsPanel = ({ onClose }) => {
         </div>
       </div>
 
-      {/* Section Thème */}
+
       <div className="settings-section">
         <div
           className="settings-section-header"
@@ -77,7 +76,7 @@ const SettingsPanel = ({ onClose }) => {
         )}
       </div>
       
-      {/* Langue */}
+
       <div className="settings-section">
         <div
           className="settings-section-header"
@@ -109,27 +108,6 @@ const SettingsPanel = ({ onClose }) => {
                 onChange={handleLanguageChange}
               />
               English
-            </label>
-          </div>
-        )}
-      </div>
-
-      {/* Confidentialité */}
-      <div className="settings-section">
-        <div
-          className="settings-section-header"
-          onClick={() => setIsPrivacyOpen(!isPrivacyOpen)}
-        >
-          <h4>
-            <FontAwesomeIcon icon={faLock} className="icon" /> {t('privacy')}
-          </h4>
-          <span className="toggle-icon">{isPrivacyOpen ? '-' : '+'}</span>
-        </div>
-        {isPrivacyOpen && (
-          <div className="settings-section-content show">
-            <label>
-              <input type="checkbox" />
-              {t('enable_strict_privacy')}
             </label>
           </div>
         )}
