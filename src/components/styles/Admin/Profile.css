@@ -527,4 +527,16 @@
   background-color: #357ABD;
 }
 
+.info-label {
+  margin-left: 10px;
+  color: #357ABD;
+}
+
+.info-value {
+  margin-left: 10px;
+}
+
+.lucide-user, .lucide-mail, .lucide-phone, .lucide-map-pin, .lucide-calendar {
+  color: #1c63a3;
+}
 

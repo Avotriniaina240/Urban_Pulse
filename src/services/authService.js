@@ -1,18 +1,38 @@
 import axios from 'axios';
 
+const MAX_STORAGE_SIZE = 5000000; // 5 Mo
+
+const isStorageAvailable = (data) => {
+  const dataString = JSON.stringify(data);
+  const sizeInBytes = new Blob([dataString]).size;
+  return sizeInBytes <= MAX_STORAGE_SIZE;
+};
+
+const clearUserFromLocalStorage = () => {
+  console.warn('Nettoyage de la clé "user" dans le localStorage en raison du dépassement de quota...');
+  localStorage.removeItem('user'); // Nettoyer uniquement la clé 'user'
+};
+
 export const login = async (email, password) => {
-  console.log('LoginService called with:', { email, password }); // Log des données d'entrée
+  console.log('LoginService called with:', { email, password });
   try {
     const response = await axios.post('http://localhost:5000/api/auth/login', { email, password });
-    console.log('API response:', response.data); // Log de la réponse complète
+    console.log('API response:', response.data);
 
-    // Sauvegarder les informations de l'utilisateur dans le localStorage
-    localStorage.setItem('user', JSON.stringify(response.data)); 
+    console.log('Current localStorage:', localStorage);
+    console.log('Size of data to store:', new Blob([JSON.stringify(response.data)]).size);
+
+    if (isStorageAvailable(response.data)) {
+      localStorage.setItem('user', JSON.stringify(response.data));
+    } else {
+      clearUserFromLocalStorage();
+      localStorage.setItem('user', JSON.stringify(response.data));
+    }
 
     return response.data;
   } catch (error) {
     console.error('API error:', error.response ? error.response.data : error.message);
-    throw error; // Relance l'erreur pour qu'elle soit gérée dans useAuth
+    throw error;
   }
 };
 
@@ -36,17 +56,16 @@ export const registerAdmin = async (username, email, password, role) => {
   }
 };
 
-// Nouvelle méthode pour récupérer l'utilisateur courant
 export const getCurrentUser = () => {
-  const user = JSON.parse(localStorage.getItem('user')); // Récupérer l'utilisateur du localStorage
-  return user; // Renvoie l'utilisateur (qui contient son rôle)
+  const user = JSON.parse(localStorage.getItem('user'));
+  return user;
 };
 
 const AuthService = {
   login,
   register,
   registerAdmin,
-  getCurrentUser, // Ajoutez ici la méthode getCurrentUser
+  getCurrentUser,
 };
 
 export default AuthService;

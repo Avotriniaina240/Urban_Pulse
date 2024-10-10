@@ -28,7 +28,6 @@ const ForumPage = () => {
             const commentsResponse = await fetch(`http://localhost:5000/api/posts/${post.id}/comments`);
             const comments = await commentsResponse.json();
             
-            // Récupérer la photo de profil de l'auteur du post
             const postAuthorProfilePicture = localStorage.getItem(`userProfilePicture_${post.author_id}`) || null;
             
             return {
@@ -39,7 +38,6 @@ const ForumPage = () => {
               isExpanded: false,
               showCommentInput: false,
               commentList: await Promise.all(comments.map(async (comment) => {
-                // Récupérer la photo de profil de l'auteur du commentaire
                 const commentAuthorProfilePicture = localStorage.getItem(`userProfilePicture_${comment.author_id}`) || null;
                 return {
                   ...comment,
@@ -52,10 +50,10 @@ const ForumPage = () => {
           }));
           setPosts(postsWithComments);
         } else {
-          console.error('Failed to fetch posts:', response.statusText);
+          console.error('Échec de la récupération des publications:', response.statusText);
         }
       } catch (error) {
-        console.error('Error fetching posts:', error);
+        console.error('Erreur lors de la récupération des publications:', error);
       }
     };
     
@@ -70,9 +68,9 @@ const ForumPage = () => {
   
   const toggleCommentInput = (id) => {
     setPosts(posts.map(post => 
-      post.id === id ? { ...post, showCommentInput: !post.showCommentInput } : post
+      post.id === id ? { ...post, showCommentInput: !post.showCommentInput } : { ...post, showCommentInput: false }
     ));
-  }; 
+  };
 
   const handleAddComment = async (postId) => {
     if (newComment.trim() === '') return;
@@ -211,14 +209,13 @@ const ForumPage = () => {
     (post.content && post.content.toLowerCase().includes(searchTerm.toLowerCase())) ||
     (post.author && post.author.toLowerCase().includes(searchTerm.toLowerCase()))
   );
-  
 
   return (
     <div className="forum-container">
       <h1 className="forum-title">Forum de Discussion</h1>
       <button className="button-retour-forum" onClick={() => navigate(-1)}>
-              <ArrowLeft size={10} />
-              Retour
+        <ArrowLeft size={10} />
+        Retour
       </button>
       <div className="search-bar">
         <input 
@@ -262,7 +259,14 @@ const ForumPage = () => {
       <div className="post-list">
         {filteredPosts.length > 0 ? (
           filteredPosts.map((post, index) => (
-            <div key={index} className="post-card">
+            <motion.div 
+              key={index} 
+              className="post-card"
+              animate={{ 
+                height: post.showCommentInput ? 'auto' : 'fit-content',
+                transition: { duration: 0.3 }
+              }}
+            >
               <div className="post-header">
                 <h2 className="post-title">{post.title}</h2>
                 <div className="post-author">
@@ -298,30 +302,38 @@ const ForumPage = () => {
                 </div>
               </div>
 
-              {post.showCommentInput && (
-                <div className="comments-section">
-                  <div className="comments-list">
-                  {post.commentList.map((comment, index) => (
-                    <div key={`${index}-${comment.content}`} className="comment">
-                      {comment.authorProfilePicture ? (
-                        <img src={comment.authorProfilePicture} alt={comment.author} className="comment-author-profile-picture" />
-                      ) : (
-                        <User className="comment-author-icon" />
-                      )}
-                        <strong>{comment.author || 'Anonyme'} :</strong> {comment.content}
+              <AnimatePresence>
+                {post.showCommentInput && (
+                  <motion.div 
+                    className="comments-section"
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <div className="comments-list">
+                      {post.commentList.map((comment, index) => (
+                        <div key={`${index}-${comment.content}`} className="comment">
+                          {comment.authorProfilePicture ? (
+                            <img src={comment.authorProfilePicture} alt={comment.author} className="comment-author-profile-picture" />
+                          ) : (
+                            <User className="comment-author-icon" />
+                          )}
+                          <strong>{comment.author || 'Anonyme'} :</strong> {comment.content}
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                  </div>
-                  <input 
-                    type="text" 
-                    placeholder="Ajouter un commentaire..." 
-                    value={newComment} 
-                    onChange={(e) => setNewComment(e.target.value)} 
-                  />
-                  <button onClick={() => handleAddComment(post.id)}>Envoyer</button>
-                </div>
-              )}
-            </div>
+                    <input 
+                      type="text" 
+                      placeholder="Ajouter un commentaire..." 
+                      value={newComment} 
+                      onChange={(e) => setNewComment(e.target.value)} 
+                    />
+                    <button onClick={() => handleAddComment(post.id)}>Envoyer</button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.div>
           ))
         ) : (
           <p>Aucun résultat trouvé.</p>

@@ -38,11 +38,12 @@ const AirQualitySimulation = () => {
 
   return (
     <div className="air-quality-simulation">
-      <h2>Simulation de Qualité de l'Air</h2>
+      <h2>Simulation Test</h2>
       <form onSubmit={handleSubmit}>
         <label>
           Réduction du Trafic (%):
           <input
+            className='input-simulation'
             type="number"
             value={trafficReduction}
             onChange={(e) => setTrafficReduction(e.target.value)}
@@ -53,6 +54,7 @@ const AirQualitySimulation = () => {
         <label>
           Augmentation des Espaces Verts (m²):
           <input
+            className='input-simulation'
             type="number"
             value={greenSpacesIncrease}
             onChange={(e) => setGreenSpacesIncrease(e.target.value)}
@@ -62,6 +64,7 @@ const AirQualitySimulation = () => {
         <label>
           Réduction de la Pollution Industrielle (%):
           <input
+            className='input-simulation'
             type="number"
             value={industrialPollutionReduction}
             onChange={(e) => setIndustrialPollutionReduction(e.target.value)}
