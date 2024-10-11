@@ -80,7 +80,7 @@ const ForumPage = () => {
     const userProfilePicture = localStorage.getItem(`userProfilePicture_${userId}`) || null;
   
     try {
-      const response = await fetch(`http://localhost:5000/api/posts/${postId}/comments`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/posts/${postId}/comments`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -122,7 +122,7 @@ const ForumPage = () => {
     const token = localStorage.getItem('token');
     
     try {
-      const response = await fetch(`http://localhost:5000/api/posts/${postId}/like`, {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/posts/${postId}/like`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -156,7 +156,7 @@ const ForumPage = () => {
       const username = localStorage.getItem('username');
       const userProfilePicture = localStorage.getItem(`userProfilePicture_${userId}`) || null;
 
-      const response = await fetch('http://localhost:5000/api/posts', {
+      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/posts`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -14,7 +14,7 @@ const UrbanistDashboard = () => {
 
   useEffect(() => {
     const fetchWeather = (latitude, longitude) => {
-      const apiKey = '13c8b873a51de1239ad5606887a1565e';
+      const apiKey = process.env.REACT_APP_WEATHER_API_KEY; // Utilisation de la variable d'environnement
       const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&lang=fr&appid=${apiKey}`;
 
       axios
@@ -154,7 +154,6 @@ const UrbanistDashboard = () => {
       </div>
     </div>
   );
-  
 }
 
 export default UrbanistDashboard;

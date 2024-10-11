@@ -1,10 +1,12 @@
 import axios from 'axios';
 
-const apiKey = '13c8b873a51de1239ad5606887a1565e';
+const apiKey = process.env.REACT_APP_WEATHER_API_KEY;
+const airQualityApiUrl = process.env.REACT_APP_AIR_QUALITY_API_URL;
+const weatherApiUrl = process.env.REACT_APP_WEATHER_API_URL;
 
 export const fetchAirQualityData = async (lat, lon) => {
     try {
-        const response = await axios.get(`http://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${apiKey}`);
+        const response = await axios.get(`${airQualityApiUrl}?lat=${lat}&lon=${lon}&appid=${apiKey}`);
         return response.data.list.map(item => ({
             lat,
             lng: lon,
@@ -19,7 +21,7 @@ export const fetchAirQualityData = async (lat, lon) => {
 
 export const fetchWeatherData = async (lat, lon) => {
     try {
-        const response = await axios.get(`http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`);
+        const response = await axios.get(`${weatherApiUrl}?lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`);
         return {
             temperature: response.data.main.temp,
             humidity: response.data.main.humidity,
@@ -40,6 +42,3 @@ export const getColor = (aqi) => {
         default: return 'grey';
     }
 };
-
-
-

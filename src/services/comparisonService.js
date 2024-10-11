@@ -1,4 +1,4 @@
-const API_KEY = '13c8b873a51de1239ad5606887a1565e';
+const API_KEY = process.env.REACT_APP_WEATHER_API_KEY;
 
 export const fetchDataForLocations = async (locationsInput, coordinatesInput, neighborhoodsInput) => {
   console.log('fetchDataForLocations called with:', { locationsInput, coordinatesInput, neighborhoodsInput });

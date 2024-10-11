@@ -2,42 +2,43 @@ import React, { useEffect, useState } from 'react';
 import Navbar from '../layouts/Navbar/Navbar';
 import Sidebar from '../layouts/Sidebar/SidebarCarte';
 import { Link } from 'react-router-dom';
-import axios from 'axios'; // Importez axios pour les requêtes HTTP
+import axios from 'axios';
 import '../styles/Dash/UrbanistDashboard.css';
 
 const AdminDashboard = () => {
   const [weatherData, setWeatherData] = useState(null);
-  const [cityName, setCityName] = useState(''); // État pour le nom de la ville
+  const [cityName, setCityName] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [userReports, setUserReports] = useState([]); // Pour stocker les rapports des utilisateurs
-  const [projects, setProjects] = useState([]); // Pour stocker les projets en cours
+  const [userReports, setUserReports] = useState([]);
+  const [projects, setProjects] = useState([]);
+  const [progress, setProgress] = useState(0); // Ajout de l'état pour la barre de progression
 
   useEffect(() => {
     const fetchWeather = (latitude, longitude) => {
-      const apiKey = '13c8b873a51de1239ad5606887a1565e';
-      const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&lang=fr&appid=${apiKey}`;
+      const weatherUrl = `${process.env.REACT_APP_WEATHER_API_URL}?lat=${latitude}&lon=${longitude}&units=metric&lang=fr&appid=${process.env.REACT_APP_WEATHER_API_KEY}`;
 
       axios
         .get(weatherUrl)
         .then((response) => {
           setWeatherData(response.data);
           setLoading(false);
+          setProgress(100); // Remplir la barre de progression à 100% une fois terminé
         })
         .catch((error) => {
           console.error("Erreur lors de la récupération des données météo :", error);
           setError("Impossible de récupérer les données météo");
           setLoading(false);
+          setProgress(100); // Remplir la barre à 100% même en cas d'erreur
         });
 
-      // Utilisation de l'API de géocodage inversé
-      const reverseGeocodeUrl = `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json&accept-language=fr`;
+      const reverseGeocodeUrl = `${process.env.REACT_APP_GEOCODING_API_URL}?lat=${latitude}&lon=${longitude}&format=json&accept-language=fr`;
 
       axios
         .get(reverseGeocodeUrl)
         .then((response) => {
           if (response.data && response.data.address && response.data.address.city) {
-            setCityName(response.data.address.city); // Récupérer le nom de la ville
+            setCityName(response.data.address.city);
           } else {
             setCityName("Ville inconnue");
           }
@@ -49,18 +50,12 @@ const AdminDashboard = () => {
     };
 
     const fetchReports = () => {
-    
+      // Simulation du chargement des rapports
+      setTimeout(() => setProgress(40), 500);
     };
 
     const fetchProjects = () => {
-      // Remplacez cette URL par celle de votre API pour récupérer les projets
-      axios.get('/api/projects') 
-        .then((response) => {
-          setProjects(response.data);
-        })
-        .catch((error) => {
-          console.error("Erreur lors de la récupération des projets :", error);
-        });
+    
     };
 
     if (navigator.geolocation) {
@@ -73,32 +68,31 @@ const AdminDashboard = () => {
           console.error("Erreur de géolocalisation :", error);
           setError("Impossible de récupérer la géolocalisation");
           setLoading(false);
+          setProgress(100);
         }
       );
     } else {
       setError("La géolocalisation n'est pas supportée par ce navigateur");
       setLoading(false);
+      setProgress(100);
     }
 
     fetchReports();
     fetchProjects();
   }, []);
 
-  const getAirQualityIcon = (airQualityIndex) => {
-    if (airQualityIndex <= 50) {
-      return 'Bon'; // Vous pouvez ajouter une icône spécifique ici
-    } else if (airQualityIndex <= 100) {
-      return 'Moyen'; // Ajoutez une icône pour moyen
-    } else {
-      return 'Mauvais'; // Ajoutez une icône pour mauvais
-    }
-  };
-
   return (
     <div className="admin-dashboard-home">
       <Navbar />
       <Sidebar />
       <div className="dashboard-content">
+        {/* Barre de progression */}
+        {loading && (
+          <div className="progress-bar">
+            <div className="progress-bar-fill" style={{ width: `${progress}%` }}></div>
+          </div>
+        )}
+
         {/* Section des indicateurs clés */}
         <div className={`key-indicators ${loading ? '' : 'animate'}`}>
           <h2>Indicateurs Clés</h2>
@@ -111,17 +105,12 @@ const AdminDashboard = () => {
               <div className="indicators-container">
                 <div className="indicator">
                   <div className="indicator-content">
-                    <img 
-                      src={`http://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`} 
-                      alt={weatherData.weather[0].description} 
-                      className="weather-icon" 
+                    <img
+                      src={`http://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`}
+                      alt={weatherData.weather[0].description}
+                      className="weather-icon"
                     />
                     <p><strong>Météo à {cityName} :</strong> {weatherData.main.temp}°C, {weatherData.weather[0].description}</p>
-                  </div>
-                </div>
-                <div className="indicator">
-                  <div className="indicator-content">
-                    <p><strong>Qualité de l'air :</strong> {getAirQualityIcon(weatherData.main.aqi)}</p>
                   </div>
                 </div>
               </div>
@@ -139,11 +128,11 @@ const AdminDashboard = () => {
               ))}
             </ul>
           ) : (
-            <p></p>
+            <p>Aucun projet en cours</p>
           )}
         </div>
 
-        {/* Liens vers d'autres fonctionnalités */}
+        {/* Accès rapide */}
         <div className={`quick-access ${loading ? '' : 'animate'}`}>
           <h2>Accès Rapide</h2>
           <div className="access-buttons">
@@ -155,6 +144,6 @@ const AdminDashboard = () => {
       </div>
     </div>
   );
-}
+};
 
 export default AdminDashboard;

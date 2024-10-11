@@ -15,7 +15,7 @@ const useForumLogic = () => {
       setError(null);
       try {
         const token = localStorage.getItem('token');
-        const response = await fetch('http://localhost:5000/api/posts', {
+        const response = await fetch(`${process.env.REACT_APP_BASE_URL}/posts`, {
           headers: {
             'Authorization': `Bearer ${token}`
           }
@@ -26,7 +26,7 @@ const useForumLogic = () => {
         const data = await response.json();
         console.log('Fetched data:', data);
         const postsWithComments = await Promise.all(data.map(async (post) => {
-          const commentsResponse = await fetch(`http://localhost:5000/api/posts/${post.id}/comments`);
+          const commentsResponse = await fetch(`${process.env.REACT_APP_BASE_URL}/posts/${post.id}/comments`);
           const comments = await commentsResponse.json();
           return {
             ...post,
@@ -60,7 +60,7 @@ const useForumLogic = () => {
       const username = localStorage.getItem('username');
       const token = localStorage.getItem('token');
 
-      const response = await fetch('http://localhost:5000/api/posts', {
+      const response = await fetch(`${process.env.REACT_APP_BASE_URL}/posts`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -2,8 +2,8 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    height: 100vh;
-    margin-left: 270px;
+    height: 900px;
+    margin-left: 245px;
     background: #ffffff;
 }
 
@@ -12,7 +12,7 @@
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    max-height: 500px;
+    max-height: 100%;
 }
 
 
@@ -32,7 +32,7 @@
     background: #ffffff;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    margin: 61px 12px;
+    margin: 80px 12px;
 }
 
 @keyframes glowPulse {
@@ -62,24 +62,16 @@
 }
 
 button {
-    margin: 10px 0;
-    padding: 12px 24px;
-    background-color: #007bff;
-    color: white;
     border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 button:hover {
-    background-color: #0056b3;
+    background-color: #a4aab1;
     transform: scale(1.05);
 }
 
 button:active {
-    background-color: #004085;
+    background-color: #a4aab1;
     transform: scale(0.98);
 }
 
@@ -113,82 +105,17 @@ button:active {
     margin-bottom: 2px;
 }
 
-.toolbar {
-    display: flex;
-    align-items: center;
-    gap: 20px;
-    margin-top: 20px;
-    margin-left: -10px;
-}
-
 .search-bar-container {
     margin-top: 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           6px;
     width: 300px;
 }
 
-.refresh-button {
-    height: 40px; 
-    margin-left: 70%;
-    width: 12%;
-    border: none;
-    border-radius: 4px;
-    padding: 10px 15px;
-    line-height: 1.5;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    font-family: 'pacifico', cursive;
-    font-size: 80%;
-    font-weight: bold;
-    color: #464343;
-}
-
-.draw-button {
-    height: 40px;
-    width: 18%;
-    border: none;
-    border-radius: 4px;
-    padding: 10px 15px;
-    line-height: 1.5;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color 0.3s;
-    gap: 10px;
-    font-family: 'pacifico', cursive;
-    font-size: 80%;
-    font-weight: bold;
-    color: #464343;
-}
-
-.draw-button {
-    background-color: #c0d3e6;
-}
-
-.draw-button:hover {
-    background-color: #c29416;
-}
-
-.refresh-button {
-    background-color: #c0d3e6;
-}
-
-.refresh-button:hover {
-    background-color: #c29416;
-}
-
-
 .role-select {
-    margin-left: 10px;
-    margin-right: -200px;
-    margin-top: 15px;
-    max-width: 150px;
     padding: 8px 12px;
-    border: 2px solid #c0d3e6;
+    border: 2px solid rgba(0, 0, 0, 0.2);
     border-radius: 4px;
-    background-color: #c0d3e6;
-    color: #464343;
+    background-color: #f2f3f3;
+    color: #4c4d4e;
     font-family: 'pacifico', cursive;
     font-size: 80%;
     font-weight: bold;
@@ -198,6 +125,10 @@ button:active {
 
 .role-select:hover {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.leaflet-popup-content-wrapper {
+    margin-left: -11.3px;
 }
 
 .leaflet-control-geocoder .leaflet-control-geocoder-icon {
@@ -291,3 +222,23 @@ button:active {
     color: #007BFF;
 }
 
+.edit-toolbar {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.draw {
+    position: absolute;
+    bottom: 40px; 
+    right: 10px; 
+    top: 50px;
+    padding: 7px;
+    height: 32px;
+    background-color: #f1f5f9;
+    background-clip: padding-box;
+    border: 2px solid rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 1000;
+    color: #5b5656;
+}

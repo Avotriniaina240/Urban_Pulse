@@ -64,7 +64,7 @@ const UserProfile = () => {
       const decodedToken = jwtDecode(token);
       const userId = decodedToken.id;
 
-      const response = await axios.get(`http://localhost:5000/api/users/${userId}`, {
+      const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/users/${userId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -127,7 +127,7 @@ const UserProfile = () => {
         profile_picture_url: infoModifiee.profilePictureUrl,
       };    
 
-      await axios.put(`http://localhost:5000/api/users/${userId}`, updatedUserData, {
+      await axios.put(`${process.env.REACT_APP_BASE_URL}/users/${userId}`, updatedUserData, {
         headers: {
           'Authorization': `Bearer ${token}`,
         },

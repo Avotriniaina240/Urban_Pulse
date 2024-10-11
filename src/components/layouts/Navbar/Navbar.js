@@ -16,39 +16,16 @@ const Navbar = ({ onSearchChange }) => {
   // Fonction pour récupérer et afficher les notifications
   const loadAndDisplayNotifications = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/notifications');
+      const response = await fetch(process.env.REACT_APP_NOTIFICATIONS_API_URL);
       const data = await response.json();
       setNotifications(data);
-
-      // Afficher les notifications
-      data.forEach((notification) => {
-        if (notification.type === 'success') {
-          toast.success(notification.message, {
-            position: "top-right",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-        } else if (notification.type === 'error') {
-          toast.error(notification.message, {
-            position: "top-right",
-            autoClose: 3000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-          });
-        }
-      });
+      
+      // ... le reste de votre code
     } catch (error) {
       console.error('Failed to load notifications', error);
     }
   };
-
+  
   const handleNotification = () => {
     loadAndDisplayNotifications();
   };

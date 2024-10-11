@@ -30,7 +30,7 @@ const AnalyzeReports = () => {
   // Récupération des statistiques
   const fetchStatistics = async () => {
     try {
-      const response = await fetch(`http://localhost:5000/api/reports/statistics`, {
+      const response = await fetch(`${process.env.REACT_APP_BASE_URL}/reports/statistics`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -53,7 +53,7 @@ const AnalyzeReports = () => {
   // Récupération des détails des rapports
   const fetchReportDetails = async () => {
     try {
-      const detailsResponse = await fetch(`http://localhost:5000/api/reports?status=${statusFilter}`, {
+      const detailsResponse = await fetch(`${process.env.REACT_APP_BASE_URL}/reports?status=${statusFilter}`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,

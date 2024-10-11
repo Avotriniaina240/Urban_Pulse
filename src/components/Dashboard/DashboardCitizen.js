@@ -13,8 +13,7 @@ const DashboardCitizen = () => {
 
   useEffect(() => {
     const fetchWeather = (latitude, longitude) => {
-      const apiKey = '13c8b873a51de1239ad5606887a1565e';
-      const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&lang=fr&appid=${apiKey}`;
+      const weatherUrl = `${process.env.REACT_APP_WEATHER_API_URL}?lat=${latitude}&lon=${longitude}&units=metric&lang=fr&appid=${process.env.REACT_APP_WEATHER_API_KEY}`;
 
       axios
         .get(weatherUrl)
@@ -29,7 +28,7 @@ const DashboardCitizen = () => {
         });
 
       // Utilisation de l'API de géocodage inversé
-      const reverseGeocodeUrl = `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json&accept-language=fr`;
+      const reverseGeocodeUrl = `${process.env.REACT_APP_GEOCODING_API_URL}?lat=${latitude}&lon=${longitude}&format=json&accept-language=fr`;
 
       axios
         .get(reverseGeocodeUrl)
@@ -47,7 +46,7 @@ const DashboardCitizen = () => {
     };
 
     const fetchReports = () => {
-  
+      // Logique pour récupérer les rapports de l'utilisateur (à implémenter)
     };
 
     if (navigator.geolocation) {

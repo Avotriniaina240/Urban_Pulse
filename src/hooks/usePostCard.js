@@ -18,7 +18,7 @@ const usePostCard = (post, setPosts) => {
   const handleLikePost = async (postId) => {
     try {
       const token = localStorage.getItem('token');
-      const response = await fetch(`http://localhost:5000/api/posts/${postId}/like`, {
+      const response = await fetch(`${process.env.REACT_APP_BASE_URL}/posts/${postId}/like`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',

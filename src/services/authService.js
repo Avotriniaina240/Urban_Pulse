@@ -16,7 +16,7 @@ const clearUserFromLocalStorage = () => {
 export const login = async (email, password) => {
   console.log('LoginService called with:', { email, password });
   try {
-    const response = await axios.post('http://localhost:5000/api/auth/login', { email, password });
+    const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/auth/login`, { email, password });
     console.log('API response:', response.data);
 
     console.log('Current localStorage:', localStorage);
@@ -38,7 +38,7 @@ export const login = async (email, password) => {
 
 export const register = async (username, email, password, role) => {
   try {
-    const response = await axios.post('http://localhost:5000/api/auth/register', { username, email, password, role });
+    const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/auth/register`, { username, email, password, role });
     return response.data;
   } catch (error) {
     console.error('API error:', error.response ? error.response.data : error.message);
@@ -48,7 +48,7 @@ export const register = async (username, email, password, role) => {
 
 export const registerAdmin = async (username, email, password, role) => {
   try {
-    const response = await axios.post('http://localhost:5000/api/auth/register', { username, email, password, role });
+    const response = await axios.post(`${process.env.REACT_APP_BASE_URL}/auth/register`, { username, email, password, role });
     return response.data;
   } catch (error) {
     console.error('API error:', error.response ? error.response.data : error.message);

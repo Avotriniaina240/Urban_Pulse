@@ -27,7 +27,7 @@ const ManageReports = () => {
   const fetchReports = async () => {
     setLoading(true);
     try {
-      const response = await fetch('http://localhost:5000/api/reports', {
+      const response = await fetch(`${process.env.REACT_APP_BASE_URL}/reports`, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -62,7 +62,7 @@ const ManageReports = () => {
 
   const handleDelete = async (id) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/reports/${id}`, {
+      const response = await fetch(`${process.env.REACT_APP_BASE_URL}/reports/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -95,7 +95,7 @@ const ManageReports = () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:5000/api/reports/${id}`, {
+      const response = await fetch(`${process.env.REACT_APP_BASE_URL}/reports/${id}`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('token')}`,

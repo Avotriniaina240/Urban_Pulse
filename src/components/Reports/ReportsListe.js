@@ -13,7 +13,7 @@ const ReportsListe = () => {
   useEffect(() => {
     const fetchReports = async () => {
       try {
-        const response = await fetch('http://localhost:5000/api/reports', {
+        const response = await fetch(`${process.env.REACT_APP_BASE_URL}/reports`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
@@ -39,7 +39,7 @@ const ReportsListe = () => {
         setReports(data);
         
         // Mettre à jour les statistiques après avoir récupéré les rapports
-        const responseStats = await fetch('http://localhost:5000/api/reports/statistics', {
+        const responseStats = await fetch(`${process.env.REACT_APP_BASE_URL}/reports/statistics`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
