@@ -249,26 +249,7 @@
   border-radius: 4px;
 }
 
-.close-modal-pro {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background-color: red;
-  color: white;
-  border: none;
-  font-size: 16px;
-  padding: 5px;
-  border-radius: 50%;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  cursor: pointer;
-}
-
-.close-modal-pro:hover {
-  opacity: 1;
-}
-
-.modal-content-pro:hover .close-modal-pro {
+.modal-content-pro:hover {
   opacity: 1;
 }
 
@@ -475,11 +456,11 @@
   border-radius: 0.5rem;
 }
 
-.close-modal-pro {
+.modal-close {
   position: absolute;
   top: 1rem;
   right: 1rem;
-  background-color: var(--primary-color);
+  background-color: #822f91;
   color: white;
   border: none;
   font-size: 1.5rem;

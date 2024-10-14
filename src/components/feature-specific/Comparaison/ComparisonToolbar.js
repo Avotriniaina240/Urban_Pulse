@@ -39,13 +39,13 @@ const ComparisonToolbar = ({ onFetchData, onSortChange }) => {
             <input
               className='recherche-comparison'
               type="text"
-              placeholder="Entrez les noms de villes (,) "
+              placeholder="Entrez les noms de villes separés par des virgules ... "
               value={locationsInput}
               onChange={(e) => setLocationsInput(e.target.value)}
             />
 
             <button className="btn-submit" onClick={handleSubmit}>
-              {isLoading && <span className="loader"></span>} ⚙️
+              {isLoading && <span className="loader"></span>} ✔️
             </button>
           </div>
         </div>

@@ -10,9 +10,7 @@ const AdminDashboard = () => {
   const [cityName, setCityName] = useState('');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [userReports, setUserReports] = useState([]);
-  const [projects, setProjects] = useState([]);
-  const [progress, setProgress] = useState(0); // Ajout de l'état pour la barre de progression
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     const fetchWeather = (latitude, longitude) => {
@@ -23,7 +21,7 @@ const AdminDashboard = () => {
         .then((response) => {
           setWeatherData(response.data);
           setLoading(false);
-          setProgress(100); // Remplir la barre de progression à 100% une fois terminé
+          setProgress(100);
         })
         .catch((error) => {
           console.error("Erreur lors de la récupération des données météo :", error);
@@ -82,11 +80,11 @@ const AdminDashboard = () => {
 
   const getAirQualityIcon = (airQualityIndex) => {
     if (airQualityIndex <= 50) {
-      return 'Bon'; // Vous pouvez ajouter une icône spécifique ici
+      return '🌞 Bon'; 
     } else if (airQualityIndex <= 100) {
-      return 'Moyen'; // Ajoutez une icône pour moyen
+      return '☁️ Moyen'; 
     } else {
-      return 'Mauvais'; // Ajoutez une icône pour mauvais
+      return '💨 Mauvais'; 
     }
   };
 

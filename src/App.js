@@ -12,7 +12,7 @@ import AdminDashboard from './components/Dashboard/AdminDashboard';
 import UrbanistDashboard from './components/Dashboard/UrbanistDashboard';
 import VueEnsemble from './components/Dash-personnalise/VueEnsemble/VueEnsemble';
 import GestionUser from './components/Dash-personnalise/GestionUser/GestionUser';
-import Profile from './components/Parametres/Profile';
+import Profile from './components/Profile/Profile';
 import AirQualitySimulation from './components/Parametres/AirQualitySimulation';
 import DashboardCitizen from './components/Dashboard/DashboardCitizen';
 import RegisterAdminPage from './pages/RegisterAdminPage';

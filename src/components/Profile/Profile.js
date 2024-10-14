@@ -7,6 +7,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import { jwtDecode } from 'jwt-decode'; 
 import 'react-toastify/dist/ReactToastify.css';
 import '../styles/Admin/Profile.css';
+import InfoItem from './InfoItem'; // Import du composant InfoItem
 
 const Modal = ({ children, onClose }) => (
   <motion.div
@@ -92,7 +93,6 @@ const UserProfile = () => {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        //console.log('Image convertie en Base64:', reader.result);
         setInfoModifiee(prev => ({
           ...prev,
           profilePictureUrl: reader.result, // Enregistre l'image en Base64
@@ -115,8 +115,6 @@ const UserProfile = () => {
       const token = localStorage.getItem('token');
       const decodedToken = jwtDecode(token);
       const userId = decodedToken.id;
-
-      console.log(infoModifiee.profilePictureUrl)
 
       const updatedUserData = {
         username: infoModifiee.username,
@@ -243,12 +241,14 @@ const UserProfile = () => {
           
           <div className="edit-button-container">
             {modeEdition ? (
-              <button className="save-button" onClick={handleSaveClick} disabled={chargement}>
-                <Save size={16} /> Sauvegarder
+              <button className="save-button" onClick={handleSaveClick}>
+                <Save size={20} />
+                Sauvegarder
               </button>
             ) : (
               <button className="edit-button" onClick={handleEditClick}>
-                <Edit size={16} /> Éditer
+                <Edit size={20} />
+                Modifier
               </button>
             )}
           </div>
@@ -259,32 +259,14 @@ const UserProfile = () => {
       <AnimatePresence>
         {modalOuvert && (
           <Modal onClose={() => setModalOuvert(false)}>
-            <img src={infoModifiee.profilePictureUrl} alt="Avatar" className="modal-image" />
+            <h2>Modifier votre photo de profil</h2>
+            <img src={infoModifiee.profilePictureUrl} alt="Aperçu" className="preview-image" />
+            <button onClick={() => setModalOuvert(false)}>Fermer</button>
           </Modal>
         )}
       </AnimatePresence>
     </div>
   );
 };
-
-const InfoItem = ({ icon, label, value, isEditing, name, onChange, type = 'text' }) => (
-  <li className="info-item">
-    {icon}
-    <div className="info-details">
-      <span className="info-label">{label}:</span>
-      {isEditing ? (
-        <input 
-          type={type}
-          name={name}
-          value={value}
-          onChange={onChange}
-          className="info-input"
-        />
-      ) : (
-        <span className="info-value">{value || 'Non défini'}</span>
-      )}
-    </div>
-  </li>
-);
 
 export default UserProfile;
