@@ -56,7 +56,7 @@
   cursor: pointer;
   margin-left: 15px;
   transition: background-color 0.3s ease;
-  width: 170px;
+  width: 220px;
   margin-top: -3px;
 }
 
@@ -331,7 +331,7 @@
 
 .button-retour-forum {
   display: flex;
-  background: #d3dce7;
+  background: #3778c7;
   color: white;
   border: none;
   padding: 10px 10px;

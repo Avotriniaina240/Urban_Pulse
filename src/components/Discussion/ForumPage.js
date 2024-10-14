@@ -3,6 +3,14 @@ import { Search, MessageSquare, ThumbsUp, ArrowLeft, User, X } from 'lucide-reac
 import { motion, AnimatePresence } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import '../styles/ATS/ForumPage.css';
+import {
+  fetchPosts,
+  toggleContent,
+  toggleCommentInput,
+  handleAddComment,
+  handleLikePost,
+  handleAddPost
+} from './ForumUtilities';
 
 const ForumPage = () => {
   const [posts, setPosts] = useState([]);
@@ -14,182 +22,8 @@ const ForumPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        const response = await fetch('http://localhost:5000/api/posts', {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
-        if (response.ok) {
-          const data = await response.json();
-          const postsWithComments = await Promise.all(data.map(async (post) => {
-            const commentsResponse = await fetch(`http://localhost:5000/api/posts/${post.id}/comments`);
-            const comments = await commentsResponse.json();
-            
-            const postAuthorProfilePicture = localStorage.getItem(`userProfilePicture_${post.author_id}`) || null;
-            
-            return {
-              ...post,
-              likes: post.likes || 0,
-              liked: post.user_liked,
-              comments: comments.length,
-              isExpanded: false,
-              showCommentInput: false,
-              commentList: await Promise.all(comments.map(async (comment) => {
-                const commentAuthorProfilePicture = localStorage.getItem(`userProfilePicture_${comment.author_id}`) || null;
-                return {
-                  ...comment,
-                  authorProfilePicture: commentAuthorProfilePicture
-                };
-              })),
-              author: post.username,
-              authorProfilePicture: postAuthorProfilePicture
-            };
-          }));
-          setPosts(postsWithComments);
-        } else {
-          console.error('Échec de la récupération des publications:', response.statusText);
-        }
-      } catch (error) {
-        console.error('Erreur lors de la récupération des publications:', error);
-      }
-    };
-    
-    fetchPosts();
+    fetchPosts(setPosts);
   }, []);
-
-  const toggleContent = (id) => {
-    setPosts(posts.map(post => 
-      post.id === id ? { ...post, isExpanded: !post.isExpanded } : post
-    ));
-  };
-  
-  const toggleCommentInput = (id) => {
-    setPosts(posts.map(post => 
-      post.id === id ? { ...post, showCommentInput: !post.showCommentInput } : { ...post, showCommentInput: false }
-    ));
-  };
-
-  const handleAddComment = async (postId) => {
-    if (newComment.trim() === '') return;
-  
-    const userId = localStorage.getItem('userId');
-    const username = localStorage.getItem('username') || 'Auteur par défaut'; 
-    const userProfilePicture = localStorage.getItem(`userProfilePicture_${userId}`) || null;
-  
-    try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/posts/${postId}/comments`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          content: newComment,
-          author_id: userId ? parseInt(userId, 10) : 1,
-          author: username,
-        }),
-      });
-  
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(`Failed to save comment: ${errorData.message}`);
-      }
-  
-      const savedComment = await response.json();
-  
-      setPosts(posts.map(post => {
-        if (post.id === postId) {
-          const updatedCommentList = [...post.commentList, {...savedComment, authorProfilePicture: userProfilePicture}];
-          return {
-            ...post,
-            commentList: updatedCommentList,
-            comments: post.comments + 1,
-          };
-        }
-        return post;
-      }));
-  
-      setNewComment('');
-    } catch (error) {
-      console.error('Error saving comment:', error.message);
-    }
-  };
-
-  const handleLikePost = async (postId) => {
-    const post = posts.find(p => p.id === postId);
-    const token = localStorage.getItem('token');
-    
-    try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/posts/${postId}/like`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ increment: !post.liked }),
-      });
-  
-      if (!response.ok) {
-        throw new Error(`Failed to update likes: ${response.status}`);
-      }
-  
-      const updatedPost = await response.json();
-  
-      setPosts((prevPosts) => 
-        prevPosts.map((p) => 
-          p.id === postId ? { ...p, likes: updatedPost.likes, liked: !p.liked } : p
-        )
-      );
-  
-    } catch (error) {
-      console.error('Erreur:', error.message);
-    }
-  };
-
-  const handleAddPost = async () => {
-    if (newPost.title.trim() === '' || newPost.content.trim() === '') return;
-
-    try {
-      const userId = localStorage.getItem('userId'); 
-      const username = localStorage.getItem('username');
-      const userProfilePicture = localStorage.getItem(`userProfilePicture_${userId}`) || null;
-
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/api/posts`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          title: newPost.title,
-          content: newPost.content,
-          author_id: userId ? parseInt(userId, 10) : 1,
-        }),
-      });
-
-      if (response.ok) {
-        const newPostData = await response.json();
-        setPosts([...posts, {
-          ...newPostData,
-          author: username || "Auteur par défaut",
-          authorProfilePicture: userProfilePicture,
-          likes: 0,
-          liked: false,
-          comments: 0,
-          isExpanded: false,
-          showCommentInput: false,
-          commentList: [],
-        }]);
-        setShowNewPostPopup(false);
-        setNewPost({ title: '', content: '' });
-      } else {
-        console.error('Failed to add post:', response.statusText);
-      }
-    } catch (error) {
-      console.error('Error while adding post:', error);
-    }
-  };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -251,7 +85,7 @@ const ForumPage = () => {
               value={newPost.content} 
               onChange={(e) => setNewPost({ ...newPost, content: e.target.value })} 
             />
-            <button onClick={handleAddPost}>Ajouter la discussion</button>
+            <button onClick={() => handleAddPost(newPost, posts, setPosts, setShowNewPostPopup, setNewPost)}>Ajouter la discussion</button>
           </div>
         </div>
       )}
@@ -278,14 +112,14 @@ const ForumPage = () => {
                   <span>{post.author}</span>
                 </div>
               </div>
-              <div className="post-content" onClick={() => toggleContent(post.id)}>
+              <div className="post-content" onClick={() => toggleContent(post.id, posts, setPosts)}>
                 <p>
                   {post.isExpanded ? post.content : "Cliquez pour voir le contenu complet..."}
                 </p>
               </div>
 
               <div className="post-footer">
-                <div className="post-likes" onClick={() => handleLikePost(post.id)}>
+                <div className="post-likes" onClick={() => handleLikePost(post.id, posts, setPosts)}>
                   <ThumbsUp 
                     className="like-icon" 
                     style={{ color: post.likes > 0 ? 'blue' : 'black' }}
@@ -296,7 +130,7 @@ const ForumPage = () => {
                     <span>J'aime</span>
                   )}
                 </div>
-                <div className="post-comments" onClick={() => toggleCommentInput(post.id)}>
+                <div className="post-comments" onClick={() => toggleCommentInput(post.id, posts, setPosts)}>
                   <MessageSquare className="comment-icon" />
                   <span>{post.comments} Commentaires</span>
                 </div>
@@ -329,7 +163,7 @@ const ForumPage = () => {
                       value={newComment} 
                       onChange={(e) => setNewComment(e.target.value)} 
                     />
-                    <button onClick={() => handleAddComment(post.id)}>Envoyer</button>
+                    <button onClick={() => handleAddComment(post.id, newComment, posts, setPosts, setNewComment)}>Envoyer</button>
                   </motion.div>
                 )}
               </AnimatePresence>

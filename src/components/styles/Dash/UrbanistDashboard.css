@@ -19,7 +19,7 @@
   font-family: 'roboto', sans-serif;
   border-radius: 8px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  margin-top: 130px;
+  margin-top: 145px;
   margin-bottom: -118px;
   width: 92%;
   opacity: 0; /* Commencer avec l'opacité à 0 pour l'animation */
@@ -76,7 +76,7 @@ h2 {
 }
 
 .key-indicators {
-  margin-top: 130px;
+  margin-top: 145px;
 }
 
 .indicators-container {
@@ -129,7 +129,7 @@ h2 {
 .progress-bar-fill {
   height: 25px;
   width: 0;
-  background-color: #4caf50;
+  background-color: #1779ca;
   border-radius: 10px;
   transition: width 0.5s ease-in-out;
 }

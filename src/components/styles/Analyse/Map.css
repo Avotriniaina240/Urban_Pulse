@@ -17,7 +17,6 @@
 
 
 .map:hover {
-    transform: scale(1.02);
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 }
 
@@ -156,56 +155,47 @@ button:active {
 }
 
 
-/* Pour les marqueurs de couleur verte */
 .leaflet-marker-icon.green {
     color: #fff;
     background-color: green;
 }
 
-/* Pour les marqueurs de couleur jaune */
 .leaflet-marker-icon.yellow {
     color: #fff;
     background-color: yellow;
 }
 
-/* Pour les marqueurs de couleur orange */
 .leaflet-marker-icon.orange {
     color: #fff;
     background-color: orange;
 }
 
-/* Pour les marqueurs de couleur rouge */
 .leaflet-marker-icon.red {
     color: #fff;
     background-color: red;
 }
 
-/* Pour les marqueurs de couleur grise */
 .leaflet-marker-icon.grey {
     color: #fff;
     background-color: grey;
 }
 
 
-/* Style pour les titres en gras */
 .meteo-container b {
-    color: #333; /* Couleur du texte du titre */
-    font-size: 16px; /* Taille légèrement plus grande pour les titres */
+    color: #333; 
+    font-size: 16px; 
 }
 
-/* Style pour le texte de la météo */
 .meteo-container div {
-    color: #555; /* Couleur du texte */
+    color: #555; 
 }
 
-/* Style pour la température en bleu */
 .temperature {
-    color: #007bff; /* Bleu */
+    color: #007bff; 
 }
 
-/* Style pour l'humidité en vert */
 .humidity {
-    color: #28a745; /* Vert */
+    color: #28a745; 
 }
 
 .air-quality-container b {
@@ -238,7 +228,7 @@ button:active {
     top: 50px;
     padding: 7px;
     height: 32px;
-    background-color: #f1f5f9;
+    background-color: #f2f5f4;
     background-clip: padding-box;
     border: 2px solid rgba(0, 0, 0, 0.2);
     border-radius: 5px;

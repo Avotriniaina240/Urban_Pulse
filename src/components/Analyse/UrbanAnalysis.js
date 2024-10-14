@@ -4,6 +4,8 @@ import Sidebar from '../layouts/Sidebar/SidebarCarte';
 import ModalEntreeDonnees from './ModalEntreeDonnees';
 import GraphiquesUrbains from './GraphiquesUrbains';
 import { fetchWeatherData, fetchWeatherDataByCoords } from './serviceMeteo';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars } from '@fortawesome/free-solid-svg-icons'; // Importer l'icône de menu
 import '../styles/Analyse/UrbanAnalysis.css';
 
 const UrbanAnalysis = () => {
@@ -60,8 +62,8 @@ const UrbanAnalysis = () => {
                     <div className="header">
                         <h1 className='urb-h1'>Analyse des Données Urbaines</h1>
                     </div>
-                    <button className='btn-open-modal' onClick={() => setIsModalOpen(true)}>
-                    📋Menu
+                    <button className='btn-open-modal-urb' onClick={() => setIsModalOpen(true)}>
+                        <FontAwesomeIcon icon={faBars} /> Ouvrir Menu
                     </button>
                     <ModalEntreeDonnees 
                         isOpen={isModalOpen} 

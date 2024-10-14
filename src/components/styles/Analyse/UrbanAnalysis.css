@@ -363,13 +363,16 @@ header {
 }
 
 /* Styles pour le bouton d'ouverture du modal */
-.btn-open-modal {
+.btn-open-modal-urb {
   margin-top: -3px;
   padding: 10px;
   background-color: #0088FE;
   color: #fff;
   border: none;
   border-radius: 5px;
+  color: #0e345d;
+  font-weight: bold;
+  width: 135px;
   cursor: pointer;
 }
 

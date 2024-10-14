@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faBars } from '@fortawesome/free-solid-svg-icons';
+
 import '../../../styles/Comparison.css';
 
 const ComparisonToolbar = ({ onFetchData, onSortChange }) => {
@@ -24,9 +27,10 @@ const ComparisonToolbar = ({ onFetchData, onSortChange }) => {
         <option value="weather.humidity">Humidité 💧</option>
       </select>
 
-      <button className="btn-open-modal" onClick={() => setIsModalOpen(true)}>
-        Ouvrir Menu
+      <button className="btn-open-modal-cp" onClick={() => setIsModalOpen(true)}>
+          <FontAwesomeIcon icon={faBars} /> Ouvrir Menu
       </button>
+
 
       {isModalOpen && (
         <div className="modal-overlay">
