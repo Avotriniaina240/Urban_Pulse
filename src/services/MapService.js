@@ -9,7 +9,7 @@ export const fetchAllData = async (zones) => {
                 return { airQuality, weather, lat: zone.lat, lon: zone.lon };
             })
         );
-        return allData.flatMap(data => data.airQuality);
+        return allData;
     } catch (error) {
         console.error('Erreur lors de la récupération des données pour toutes les zones :', error);
         throw error;
@@ -40,24 +40,26 @@ export const getWeatherDescriptionInFrench = (description) => {
     if (!description) return 'non disponible';
     switch (description.toLowerCase()) {
         case 'clear sky':
-            return 'Ciel dégagé';
+            return '☀️ Ciel dégagé';
         case 'few clouds':
-            return 'Quelques nuages';
+            return '🌤️ Quelques nuages';
         case 'scattered clouds':
-            return 'Nuages épars';
+            return '🌥️ Nuages épars';
         case 'broken clouds':
-            return 'Nuages fragmentés';
+            return '☁️ Nuages fragmentés';
         case 'shower rain':
-            return 'Averses';
+            return '🌧️ Averses';
         case 'rain':
-            return 'Pluie';
+            return '🌧️ Pluie';
         case 'thunderstorm':
-            return 'Orage';
+            return '⛈️ Orage';
         case 'snow':
-            return 'Neige';
+            return '❄️ Neige';
         case 'mist':
-            return 'Brume';
+            return '🌫️ Brume';
+        case 'overcast clouds':
+            return '☁️ Ciel couvert';
         default:
-            return 'non disponible';
+            return description; // Si aucune traduction n'est trouvée, retourner la description originale
     }
 };
