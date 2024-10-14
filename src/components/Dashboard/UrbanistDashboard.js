@@ -11,6 +11,7 @@ const UrbanistDashboard = () => {
   const [cityName, setCityName] = useState(''); // État pour le nom de la ville
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     const fetchWeather = (latitude, longitude) => {
@@ -80,6 +81,12 @@ const UrbanistDashboard = () => {
       <Navbar />
       <Sidebar />
       <div className="dashboard-content">
+        {/* Barre de progression */}
+        {loading && (
+          <div className="progress-bar">
+            <div className="progress-bar-fill" style={{ width: `${progress}%` }}></div>
+          </div>
+        )}
         {/* Section des indicateurs clés */}
         <div className={`key-indicators ${loading ? '' : 'animate'}`}>
           <h2>Indicateurs Clés</h2>

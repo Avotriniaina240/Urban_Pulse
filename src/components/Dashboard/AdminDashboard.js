@@ -29,7 +29,7 @@ const AdminDashboard = () => {
           console.error("Erreur lors de la récupération des données météo :", error);
           setError("Impossible de récupérer les données météo");
           setLoading(false);
-          setProgress(100); // Remplir la barre à 100% même en cas d'erreur
+          setProgress(100); 
         });
 
       const reverseGeocodeUrl = `${process.env.REACT_APP_GEOCODING_API_URL}?lat=${latitude}&lon=${longitude}&format=json&accept-language=fr`;
@@ -50,7 +50,6 @@ const AdminDashboard = () => {
     };
 
     const fetchReports = () => {
-      // Simulation du chargement des rapports
       setTimeout(() => setProgress(40), 500);
     };
 
@@ -81,6 +80,16 @@ const AdminDashboard = () => {
     fetchProjects();
   }, []);
 
+  const getAirQualityIcon = (airQualityIndex) => {
+    if (airQualityIndex <= 50) {
+      return 'Bon'; // Vous pouvez ajouter une icône spécifique ici
+    } else if (airQualityIndex <= 100) {
+      return 'Moyen'; // Ajoutez une icône pour moyen
+    } else {
+      return 'Mauvais'; // Ajoutez une icône pour mauvais
+    }
+  };
+
   return (
     <div className="admin-dashboard-home">
       <Navbar />
@@ -93,8 +102,7 @@ const AdminDashboard = () => {
           </div>
         )}
 
-        {/* Section des indicateurs clés */}
-        <div className={`key-indicators ${loading ? '' : 'animate'}`}>
+<div className={`key-indicators ${loading ? '' : 'animate'}`}>
           <h2>Indicateurs Clés</h2>
           {loading ? (
             <p>Chargement des données météo...</p>
@@ -105,12 +113,17 @@ const AdminDashboard = () => {
               <div className="indicators-container">
                 <div className="indicator">
                   <div className="indicator-content">
-                    <img
-                      src={`http://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`}
-                      alt={weatherData.weather[0].description}
-                      className="weather-icon"
+                    <img 
+                      src={`http://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`} 
+                      alt={weatherData.weather[0].description} 
+                      className="weather-icon" 
                     />
                     <p><strong>Météo à {cityName} :</strong> {weatherData.main.temp}°C, {weatherData.weather[0].description}</p>
+                  </div>
+                </div>
+                <div className="indicator">
+                  <div className="indicator-content">
+                    <p><strong>Qualité de l'air :</strong> {getAirQualityIcon(weatherData.main.aqi)}</p>
                   </div>
                 </div>
               </div>
@@ -121,25 +134,37 @@ const AdminDashboard = () => {
         {/* Aperçu des projets en cours */}
         <div className={`projects-overview ${loading ? '' : 'animate'}`}>
           <h2>Projets en Cours</h2>
-          {projects.length > 0 ? (
-            <ul>
-              {projects.slice(0, 5).map((project) => (
-                <li key={project.id}>{project.name}</li>
-              ))}
-            </ul>
-          ) : (
-            <p>Aucun projet en cours</p>
-          )}
+          <ul>
+            <li>Rénovation du quartier Nord</li>
+            <li>Aménagement des espaces verts</li>
+            <li>Réhabilitation des infrastructures de transport</li>
+          </ul>
+          <Link to="/urban-analysis" className="dashboard-link">
+            Voir l'analyse urbaine complète
+          </Link>
         </div>
 
         {/* Accès rapide */}
         <div className={`quick-access ${loading ? '' : 'animate'}`}>
           <h2>Accès Rapide</h2>
           <div className="access-buttons">
-            <Link to="/user-management" className="button">Gestion des Utilisateurs</Link>
-            <Link to="/report-management" className="button">Gestion des Rapports</Link>
-            <Link to="/project-management" className="button">Gestion des Projets</Link>
+            <Link to="/gestion-user" className="button">Gestion des Utilisateurs</Link>
+            <Link to="/manage-reports" className="button">Gestion des Rapports</Link>
+            <Link to="/analyze-reports" className="button">Analyse des Projets</Link>
           </div>
+        </div>
+
+                {/* Derniers rapports soumis */}
+                <div className={`latest-reports ${loading ? '' : 'animate'}`}>
+          <h2>Derniers Rapports des Citoyens</h2>
+          <ul>
+            <li>Dégradation de la chaussée - Quartier Sud</li>
+            <li>Problèmes de circulation - Centre-ville</li>
+            <li>Demande d'aménagement d'un parc - Quartier Est</li>
+          </ul>
+          <Link to="/reports-liste" className="dashboard-link">
+            Voir tous les rapports
+          </Link>
         </div>
       </div>
     </div>

@@ -44,17 +44,16 @@ export const createPollutionPopupContent = (airQualityData) => {
 
     return `
         <div>
-            <b>Qualité de l'air : ${airQualityDescription}</b><br>
+            <b>Qualité de l'air : ${airQualityDescription} 🌍</b><br>
             <strong>Composants:</strong><br>
-            CO : ${airQuality.components.co ?? 'N/A'} µg/m³<br>
-            NO2 : ${airQuality.components.no2 ?? 'N/A'} µg/m³<br>
-            O3 : ${airQuality.components.o3 ?? 'N/A'} µg/m³<br>
-            PM2.5 : ${airQuality.components.pm2_5 ?? 'N/A'} µg/m³<br>
-            PM10 : ${airQuality.components.pm10 ?? 'N/A'} µg/m³<br>
+            <b style="color: #007BFF;">CO :</b> ${airQuality.components.co ?? 'N/A'} µg/m³ 🌫️<br>
+            <b style="color: #007BFF;">NO2 :</b> ${airQuality.components.no2 ?? 'N/A'} µg/m³ 🚗<br>
+            <b style="color: #007BFF;">O3 :</b> ${airQuality.components.o3 ?? 'N/A'} µg/m³ ☀️<br>
+            <b style="color: #007BFF;">PM2.5 :</b> ${airQuality.components.pm2_5 ?? 'N/A'} µg/m³ 🏭<br>
+            <b style="color: #007BFF;">PM10 :</b> ${airQuality.components.pm10 ?? 'N/A'} µg/m³ 🌪️<br>
         </div>
     `;
-};
-
+}
 
 export const createWeatherPopupContent = (weatherData) => {
     console.log('Creating weather popup content with:', weatherData);
@@ -65,8 +64,7 @@ export const createWeatherPopupContent = (weatherData) => {
 
     const description = getWeatherDescriptionInFrench(weatherData.weather);
 
-    // Définir des emojis en fonction de la description météo
-    let weatherEmoji = '🌥️'; // Par défaut, nuageux
+    let weatherEmoji = '🌥️'; 
     if (description.includes('soleil')) {
         weatherEmoji = '☀️';
     } else if (description.includes('pluie')) {

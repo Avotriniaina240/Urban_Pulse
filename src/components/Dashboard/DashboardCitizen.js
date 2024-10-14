@@ -10,6 +10,7 @@ const DashboardCitizen = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [userReports, setUserReports] = useState([]); 
+  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     const fetchWeather = (latitude, longitude) => {
@@ -69,11 +70,27 @@ const DashboardCitizen = () => {
     fetchReports();
   }, []);
 
+  const getAirQualityIcon = (airQualityIndex) => {
+    if (airQualityIndex <= 50) {
+      return 'Bon'; // Vous pouvez ajouter une icône spécifique ici
+    } else if (airQualityIndex <= 100) {
+      return 'Moyen'; // Ajoutez une icône pour moyen
+    } else {
+      return 'Mauvais'; // Ajoutez une icône pour mauvais
+    }
+  };
+
   return (
-    <div className="citizen-dashboard-home">
+    <div className="urbaniste-dashboard-home">
       <Navbar />
       <Sidebar />
       <div className="dashboard-content">
+        {/* Barre de progression */}
+        {loading && (
+          <div className="progress-bar">
+            <div className="progress-bar-fill" style={{ width: `${progress}%` }}></div>
+          </div>
+        )}
         {/* Section des indicateurs clés */}
         <div className={`key-indicators ${loading ? '' : 'animate'}`}>
           <h2>Indicateurs Clés</h2>
@@ -91,37 +108,53 @@ const DashboardCitizen = () => {
                       alt={weatherData.weather[0].description} 
                       className="weather-icon" 
                     />
-                    <p><strong>Météo à {cityName} :</strong> {weatherData.main.temp}°C</p> 
-                    <p><br/> <strong>Qualité de l'air :</strong> {weatherData.weather[0].description}</p>
+                    <p><strong>Météo à {cityName} :</strong> {weatherData.main.temp}°C, {weatherData.weather[0].description}</p>
+                  </div>
+                </div>
+                <div className="indicator">
+                  <div className="indicator-content">
+                    <p><strong>Qualité de l'air :</strong> {getAirQualityIcon(weatherData.main.aqi)}</p>
                   </div>
                 </div>
               </div>
             )
           )}
         </div>
-
-        {/* Aperçu des rapports soumis par l'utilisateur */}
-        <div className={`user-reports ${loading ? '' : 'animate'}`}>
-          <h2>Mes Rapports</h2>
-          {userReports.length > 0 ? (
-            <ul>
-              {userReports.slice(0, 5).map((report) => (
-                <li key={report.id}>{report.title} - {report.status}</li>
-              ))}
-            </ul>
-          ) : (
-            <p></p>
-          )}
+  
+        {/* Aperçu des projets en cours */}
+        <div className={`projects-overview ${loading ? '' : 'animate'}`}>
+          <h2>Projets en Cours</h2>
+          <ul>
+            <li>Rénovation du quartier Nord</li>
+            <li>Aménagement des espaces verts</li>
+            <li>Réhabilitation des infrastructures de transport</li>
+          </ul>
+          <Link to="/urban-analysis" className="dashboard-link">
+            Voir l'analyse urbaine complète
+          </Link>
         </div>
-
-        {/* Liens vers d'autres fonctionnalités */}
+  
+        {/* Accès rapide aux fonctionnalités */}
         <div className={`quick-access ${loading ? '' : 'animate'}`}>
           <h2>Accès Rapide</h2>
           <div className="access-buttons">
-            <Link to="/submit-report" className="button">Soumettre un Rapport</Link>
+          <Link to="/submit-report" className="button">Soumettre un Rapport</Link>
             <Link to="/view-reports" className="button">Voir Mes Rapports</Link>
             <Link to="/community-forum" className="button">Forum Communautaire</Link>
           </div>
+        </div>
+  
+        {/* Derniers rapports soumis */}
+        <div className={`latest-reports ${loading ? '' : 'animate'}`}>
+          <h2>Derniers Rapports des Citoyens</h2>
+          <ul>
+            <li>Dégradation de la chaussée - Quartier Sud</li>
+            <li>Problèmes de circulation - Centre-ville</li>
+            <li>Demande d'aménagement d'un parc - Quartier Est</li>
+          </ul>
+          <Link to="/reports-liste" className="dashboard-link">
+            Voir tous les rapports
+          </Link>
         </div>
       </div>
     </div>

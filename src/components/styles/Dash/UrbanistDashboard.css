@@ -21,6 +21,7 @@
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   margin-top: 130px;
   margin-bottom: -118px;
+  width: 92%;
   opacity: 0; /* Commencer avec l'opacité à 0 pour l'animation */
   transform: translateY(20px); /* Déplacement vers le bas pour l'effet d'animation */
   transition: opacity 0.5s ease, transform 0.5s ease; /* Transition pour l'opacité et le mouvement */
@@ -45,7 +46,7 @@ h2 {
 }
 
 .button {
-  background-color: #3498db;
+  background-color: #88a3b5;
   color: white;
   padding: 10px;
   text-align: center;

@@ -131,6 +131,10 @@ button:active {
     margin-left: -11.3px;
 }
 
+.leaflet-popup-content {
+    font-size: 1.3em;
+}
+
 .leaflet-control-geocoder .leaflet-control-geocoder-icon {
     display: none;
 }

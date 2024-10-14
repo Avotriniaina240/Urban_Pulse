@@ -37,6 +37,16 @@ const redIcon = new L.Icon({
     shadowSize: [33, 33]  
 });
 
+// Définition de l'icône pour la localisation de l'utilisateur
+const blueIcon = new L.Icon({
+    iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-blue.png',
+    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41]
+});
+
 const Map = () => {
     const [airQualityData, setAirQualityData] = useState([]);
     const [map, setMap] = useState(null);
@@ -44,6 +54,8 @@ const Map = () => {
     const [drawnItems, setDrawnItems] = useState(null);
     const [selectedRole, setSelectedRole] = useState('pollution');
     const [error, setError] = useState(null);
+    const [userLocation, setUserLocation] = useState(null);
+    const [cityName, setCityName] = useState("");
 
     const fetchData = useCallback(async () => {
         const zones = []; // Définissez vos zones ici
@@ -62,16 +74,58 @@ const Map = () => {
         }
     }, []);
 
+    const getCityName = async (lat, lon) => {
+        try {
+            const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=10&addressdetails=1`);
+            const data = await response.json();
+            return data.address.city || data.address.town || data.address.village || "Ville inconnue";
+        } catch (error) {
+            console.error("Erreur lors de la récupération du nom de la ville:", error);
+            return "Ville inconnue";
+        }
+    };
+
+    useEffect(() => {
+        // Obtenir la position de l'utilisateur
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                async (position) => {
+                    const location = [position.coords.latitude, position.coords.longitude];
+                    setUserLocation(location);
+                    const city = await getCityName(location[0], location[1]);
+                    setCityName(city);
+                },
+                (error) => {
+                    console.error("Erreur de géolocalisation:", error);
+                    const defaultLocation = [-21.4545, 47.0833];
+                    setUserLocation(defaultLocation);
+                    getCityName(defaultLocation[0], defaultLocation[1]).then(setCityName);
+                }
+            );
+        } else {
+            console.log("La géolocalisation n'est pas supportée par ce navigateur.");
+            const defaultLocation = [-21.4545, 47.0833];
+            setUserLocation(defaultLocation);
+            getCityName(defaultLocation[0], defaultLocation[1]).then(setCityName);
+        }
+    }, []);
+
     useEffect(() => {
         const mapContainer = document.getElementById('map');
         let mapInstance;
 
-        if (!mapContainer._leaflet_id) {
+        if (!mapContainer._leaflet_id && userLocation) {
             try {
-                mapInstance = L.map(mapContainer).setView([-21.4545, 47.0833], 13);
+                mapInstance = L.map(mapContainer).setView(userLocation, 13);
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                     attribution: '© OpenStreetMap contributors'
                 }).addTo(mapInstance);
+
+                // Ajouter un marqueur pour la position de l'utilisateur
+                L.marker(userLocation, { icon: blueIcon })
+                    .addTo(mapInstance)
+                    .bindPopup(cityName)
+                    .openPopup();
 
                 const updateMarkers = () => {
                     airQualityData.forEach((loc, index) => {
@@ -159,7 +213,7 @@ const Map = () => {
                 mapInstance.remove();
             }
         };
-    }, [airQualityData, drawingMode, selectedRole]);
+    }, [airQualityData, drawingMode, selectedRole, userLocation, cityName]);
 
     // Fonction de débogage pour vérifier le chargement des ressources
     const checkResourceLoading = () => {
