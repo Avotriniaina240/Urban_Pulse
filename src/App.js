@@ -2,7 +2,6 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import './i18n';
 import LoginPage from './pages/LoginPage';
 import { ROUTES } from './constants/routes';
 import RegisterPage from './pages/RegisterPage';
@@ -38,6 +37,7 @@ const App = () => {
           <Route path={ROUTES.LOGIN} element={<LoginPage />} />
           <Route path="settings/*" element={<SettingsPannel />} /> 
           <Route path="/" element={<Page />} /> 
+
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/admin-dashboard" element={<AdminDashboard />} />
           <Route path="/urbanist-dashboard" element={<UrbanistDashboard />} />
