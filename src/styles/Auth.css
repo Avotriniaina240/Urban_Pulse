@@ -17,7 +17,7 @@
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 310px;
+  max-width: 70%;
   padding: 20px;
   box-sizing: border-box;
   position: relative; /* Pour positionner le spinner */
@@ -47,8 +47,7 @@ input[type="text"], input[type="email"], input[type="password"] {
   width: 93%;
 }
 
-button {
-  background-color: #007bff;
+.button-auth {
   color: white;
   border: none;
   cursor: pointer;
@@ -60,7 +59,7 @@ button {
   max-width: 300px;
 }
 
-button:disabled {
+.button-auth:disabled {
   background-color: #d3d3d3;
   cursor: not-allowed;
 }
@@ -189,7 +188,6 @@ option[disabled] {
 .forgot-password-box button {
   width: 100%;
   padding: 12px;
-  background-color: #007BFF;
   color: white;
   border: none;
   border-radius: 5px;

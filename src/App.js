@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import './index.css';
 import LoginPage from './pages/LoginPage';
 import { ROUTES } from './constants/routes';
 import RegisterPage from './pages/RegisterPage';
@@ -34,7 +35,7 @@ const App = () => {
     <StatisticsProvider>
       <Router>
         <Routes>
-          <Route path={ROUTES.LOGIN} element={<LoginPage />} />
+          <Route path="/login" element={<LoginPage />} />
           <Route path="settings/*" element={<SettingsPannel />} /> 
           <Route path="/" element={<Page />} /> 
 

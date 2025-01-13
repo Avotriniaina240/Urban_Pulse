@@ -49,7 +49,7 @@ const ResetPassword = () => {
         value={confirmPassword}
         onChange={(e) => setConfirmPassword(e.target.value)}
       />
-      <button onClick={handleResetPassword}>Réinitialiser le mot de passe</button>
+      <button onClick={handleResetPassword} className='button-auth'>Réinitialiser le mot de passe</button>
 
       {successMessage && <p className="success-message">{successMessage}</p>}
       {errorMessage && <p className="error-message">{errorMessage}</p>}

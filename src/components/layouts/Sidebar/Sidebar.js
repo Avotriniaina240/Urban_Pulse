@@ -51,7 +51,7 @@ const Sidebar = () => {
         <li><Link to="/home-reports"><FaFileAlt /> Rapports et Analyses</Link></li>
         <li><Link to="/comparison"><FaBalanceScale /> Comparaison</Link></li>
         <li><Link to="/historique-prediction"><FaChartLine /> Données Historique et Prediction</Link></li>
-        <li><Link to="/map"><FaMapMarkedAlt /> Cartographie et Géolocalisation</Link></li>k
+        <li><Link to="/map"><FaMapMarkedAlt /> Cartographie et Géolocalisation</Link></li>
         <li
           ref={userMenuRef}
           onMouseLeave={handleMouseLeave}

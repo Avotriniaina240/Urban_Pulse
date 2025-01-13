@@ -1,19 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import '../styles/ATS/SettingsPannel.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSun, faMoon, faBell, faGlobe, faLock, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faSun, faMoon, faGlobe, faUser } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom'; 
-import { useTranslation } from 'react-i18next'; 
 
 const SettingsPanel = ({ onClose }) => {
   const [isThemeOpen, setIsThemeOpen] = useState(false);
   const [isLanguageOpen, setIsLanguageOpen] = useState(false);
-  const [isPrivacyOpen, setIsPrivacyOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [language, setLanguage] = useState('fr');
 
   const navigate = useNavigate();
-  const { t, i18n } = useTranslation(); 
 
   useEffect(() => {
     if (typeof document !== 'undefined') {
@@ -21,17 +18,11 @@ const SettingsPanel = ({ onClose }) => {
     }
   }, [isDarkMode]);
 
-  useEffect(() => {
-    i18n.changeLanguage(language); 
-  }, [language, i18n]);
-
   const handleToggleDarkMode = () => setIsDarkMode(!isDarkMode);
-
 
   const handleProfileClick = () => {
     navigate('/Profile'); 
   };
-
 
   const handleLanguageChange = (event) => {
     setLanguage(event.target.value);
@@ -46,11 +37,10 @@ const SettingsPanel = ({ onClose }) => {
           onClick={handleProfileClick}
         >
           <h4>
-            <FontAwesomeIcon icon={faUser} className="icon" /> {t('profile')}
+            <FontAwesomeIcon icon={faUser} className="icon" /> Profile
           </h4>
         </div>
       </div>
-
 
       <div className="settings-section">
         <div
@@ -58,7 +48,7 @@ const SettingsPanel = ({ onClose }) => {
           onClick={() => setIsThemeOpen(!isThemeOpen)}
         >
           <h4>
-            <FontAwesomeIcon icon={faSun} className="icon" /> {t('theme')}
+            <FontAwesomeIcon icon={faSun} className="icon" /> Theme
           </h4>
           <span className="toggle-icon">{isThemeOpen ? '-' : '+'}</span>
         </div>
@@ -70,12 +60,11 @@ const SettingsPanel = ({ onClose }) => {
                 checked={isDarkMode}
                 onChange={handleToggleDarkMode}
               />
-              <FontAwesomeIcon icon={isDarkMode ? faMoon : faSun} className="icon" /> {t('dark_mode')}
+              <FontAwesomeIcon icon={isDarkMode ? faMoon : faSun} className="icon" /> Dark Mode
             </label>
           </div>
         )}
       </div>
-      
 
       <div className="settings-section">
         <div
@@ -83,7 +72,7 @@ const SettingsPanel = ({ onClose }) => {
           onClick={() => setIsLanguageOpen(!isLanguageOpen)}
         >
           <h4>
-            <FontAwesomeIcon icon={faGlobe} className="icon" /> {t('language')}
+            <FontAwesomeIcon icon={faGlobe} className="icon" /> Language
           </h4>
           <span className="toggle-icon">{isLanguageOpen ? '-' : '+'}</span>
         </div>

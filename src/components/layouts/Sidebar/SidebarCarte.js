@@ -1,165 +1,146 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { FaTachometerAlt, FaChartBar, FaUsers, FaFileAlt, FaBalanceScale, FaChartLine, FaMapMarkedAlt, FaSignOutAlt } from 'react-icons/fa';
-import { Link, Route, Routes, useNavigate, useLocation } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
-import '../../styles/Bar/SideCss/SidebarCarte.css';
-import RegisterAdminPage from '../../../pages/RegisterAdminPage';
-import AuthService from '../../../services/authService';
+import React, { useState, useRef } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { LayoutDashboard, BarChart3, FileText, Scale, TrendingUp, Map,
+  ChevronDown, Users, Settings, ChevronLeft, ChevronRight } from 'lucide-react';
 
 const SidebarCarte = () => {
-  const { t } = useTranslation();
   const navigate = useNavigate();
   const location = useLocation();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showComplaintMenu, setShowComplaintMenu] = useState(false);
-  const [userRole, setUserRole] = useState('');
-  const [activePath, setActivePath] = useState('');
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const userMenuRef = useRef(null);
   const complaintMenuRef = useRef(null);
-
-  useEffect(() => {
-    setActivePath(location.pathname);
-  }, [location]);
-
-  useEffect(() => {
-    const fetchUserRole = async () => {
-      try {
-        const user = await AuthService.getCurrentUser();
-        if (user && user.role) {
-          setUserRole(user.role);
-          localStorage.setItem('userRole', user.role);
-        } else {
-          const storedRole = localStorage.getItem('userRole');
-          if (storedRole) {
-            setUserRole(storedRole);
-          }
-        }
-      } catch (error) {
-        console.error('Erreur lors de la récupération du rôle utilisateur:', error);
-      }
-    };
-
-    fetchUserRole();
-  }, []);
 
   const handleLogout = () => {
     try {
       localStorage.removeItem('user');
       localStorage.removeItem('userRole');
-      setUserRole('');
       navigate('/login');
     } catch (error) {
       console.error('Erreur lors de la déconnexion:', error);
     }
   };
 
-  const handleUserMenuClick = (event) => {
-    event.preventDefault();
-    setShowUserMenu((prevShowUserMenu) => !prevShowUserMenu);
-  };
+  const isActive = (path) => location.pathname === path;
 
-  const handleComplaintMenuClick = (event) => {
-    event.preventDefault();
-    setShowComplaintMenu((prevShowComplaintMenu) => !prevShowComplaintMenu);
-  };
+  const MenuItem = ({ to, icon: Icon, label, onClick, className = "" }) => (
+    <Link
+      to={to}
+      onClick={onClick}
+      className={`flex items-center gap-5 px-3 py-2 rounded-lg transition-colors ${
+        isActive(to)
+          ? "bg-gradient-to-r from-[#9fdc23]/20 to-[#00b8e4]/20 text-[#9fdc23]"
+          : "text-gray-600 hover:bg-gray-50 hover:text-[#00b8e4]"
+      } ${className}`}
+    >
+      <Icon className="w-5 h-5 flex-shrink-0" />
+      <span className={`text-sm font-medium ${sidebarCollapsed ? 'hidden' : 'block'}`}>{label}</span>
+    </Link>
+  );
 
-  const handleMouseLeave = (event) => {
-    if (!event.relatedTarget || !userMenuRef.current) return;
-    if (userMenuRef.current && event.relatedTarget instanceof Node && !userMenuRef.current.contains(event.relatedTarget)) {
-      setShowUserMenu(false);
-    }
-  };
+  const SubmenuItem = ({ to, label }) => (
+    <Link
+      to={to}
+      className={`flex items-center px-3 py-2 text-sm rounded-lg transition-colors ${
+        isActive(to)
+          ? "text-[#00b8e4] bg-[#00b8e4]/10"
+          : "text-gray-600 hover:bg-gray-50 hover:text-[#9fdc23]"
+      } ${sidebarCollapsed ? 'hidden' : 'ml-6'}`}
+    >
+      {label}
+    </Link>
+  );
 
-  const handleComplaintMouseLeave = (event) => {
-    if (!event.relatedTarget || !complaintMenuRef.current) return;
-    if (complaintMenuRef.current && event.relatedTarget instanceof Node && !complaintMenuRef.current.contains(event.relatedTarget)) {
-      setShowComplaintMenu(false);
-    }
-  };
+  const renderComplaintMenu = () => (
+    <div ref={complaintMenuRef} className="relative">
+      <div
+        onClick={() => setShowComplaintMenu(!showComplaintMenu)}
+        className={`flex items-center justify-between w-full px-3 py-2 text-gray-600 rounded-lg transition-colors ${
+          isActive('/reports') || isActive('/reports-liste') || isActive('/manage-reports') || isActive('/analyze-reports')
+            ? "bg-gradient-to-r from-[#9fdc23]/20 to-[#00b8e4]/20 text-[#9fdc23]"
+            : "hover:bg-gray-50 hover:text-[#00b8e4]"
+        }`}
+      >
+        <div className="flex items-center gap-5">
+          <FileText className="w-5 h-5" />
+          <span className={`text-sm font-medium ${sidebarCollapsed ? 'hidden' : 'block'}`}>Rapports</span>
+        </div>
+        {!sidebarCollapsed && (
+          <ChevronDown className={`w-4 h-4 transition-transform ${showComplaintMenu ? 'rotate-180' : ''}`} />
+        )}
+      </div>
+      {showComplaintMenu && !sidebarCollapsed && (
+        <div className="mt-1 space-y-1">
+          <SubmenuItem to="/reports" label="Déposer une plainte" />
+          <SubmenuItem to="/reports-liste" label="Liste des plaintes" />
+          <SubmenuItem to="/manage-reports" label="Gérer les plaintes" />
+          <SubmenuItem to="/analyze-reports" label="Analyser les plaintes" />
+        </div>
+      )}
+    </div>
+  );
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
-        setShowUserMenu(false);
-      }
-      if (complaintMenuRef.current && !complaintMenuRef.current.contains(event.target)) {
-        setShowComplaintMenu(false);
-      }
-    };
+  const renderUserMenu = () => (
+    <div ref={userMenuRef} className="relative">
+      <div
+        onClick={() => setShowUserMenu(!showUserMenu)}
+        className={`flex items-center justify-between w-full px-3 py-2 text-gray-600 rounded-lg transition-colors ${
+          isActive('/gestion-user') || isActive('/register-admin')
+            ? "bg-gradient-to-r from-[#9fdc23]/20 to-[#00b8e4]/20 text-[#9fdc23]"
+            : "hover:bg-gray-50 hover:text-[#00b8e4]"
+        }`}
+      >
+        <div className="flex items-center gap-5">
+          <Users className="w-5 h-5" />
+          <span className={`text-sm font-medium ${sidebarCollapsed ? 'hidden' : 'block'}`}>Utilisateurs</span>
+        </div>
+        {!sidebarCollapsed && (
+          <ChevronDown className={`w-4 h-4 transition-transform ${showUserMenu ? 'rotate-180' : ''}`} />
+        )}
+      </div>
+      {showUserMenu && !sidebarCollapsed && (
+        <div className="mt-1 space-y-1">
+          <SubmenuItem to="/register-admin" label="Ajouter un utilisateur" />
+          <SubmenuItem to="/gestion-user" label="Gérer les utilisateurs" />
+        </div>
+      )}
+    </div>
+  );
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  const isActive = (path) => {
-    return activePath === path ? 'active' : '';
+  const toggleSidebar = () => {
+    setSidebarCollapsed(!sidebarCollapsed);
   };
 
   return (
-    <div className="sideCarte">
-      <ul>
-        {userRole === 'admin' && (
-          <li className={isActive('/vue-ensemble')}><Link to="/vue-ensemble"><FaTachometerAlt /> {t('overview')}</Link></li>
-        )}
-        <li className={isActive('/urban-analysis')}><Link to="/urban-analysis"><FaChartBar /> {t('urban_analysis')}</Link></li>
-        <li
-          ref={complaintMenuRef}
-          onMouseLeave={handleComplaintMouseLeave}
-          className={isActive('/reports') || isActive('/reports-liste') || isActive('/manage-reports') || isActive('/analyze-reports') ? 'active' : ''}
-        >
-          <a onClick={handleComplaintMenuClick}>
-            <FaFileAlt /> {t('reports_analysis')}
-          </a>
-          {showComplaintMenu && (
-            <ul className="submenu-Carte">
-              <li className={isActive('/reports')}><Link to="/reports">{t('file_complaint')}</Link></li>
-              <li className={isActive('/reports-liste')}><Link to="/reports-liste">{t('complaint_list')}</Link></li>
-              {userRole === 'admin' && (
-                <>
-                  <li className={isActive('/manage-reports')}><Link to="/manage-reports">{t('manage_complaints')}</Link></li>
-                  <li className={isActive('/analyze-reports')}><Link to="/analyze-reports">{t('analyze_complaints')}</Link></li>
-                </>
-              )}
-            </ul>
-          )}
-        </li>
-        <li className={isActive('/comparison')}><Link to="/comparison"><FaBalanceScale /> {t('comparison')}</Link></li>
-        <li className={isActive('/historique-prediction')}><Link to="/historique-prediction"><FaChartLine /> {t('historical_data')}</Link></li>
-        <li className={isActive('/map')}><Link to="/map"><FaMapMarkedAlt /> {t('mapping')}</Link></li>
-        {(userRole === 'urbaniste' || userRole === 'citoyen') && (
-          <li className={isActive('/user-specific-route')}>
-            <Link to="/user-specific-route">{t('user_specific_link')}</Link>
-          </li>
-        )}
-        {userRole === 'admin' && (
-          <li
-            ref={userMenuRef}
-            onMouseLeave={handleMouseLeave}
-            className={isActive('/gestion-user') || isActive('/register-admin') ? 'active' : ''}
+    <aside 
+      className={`fixed top-0 left-0 h-full ${
+        sidebarCollapsed ? 'w-16' : 'w-64'
+      } bg-white border-r border-gray-200 transition-all duration-300 ease-in-out pt-16`}
+    >
+      <div className="flex flex-col h-full overflow-y-auto">
+        <nav className="flex-1 p-4 space-y-4">
+          <div
+            onClick={toggleSidebar}
+            className="top-20 right-4 bg-transparent text-gray-600 hover:text-[#00b8e4] cursor-pointer transition-colors duration-200"
           >
-            <a href="/gestion-user" onClick={handleUserMenuClick}>
-              <FaUsers /> {t('user_management')}
-            </a>
-            {showUserMenu && (
-              <ul className="submenu-Carte">
-                <li className={isActive('/register-admin')}><Link to="/register-admin">{t('new_user')}</Link></li>
-                <li className={isActive('/gestion-user')}><Link to="/gestion-user">{t('manage_user')}</Link></li>
-              </ul>
+            {sidebarCollapsed ? (
+              <ChevronRight className="w-5 h-5" />
+            ) : (
+              <ChevronLeft className="w-5 h-5" />
             )}
-          </li>
-        )}
-        <li>
-          <div className="sidebar-logout-Carte" onClick={handleLogout}>
-            <FaSignOutAlt />
-            <span className="logout-text-Carte"><strong>{t('logout')}</strong></span>
           </div>
-        </li>
-      </ul>
 
-      <Routes>
-        <Route path="/nouveau-utilisateur" element={<RegisterAdminPage />} />
-      </Routes>
-    </div>
+          <MenuItem to="/vue-ensemble" icon={LayoutDashboard} label="Vue d'ensemble" />
+          <MenuItem to="/urban-analysis" icon={BarChart3} label="Analyse urbaine" />
+          {renderComplaintMenu()}
+          <MenuItem to="/comparison" icon={Scale} label="Comparaison" />
+          <MenuItem to="/historique-prediction" icon={TrendingUp} label="Données historiques" />
+          <MenuItem to="/map" icon={Map} label="Cartographie" />
+          {renderUserMenu()}
+        </nav>
+      </div>
+    </aside>
   );
 };
 

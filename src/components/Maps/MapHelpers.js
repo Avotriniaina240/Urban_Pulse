@@ -2,6 +2,7 @@ import L from 'leaflet';
 import { getColor, fetchWeatherData } from './MapUtils';
 import { fetchAllData, getAirQualityDescriptionInFrench, getWeatherDescriptionInFrench } from '../../services/MapService';
 
+// Exporter les fonctions avec des popups modernes utilisant Tailwind CSS
 export const createMarker = (loc, selectedRole, mapInstance) => {
     const icon = L.AwesomeMarkers.icon({
         icon: selectedRole === 'pollution' ? 'cloud' : 'sun',
@@ -26,69 +27,98 @@ export const createMarker = (loc, selectedRole, mapInstance) => {
 };
 
 export const createPollutionPopupContent = (airQualityData) => {
-    // Vérifiez d'abord si airQualityData est un tableau et contient un élément
     if (!Array.isArray(airQualityData) || airQualityData.length === 0) {
-        console.error("Aucune donnée de qualité de l'air reçue ou les données sont vides.");
-        return `<div>Erreur: Les données de qualité de l'air sont indisponibles.</div>`;
+        return `
+            <div class="bg-white p-2 rounded-lg shadow-lg min-w-[220px]">
+                <div class="flex items-center gap-2 border-b pb-2 mb-2">
+                    <span class="material-icons text-red-500">error_outline</span>
+                    <h3 class="text-sm font-semibold text-gray-800">Données indisponibles</h3>
+                </div>
+            </div>
+        `;
     }
 
-    const airQuality = airQualityData[0];  // Accéder au premier élément du tableau
-
-    // Vérifiez ensuite si les composants existent
+    const airQuality = airQualityData[0];
     if (!airQuality.components) {
-        console.error("Les composants des données de qualité de l'air sont absents ou invalides.");
-        return `<div>Erreur: Les composants de la qualité de l'air ne sont pas disponibles.</div>`;
+        return `
+            <div class="bg-white p-2 rounded-lg shadow-lg min-w-[220px]">
+                <div class="flex items-center gap-2 border-b pb-2 mb-2">
+                    <span class="material-icons text-red-500">error_outline</span>
+                    <h3 class="text-sm font-semibold text-gray-800">Composants non disponibles</h3>
+                </div>
+            </div>
+        `;
     }
 
     const airQualityDescription = getAirQualityDescriptionInFrench(airQuality.air_quality);
+    const qualityColor = getQualityColor(airQuality.air_quality);
 
     return `
-        <div>
-            <b>Qualité de l'air : ${airQualityDescription} 🌍</b><br>
-            <strong>Composants:</strong><br>
-            <b style="color: #007BFF;">CO :</b> ${airQuality.components.co ?? 'N/A'} µg/m³ 🌫️<br>
-            <b style="color: #007BFF;">NO2 :</b> ${airQuality.components.no2 ?? 'N/A'} µg/m³ 🚗<br>
-            <b style="color: #007BFF;">O3 :</b> ${airQuality.components.o3 ?? 'N/A'} µg/m³ ☀️<br>
-            <b style="color: #007BFF;">PM2.5 :</b> ${airQuality.components.pm2_5 ?? 'N/A'} µg/m³ 🏭<br>
-            <b style="color: #007BFF;">PM10 :</b> ${airQuality.components.pm10 ?? 'N/A'} µg/m³ 🌪️<br>
-        </div>
-    `;
-}
+        <div class="bg-white p-2 rounded-lg shadow-lg min-w-[220px]">
+            <div class="flex items-center gap-2 border-b pb-2 mb-2">
+                <span class="material-icons text-green-500">air</span>
+                <h3 class="text-sm font-semibold text-gray-800">Qualité de l'air</h3>
+            </div>
 
-export const createWeatherPopupContent = (weatherData) => {
-    console.log('Creating weather popup content with:', weatherData);
+            <div class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium text-white" style="background-color: ${qualityColor}20; color: ${qualityColor}">
+                ${airQualityDescription}
+            </div>
 
-    if (!weatherData) {
-        return "<div>Données météorologiques non disponibles.</div>";
-    }
+            <div class="grid grid-cols-2 gap-2 mt-2">
+                <div class="text-xs font-medium text-gray-500">CO</div>
+                <div class="text-xs text-gray-800" title="Monoxyde de carbone, gaz toxique produit par la combustion, notamment des moteurs à combustion et des cheminées.">${airQuality.components.co ?? 'N/A'} µg/m³</div>
 
-    const description = getWeatherDescriptionInFrench(weatherData.weather);
+                <div class="text-xs font-medium text-gray-500">NO₂</div>
+                <div class="text-xs text-gray-800" title="Dioxyde d'azote, un gaz produit par les moteurs de véhicules et les usines. Il peut être nocif pour les voies respiratoires.">${airQuality.components.no2 ?? 'N/A'} µg/m³</div>
 
-    let weatherEmoji = '🌥️'; 
-    if (description.includes('soleil')) {
-        weatherEmoji = '☀️';
-    } else if (description.includes('pluie')) {
-        weatherEmoji = '🌧️';
-    } else if (description.includes('neige')) {
-        weatherEmoji = '❄️';
-    } else if (description.includes('orage')) {
-        weatherEmoji = '⚡';
-    }
+                <div class="text-xs font-medium text-gray-500">O₃</div>
+                <div class="text-xs text-gray-800" title="Ozone, un gaz qui peut être bénéfique dans la stratosphère mais nuisible à la surface, surtout en cas de pollution.">${airQuality.components.o3 ?? 'N/A'} µg/m³</div>
 
-    console.log('Translated description:', description);
+                <div class="text-xs font-medium text-gray-500">PM2.5</div>
+                <div class="text-xs text-gray-800" title="Particules fines (moins de 2.5 micromètres), pouvant pénétrer profondément dans les poumons et affecter la santé respiratoire.">${airQuality.components.pm2_5 ?? 'N/A'} µg/m³</div>
 
-    return `
-        <div style="font-size: 14px; font-family: Arial, sans-serif; color: #333;">
-            <div style="font-size: 16px; font-weight: bold;">${weatherEmoji} Météo</div>
-            <div style="margin-top: 8px;">
-                <b style="color: #007BFF;">🌡️ Température :</b> ${weatherData.temperature ?? 'N/A'} °C<br>
-                <b style="color: #007BFF;">💧 Humidité :</b> ${weatherData.humidity ?? 'N/A'}%<br>
-                <b style="color: #007BFF;">📜 Description :</b> ${description} ${weatherEmoji}<br>
+                <div class="text-xs font-medium text-gray-500">PM10</div>
+                <div class="text-xs text-gray-800" title="Particules en suspension (moins de 10 micromètres), souvent générées par la poussière, les transports et l'industrie.">${airQuality.components.pm10 ?? 'N/A'} µg/m³</div>
             </div>
         </div>
     `;
 };
 
+export const createWeatherPopupContent = (weatherData) => {
+    if (!weatherData) {
+        return `
+            <div class="bg-white p-2 rounded-lg shadow-lg min-w-[220px]">
+                <div class="flex items-center gap-2 border-b pb-2 mb-2">
+                    <span class="material-icons text-red-500">error_outline</span>
+                    <h3 class="text-sm font-semibold text-gray-800">Données météo indisponibles</h3>
+                </div>
+            </div>
+        `;
+    }
+
+    const description = getWeatherDescriptionInFrench(weatherData.weather);
+    const weatherIcon = getWeatherIcon(description);
+
+    return `
+        <div class="bg-white p-2 rounded-lg shadow-lg min-w-[220px]">
+            <div class="flex items-center gap-2 border-b pb-2 mb-2">
+                <span class="material-icons text-yellow-500">${weatherIcon}</span>
+                <h3 class="text-sm font-semibold text-gray-800">Météo</h3>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2">
+                <div class="text-xs font-medium text-gray-500">Température</div>
+                <div class="text-xs text-gray-800">${weatherData.temperature ?? 'N/A'}°C</div>
+
+                <div class="text-xs font-medium text-gray-500">Humidité</div>
+                <div class="text-xs text-gray-800">${weatherData.humidity ?? 'N/A'}%</div>
+
+                <div class="text-xs font-medium text-gray-500">Conditions</div>
+                <div class="text-xs text-gray-800" title="Description générale des conditions météorologiques, comme ensoleillé, pluvieux, neigeux, etc.">${description}</div>
+            </div>
+        </div>
+    `;
+};
 
 export const handleDrawCreated = async (event, drawnItemsLayer, selectedRole) => {
     const layer = event.layer;
@@ -100,18 +130,58 @@ export const handleDrawCreated = async (event, drawnItemsLayer, selectedRole) =>
 
         try {
             const allData = await fetchAllData([{ lat, lon: lng }]);
-            const locationData = allData[0];
+            if (allData && allData.length > 0) {
+                const locationData = allData[0];
 
-            if (selectedRole === 'pollution') {
-                popupContent = createPollutionPopupContent(locationData.airQuality);
-            } else if (selectedRole === 'meteo') {
-                popupContent = createWeatherPopupContent(locationData.weather);
+                if (selectedRole === 'pollution') {
+                    popupContent = createPollutionPopupContent(locationData.airQuality);
+                } else if (selectedRole === 'meteo') {
+                    popupContent = createWeatherPopupContent(locationData.weather);
+                }
+            } else {
+                popupContent = `
+                    <div class="bg-white p-4 rounded-lg shadow-lg min-w-[280px]">
+                        <div class="flex items-center gap-2 border-b pb-3 mb-4">
+                            <span class="material-icons text-red-500">error_outline</span>
+                            <h3 class="text-lg font-semibold text-gray-800">Aucune donnée disponible</h3>
+                        </div>
+                    </div>
+                `;
             }
         } catch (error) {
             console.error("Erreur lors de la récupération des données:", error);
-            popupContent = "<div>Erreur lors du chargement des données. Veuillez réessayer plus tard.</div>";
+            popupContent = `
+                <div class="bg-white p-4 rounded-lg shadow-lg min-w-[280px]">
+                    <div class="flex items-center gap-2 border-b pb-3 mb-4">
+                        <span class="material-icons text-red-500">error_outline</span>
+                        <h3 class="text-lg font-semibold text-gray-800">Erreur de chargement</h3>
+                    </div>
+                    <p class="text-sm text-gray-800">Veuillez réessayer plus tard.</p>
+                </div>
+            `;
         }
 
         layer.bindPopup(popupContent).openPopup();
     }
+};
+
+// Fonction utilitaire pour obtenir la couleur en fonction de la qualité de l'air
+const getQualityColor = (quality) => {
+    const colors = {
+        1: '#10B981', // Excellent - Vert
+        2: '#34D399', // Bon - Vert clair
+        3: '#FBBF24', // Moyen - Jaune
+        4: '#F59E0B', // Médiocre - Orange
+        5: '#EF4444', // Mauvais - Rouge
+    };
+    return colors[quality] || '#6B7280';
+};
+
+// Fonction utilitaire pour obtenir l'icône météo
+const getWeatherIcon = (description) => {
+    if (description.includes('soleil')) return 'wb_sunny';
+    if (description.includes('pluie')) return 'water_drop';
+    if (description.includes('neige')) return 'ac_unit';
+    if (description.includes('orage')) return 'thunderstorm';
+    return 'cloud';
 };

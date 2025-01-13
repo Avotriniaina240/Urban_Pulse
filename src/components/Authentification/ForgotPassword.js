@@ -28,7 +28,7 @@ const ForgotPassword = () => {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-        <button onClick={handleForgotPassword}>Envoyer</button>
+        <button onClick={handleForgotPassword} className='button-auth'>Envoyer</button>
         {successMessage && <p className="success-message">{successMessage}</p>}
         {errorMessage && <p className="error-message">{errorMessage}</p>}
       </div>

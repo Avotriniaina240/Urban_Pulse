@@ -5,6 +5,7 @@ export const fetchAllData = async (zones) => {
         const allData = await Promise.all(
             zones.map(async (zone) => {
                 const airQuality = await fetchAirQualityData(zone.lat, zone.lon);
+                console.log('Données de qualité de l\'air reçues :', airQuality);
                 const weather = await fetchWeatherData(zone.lat, zone.lon);
                 return { airQuality, weather, lat: zone.lat, lon: zone.lon };
             })
@@ -37,7 +38,7 @@ export const getAirQualityDescriptionInFrench = (airQualityIndex) => {
 
 export const getWeatherDescriptionInFrench = (description) => {
     console.log('Description Received:', description);
-    if (!description) return 'non disponible';
+    if (!description) return 'Non disponible';
     switch (description.toLowerCase()) {
         case 'clear sky':
             return '☀️ Ciel dégagé';

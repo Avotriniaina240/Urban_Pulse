@@ -1,30 +1,46 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
 import { Plus, Mail, Phone, MapPin, Calendar, User, ArrowLeft, Edit, Save } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
-import { ToastContainer, toast } from 'react-toastify'; 
-import { jwtDecode } from 'jwt-decode'; 
+import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import '../styles/Admin/Profile.css';
-import InfoItem from './InfoItem'; // Import du composant InfoItem
+
+const InfoItem = ({ icon, label, value, isEditing, name, onChange, type = "text" }) => (
+  <div className="flex items-center space-x-4 p-2 rounded-lg hover:bg-gray-50">
+    <div className="text-gray-400">{icon}</div>
+    <div className="flex-1">
+      <p className="text-sm font-medium text-gray-500">{label}</p>
+      {isEditing ? (
+        <input
+          type={type}
+          name={name}
+          value={value || ''}
+          onChange={onChange}
+          className="mt-1 w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      ) : (
+        <p className="text-sm text-gray-900">{value || 'Non défini'}</p>
+      )}
+    </div>
+  </div>
+);
 
 const Modal = ({ children, onClose }) => (
-  <motion.div
-    className="modal-pro"
-    initial={{ opacity: 0 }}
-    animate={{ opacity: 1 }}
-    exit={{ opacity: 0 }}
-  >
-    <div className="modal-content-pro">
-      <button className="modal-close" onClick={onClose}>✕</button>
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+      <div className="flex justify-end">
+        <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
+          ×
+        </button>
+      </div>
       {children}
     </div>
-  </motion.div>
+  </div>
 );
 
 const UserProfile = () => {
-  const [infoUtilisateur, setInfoUtilisateur] = useState({
+  const [userInfo, setUserInfo] = useState({
     username: '',
     email: '',
     phoneNumber: '',
@@ -33,17 +49,10 @@ const UserProfile = () => {
     profilePictureUrl: '',
     role: ''
   });
-  const [modalOuvert, setModalOuvert] = useState(false);
-  const [chargement, setChargement] = useState(false);
-  const [modeEdition, setModeEdition] = useState(false);
-  const [infoModifiee, setInfoModifiee] = useState({
-    username: '',
-    email: '',
-    phoneNumber: '',
-    address: '',
-    dateOfBirth: '',
-    profilePictureUrl: ''
-  });
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedInfo, setEditedInfo] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -51,40 +60,33 @@ const UserProfile = () => {
   }, []);
 
   const loadUserInfo = async () => {
-    setChargement(true);
-
+    setIsLoading(true);
     try {
       const token = localStorage.getItem('token');
-
       if (!token) {
-        toast.error("Token manquant. Veuillez vous reconnecter."); 
-        navigate('/login'); // Rediriger vers la page de connexion
+        toast.error("Token manquant. Veuillez vous reconnecter.");
+        navigate('/login');
         return;
       }
 
       const decodedToken = jwtDecode(token);
-      const userId = decodedToken.id;
+      const response = await axios.get(
+        `${process.env.REACT_APP_BASE_URL}/users/${decodedToken.id}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
 
-      const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/users/${userId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      const userInfo = {
+      const userData = {
         ...response.data,
         phoneNumber: response.data.phone_number,
       };
-      delete userInfo.phone_number;
+      delete userData.phone_number;
 
-      setInfoUtilisateur(userInfo);
-      setInfoModifiee(userInfo); 
-
+      setUserInfo(userData);
+      setEditedInfo(userData);
     } catch (error) {
-      console.error("Erreur lors du chargement des informations utilisateur:", error);
-      toast.error("Impossible de charger les informations utilisateur."); 
+      toast.error("Impossible de charger les informations utilisateur.");
     } finally {
-      setChargement(false);
+      setIsLoading(false);
     }
   };
 
@@ -93,178 +95,144 @@ const UserProfile = () => {
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
-        setInfoModifiee(prev => ({
+        setEditedInfo(prev => ({
           ...prev,
-          profilePictureUrl: reader.result, // Enregistre l'image en Base64
+          profilePictureUrl: reader.result,
         }));
       };
       reader.readAsDataURL(file);
-    } else {
-      console.log("Aucun fichier sélectionné.");
     }
   };
 
-  const handleEditClick = () => {
-    setModeEdition(true);
-  };
-
-  const handleSaveClick = async () => {
-    setChargement(true);
-  
+  const handleSave = async () => {
+    setIsLoading(true);
     try {
       const token = localStorage.getItem('token');
-      const decodedToken = jwtDecode(token);
-      const userId = decodedToken.id;
+      const { id } = jwtDecode(token);
 
-      const updatedUserData = {
-        username: infoModifiee.username,
-        email: infoModifiee.email,
-        phoneNumber: infoModifiee.phoneNumber,
-        address: infoModifiee.address,
-        dateOfBirth: infoModifiee.dateOfBirth,
-        profile_picture_url: infoModifiee.profilePictureUrl,
-      };    
-
-      await axios.put(`${process.env.REACT_APP_BASE_URL}/users/${userId}`, updatedUserData, {
-        headers: {
-          'Authorization': `Bearer ${token}`,
+      await axios.put(
+        `${process.env.REACT_APP_BASE_URL}/users/${id}`,
+        {
+          ...editedInfo,
+          profile_picture_url: editedInfo.profilePictureUrl,
         },
-      });
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
 
-      setInfoUtilisateur(updatedUserData);
-      setModeEdition(false);
-      toast.success('Profil mis à jour avec succès');
+      setUserInfo(editedInfo);
+      setIsEditing(false);
+      toast.success("Profil mis à jour avec succès");
     } catch (error) {
-      console.error("Erreur lors de la mise à jour du profil:", error);
-      toast.error("Impossible de mettre à jour le profil. Veuillez réessayer.");
+      toast.error("Impossible de mettre à jour le profil");
     } finally {
-      setChargement(false);
+      setIsLoading(false);
     }
   };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setInfoModifiee(prev => ({ ...prev, [name]: value }));
+    setEditedInfo(prev => ({ ...prev, [name]: value }));
   };
 
   return (
-    <div className="container-box">
-      <div className="container-pro">
-        <h1 className="title-pro">Profil Utilisateur</h1>
-
-        <div className="profile-box">
-          <motion.div
-            className="card-pro"
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <button className="back-button" onClick={() => navigate(-1)}>
-              <ArrowLeft size={10} />
+    <div className="min-h-screen bg-gray-50 p-4 md:p-8">
+      <div className="max-w-4xl mx-auto space-y-6">
+        <div className="bg-white rounded-lg shadow-md overflow-hidden">
+          <div className="p-6">
+            <button
+              onClick={() => navigate(-1)}
+              className="mb-4 flex items-center text-gray-600 hover:text-gray-900"
+            >
+              <ArrowLeft className="mr-2 h-4 w-4" />
               Retour
             </button>
-            <div className="profile-picture-container">
-              <img
-                src={infoModifiee.profilePictureUrl || '/image/profil-defaut.jpg'}
-                alt="Avatar"
-                className="avatar-pro"
-                onClick={() => setModalOuvert(true)}
-              />
-              <label className="upload-icon">
-                <Plus size={24} color="#4a90e2" />
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                  className="file-input"
-                  disabled={chargement}
-                />
-              </label>
-            </div>
-            <h2 className="subtitle-pro">{infoUtilisateur.username || 'Utilisateur non défini'}</h2>
-            {chargement && <p>Chargement en cours...</p>}
-          </motion.div>
+            <h1 className="text-2xl font-bold text-center mb-8">Profil Utilisateur</h1>
 
-          <div className="box-info">
-            <motion.div
-              className="info-section-pro"
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              <ul className="details-list-pro">
-                <InfoItem 
-                  icon={<User />} 
-                  label="Utilisateur" 
-                  value={modeEdition ? infoModifiee.username : infoUtilisateur.username} 
-                  isEditing={modeEdition}
-                  name="username"
-                  onChange={handleInputChange}
+            <div className="flex flex-col items-center mb-8">
+              <div className="relative">
+                <img
+                  src={editedInfo.profilePictureUrl || '/image/profil-defaut.jpg'}
+                  alt="Avatar"
+                  className="h-32 w-32 rounded-full object-cover border-4 border-white shadow-lg"
+                  onClick={() => setIsModalOpen(true)}
                 />
-                <InfoItem 
-                  icon={<Mail />} 
-                  label="Email" 
-                  value={modeEdition ? infoModifiee.email : infoUtilisateur.email} 
-                  isEditing={modeEdition}
-                  name="email"
+                <label className="absolute bottom-0 right-0 p-2 bg-white rounded-full shadow-lg cursor-pointer hover:bg-gray-50">
+                  <Plus className="h-5 w-5 text-blue-500" />
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    className="hidden"
+                  />
+                </label>
+              </div>
+              <h2 className="mt-4 text-xl font-semibold">
+                {userInfo.username || 'Utilisateur'}
+              </h2>
+            </div>
+
+            <div className="space-y-4">
+              {[
+                { icon: <User />, label: "Utilisateur", name: "username" },
+                { icon: <Mail />, label: "Email", name: "email" },
+                { icon: <Phone />, label: "Téléphone", name: "phoneNumber" },
+                { icon: <MapPin />, label: "Adresse", name: "address" },
+                { icon: <Calendar />, label: "Date de naissance", name: "dateOfBirth", type: "date" },
+                { icon: <User />, label: "Rôle", name: "role", readonly: true }
+              ].map((item) => (
+                <InfoItem
+                  key={item.name}
+                  icon={item.icon}
+                  label={item.label}
+                  value={isEditing ? editedInfo[item.name] : userInfo[item.name]}
+                  isEditing={isEditing && !item.readonly}
+                  name={item.name}
                   onChange={handleInputChange}
+                  type={item.type}
                 />
-                <InfoItem 
-                  icon={<Phone />} 
-                  label="Téléphone" 
-                  value={modeEdition ? infoModifiee.phoneNumber : infoUtilisateur.phoneNumber} 
-                  isEditing={modeEdition}
-                  name="phoneNumber"
-                  onChange={handleInputChange}
-                />
-                <InfoItem 
-                  icon={<MapPin />} 
-                  label="Adresse" 
-                  value={modeEdition ? infoModifiee.address : infoUtilisateur.address} 
-                  isEditing={modeEdition}
-                  name="address"
-                  onChange={handleInputChange}
-                />
-                <InfoItem 
-                  icon={<Calendar />} 
-                  label="Date de naissance" 
-                  value={modeEdition ? infoModifiee.dateOfBirth : infoUtilisateur.dateOfBirth} 
-                  isEditing={modeEdition}
-                  name="dateOfBirth"
-                  onChange={handleInputChange}
-                  type="date"
-                />
-                <InfoItem icon={<User />} label="Rôle" value={infoUtilisateur.role} />
-              </ul>
-            </motion.div>
-          </div>
-          
-          <div className="edit-button-container">
-            {modeEdition ? (
-              <button className="save-button" onClick={handleSaveClick}>
-                <Save size={20} />
-                Sauvegarder
+              ))}
+            </div>
+
+            <div className="flex justify-center mt-8">
+              <button
+                onClick={isEditing ? handleSave : () => setIsEditing(true)}
+                disabled={isLoading}
+                className="flex items-center px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
+              >
+                {isEditing ? (
+                  <>
+                    <Save className="mr-2 h-4 w-4" />
+                    Sauvegarder
+                  </>
+                ) : (
+                  <>
+                    <Edit className="mr-2 h-4 w-4" />
+                    Modifier
+                  </>
+                )}
               </button>
-            ) : (
-              <button className="edit-button" onClick={handleEditClick}>
-                <Edit size={20} />
-                Modifier
-              </button>
-            )}
+            </div>
           </div>
         </div>
-      </div>
 
-      <ToastContainer />
-      <AnimatePresence>
-        {modalOuvert && (
-          <Modal onClose={() => setModalOuvert(false)}>
-            <h2>Modifier votre photo de profil</h2>
-            <img src={infoModifiee.profilePictureUrl} alt="Aperçu" className="preview-image" />
-            <button onClick={() => setModalOuvert(false)}>Fermer</button>
+        {isModalOpen && (
+          <Modal onClose={() => setIsModalOpen(false)}>
+            <h2 className="text-xl font-semibold mb-4">Modifier votre photo de profil</h2>
+            <img
+              src={editedInfo.profilePictureUrl}
+              alt="Aperçu"
+              className="w-full h-64 object-cover rounded-lg"
+            />
+            <button
+              onClick={() => setIsModalOpen(false)}
+              className="mt-4 w-full px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300"
+            >
+              Fermer
+            </button>
           </Modal>
         )}
-      </AnimatePresence>
+      </div>
+      <ToastContainer />
     </div>
   );
 };

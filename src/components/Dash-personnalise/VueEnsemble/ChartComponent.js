@@ -1,87 +1,122 @@
-import React, { useEffect, useState, useRef } from 'react';
-import { Bar, Line, Doughnut } from 'react-chartjs-2';
-import '../../styles/Admin/VueEnsemble.css';
-import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, LineElement, PointElement, Title, Tooltip, Legend, ArcElement } from 'chart.js';
+import React, { useEffect, useState } from 'react';
+import { Bar, Line } from 'react-chartjs-2';
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  LineElement,
+  PointElement,
+  Title,
+  Tooltip,
+  Legend,
+  ArcElement
+} from 'chart.js';
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, LineElement, PointElement, Title, Tooltip, Legend, ArcElement);
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  LineElement,
+  PointElement,
+  Title,
+  Tooltip,
+  Legend,
+  ArcElement
+);
 
-const ChartComponent = ({ stats, chartType, setChartType }) => {
-  const [isTransitioning, setIsTransitioning] = useState(false);
-  const intervalRef = useRef(null);
+const ChartComponent = ({ stats, chartType }) => {
+  const [chartData, setChartData] = useState(null);
 
-  const chartData = {
-    labels: ['Citoyens', 'Administrateurs', 'Urbanistes'],
-    datasets: [
-      {
-        label: 'Nombre d\'utilisateurs',
-        data: [stats.citizenCount, stats.adminCount, stats.urbanistCount],
-        backgroundColor: ['rgba(75, 192, 192, 0.6)', 'rgba(255, 99, 132, 0.6)', 'rgba(54, 162, 235, 0.6)'],
-        borderColor: 'rgba(75, 192, 192, 1)',
-        borderWidth: 0.5,
-        tension: chartType === 'line' ? 0.4 : 0,
-        fill: false,
-      },
-    ],
-  };
+  useEffect(() => {
+    setChartData({
+      labels: ['Citoyens', 'Administrateurs', 'Urbanistes'],
+      datasets: [
+        {
+          label: "Nombre d'utilisateurs",
+          data: [stats.citizenCount, stats.adminCount, stats.urbanistCount],
+          backgroundColor: [
+            'rgba(76, 175, 80, 0.6)',  // Green
+            'rgba(255, 99, 132, 0.6)', // Pink
+            'rgba(54, 162, 235, 0.6)'  // Blue
+          ],
+          borderColor: [
+            'rgb(76, 175, 80)',  // Green
+            'rgb(255, 99, 132)', // Pink
+            'rgb(54, 162, 235)'  // Blue
+          ],
+          borderWidth: 1,
+          tension: chartType === 'line' ? 0.4 : 0,
+          fill: chartType === 'line' ? false : true,
+        }
+      ]
+    });
+  }, [stats, chartType]);
 
   const chartOptions = {
     responsive: true,
-    maintainAspectRatio: true,
+    maintainAspectRatio: false,
     scales: {
       y: {
         beginAtZero: true,
+        grid: {
+          color: 'rgba(0, 0, 0, 0.1)',
+        },
+        ticks: {
+          font: {
+            size: 12
+          },
+          color: 'rgb(107, 114, 128)'
+        }
       },
+      x: {
+        grid: {
+          display: false
+        },
+        ticks: {
+          font: {
+            size: 12
+          },
+          color: 'rgb(107, 114, 128)'
+        }
+      }
     },
     plugins: {
       legend: {
-        display: true,
-        position: 'top',
-        labels: {
-          color: 'rgba(0,0,0,0.7)',
-          font: {
-            size: 14,
-          },
-        },
+        display: false
       },
       tooltip: {
-        callbacks: {
-          label: function (context) {
-            return `${context.label}: ${context.raw} utilisateurs`;
-          },
+        backgroundColor: 'rgba(255, 255, 255, 0.9)',
+        titleColor: 'rgb(17, 24, 39)',
+        bodyColor: 'rgb(107, 114, 128)',
+        borderColor: 'rgba(0, 0, 0, 0.1)',
+        borderWidth: 1,
+        padding: 12,
+        bodyFont: {
+          size: 14
         },
-      },
+        callbacks: {
+          label: function(context) {
+            return `${context.label}: ${context.raw} utilisateurs`;
+          }
+        }
+      }
     },
     animation: {
-      duration: 1500,
-      easing: 'easeOutBounce',
-    },
+      duration: 750,
+      easing: 'easeInOutQuart'
+    }
   };
 
-  useEffect(() => {
-    const startInterval = () => {
-      intervalRef.current = setInterval(() => {
-        setIsTransitioning(true);
-        setTimeout(() => {
-          setChartType(prevType => (prevType === 'bar' ? 'line' : 'bar'));
-          setIsTransitioning(false);
-        }, 300);
-      }, 5000);
-    };
+  if (!chartData) {
+    return <div className="h-full w-full flex items-center justify-center">Chargement...</div>;
+  }
 
-    startInterval();
-
-    return () => {
-      clearInterval(intervalRef.current); // Nettoyer l'intervalle
-    };
-  }, [setChartType]);
-
+  const ChartType = chartType === 'bar' ? Bar : Line;
+  
   return (
-    <div className={`chart-wrapper ${isTransitioning ? 'fade-out' : 'fade-in'}`}>
-      {chartType === 'bar' ? (
-        <Bar data={chartData} options={chartOptions} />
-      ) : (
-        <Line data={chartData} options={chartOptions} />
-      )}
+    <div className="w-full h-full">
+      <ChartType data={chartData} options={chartOptions} />
     </div>
   );
 };

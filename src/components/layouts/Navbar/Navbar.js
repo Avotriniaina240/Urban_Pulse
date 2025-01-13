@@ -1,40 +1,57 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { FaHome, FaComment, FaBell, FaEllipsisH } from 'react-icons/fa';
+import React, { useState, useEffect } from 'react';
+import { 
+  Home,
+  MessageSquare,
+  Bell,
+} from 'lucide-react';
 import { toast, ToastContainer } from 'react-toastify';
+import { jwtDecode } from 'jwt-decode';
+import axios from 'axios';
 import 'react-toastify/dist/ReactToastify.css';
-import '../../styles/Bar/NavCss/Navbar.css';
-import SettingsPanel from '../../Parametres/SettingsPannel';
-import AuthService from '../../../services/authService'; // Importez votre service d'authentification
+import AuthService from '../../../services/authService';
 
 const Navbar = ({ onSearchChange }) => {
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [notifications, setNotifications] = useState([]);
-  const [userRole, setUserRole] = useState(''); // État pour stocker le rôle de l'utilisateur
-  const settingsRef = useRef(null);
-  const settingsButtonRef = useRef(null);
+  const [userRole, setUserRole] = useState('');
+  const [userAvatar, setUserAvatar] = useState('');
+  const [userName, setUserName] = useState('');
 
-  // Fonction pour récupérer et afficher les notifications
   const loadAndDisplayNotifications = async () => {
     try {
       const response = await fetch(process.env.REACT_APP_NOTIFICATIONS_API_URL);
       const data = await response.json();
       setNotifications(data);
-      
-      // ... le reste de votre code
     } catch (error) {
       console.error('Failed to load notifications', error);
     }
   };
-  
+
+  const loadUserAvatar = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        console.error('Token missing');
+        return;
+      }
+
+      const decodedToken = jwtDecode(token);
+      const response = await axios.get(
+        `${process.env.REACT_APP_BASE_URL}/users/${decodedToken.id}`,
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+
+      setUserAvatar(response.data.profilePictureUrl || '/image/profil-defaut.jpg');
+      setUserName(response.data.username || '');
+    } catch (error) {
+      console.error('Failed to load user avatar', error);
+      setUserAvatar('/image/profil-defaut.jpg');
+    }
+  };
+
   const handleNotification = () => {
     loadAndDisplayNotifications();
   };
 
-  const toggleSettings = () => {
-    setIsSettingsOpen(prevState => !prevState);
-  };
-
-  // Récupérer le rôle de l'utilisateur
   const fetchUserRole = async () => {
     try {
       const user = await AuthService.getCurrentUser();
@@ -46,72 +63,99 @@ const Navbar = ({ onSearchChange }) => {
     }
   };
 
-  // Appel pour récupérer le rôle lorsque le composant est monté
   useEffect(() => {
     fetchUserRole();
+    loadUserAvatar();
   }, []);
 
-  // Gérer le clic en dehors du panneau de paramètres
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (
-        settingsRef.current &&
-        settingsButtonRef.current &&
-        !settingsRef.current.contains(event.target) &&
-        !settingsButtonRef.current.contains(event.target)
-      ) {
-        setIsSettingsOpen(false);
-      }
-    };
+  const NavLink = ({ href, icon: Icon, label }) => {
+    return (
+      <a href={href} className="flex items-center gap-2 px-4 py-2 text-gray-600 hover:text-lime-600 transition-colors rounded-lg">
+        <Icon className="w-5 h-5" />
+        <span className="hidden md:block">{label}</span>
+      </a>
+    );
+  };
 
-    document.addEventListener('mousedown', handleClickOutside);
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [settingsRef, settingsButtonRef]);
-
-  // Déterminer le lien de tableau de bord en fonction du rôle
-  const getDashboardLink = () => {
-    switch (userRole) {
-      case 'admin':
-        return 'admin-dashboard';
-      case 'citizen':
-        return 'dashboard-citizen';
-      case 'urbanist':
-        return 'urbanist-dashboard';
-      default:
-        return 'dashboard'; // Lien par défaut si aucun rôle n'est trouvé
-    }
+  const AvatarLink = ({ href }) => {
+    // Get first letter of username for fallback
+    const initial = userName ? userName[0].toUpperCase() : '?';
+    
+    return (
+      <a 
+        href={href} 
+        className="relative flex items-center justify-center"
+      >
+        <div className="relative group">
+          {/* Outer circle with gradient border */}
+          <div className="w-10 h-10 rounded-full bg-gradient-to-r from-lime-500 to-cyan-500 p-0.5">
+            {/* Inner circle with image */}
+            <div className="w-full h-full rounded-full overflow-hidden bg-white">
+              {userAvatar ? (
+                <img 
+                  src={userAvatar} 
+                  alt="Profile" 
+                  className="w-full h-full object-cover transition-transform duration-200 group-hover:scale-110"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center bg-gray-100 text-gray-600 font-semibold">
+                  {initial}
+                </div>
+              )}
+            </div>
+          </div>
+          
+          {/* Active status indicator */}
+          <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-white rounded-full"></div>
+        </div>
+        
+        {/* Username tooltip on hover */}
+        <div className="hidden group-hover:block absolute top-full mt-2 px-2 py-1 bg-gray-800 text-white text-xs rounded whitespace-nowrap">
+          {userName || 'Profile'}
+        </div>
+      </a>
+    );
   };
 
   return (
-    <div className="navbar">
-      <div className="navbar-logo">
-        <span className="logo-letter">Urban Pulse</span>
-      </div>
-      <div className="navbar-links">
-        <a href={getDashboardLink()} title="Dashboard"><FaHome /></a>
-        <a href="forum-page" title="Commentaires et Feedback"><FaComment /></a>
-        <a href="#notification" title="Notification" onClick={handleNotification}>
-          <FaBell />
-        </a>
-        <div 
-          ref={settingsButtonRef}
-          title="Paramètres et personnalisation"
-          onClick={toggleSettings}
-          style={{ display: 'inline-block', cursor: 'pointer', color: '#000', marginLeft: '15px' }}
-        >
-          <FaEllipsisH />
+    <nav className="fixed top-0 left-0 right-0 bg-white border-b border-gray-200 z-50">
+      <div className="max-w-7xl mx-auto px-4">
+        <div className="flex items-center justify-between h-16">
+          {/* Logo */}
+          <div className="flex items-center gap-2">
+            <span className="text-xl font-bold bg-gradient-to-r from-lime-500 to-cyan-500 bg-clip-text text-transparent">
+              Urban Pulse
+            </span>
+          </div>
+
+          {/* Navigation Links */}
+          <div className="flex items-center gap-6">
+            <NavLink 
+              href="vue-ensemble"
+              icon={Home} 
+              label="Dashboard" 
+            />
+            <NavLink 
+              href="forum-page" 
+              icon={MessageSquare} 
+              label="Forum" 
+            />
+
+            {/* Notification Icon */}
+            <div className="relative">
+              <Bell 
+                className="w-6 h-6 text-gray-600 hover:text-lime-600 transition-colors cursor-pointer"
+                onClick={handleNotification}
+              />
+            </div>
+
+            {/* Profile Avatar */}
+            <AvatarLink href="profile" />
+          </div>
         </div>
       </div>
       <ToastContainer />
-      {isSettingsOpen && (
-        <div ref={settingsRef} style={{ position: 'absolute', top: '60px', right: '20px' }}>
-          <SettingsPanel onClose={toggleSettings} />
-        </div>
-      )}
-    </div>
+    </nav>
   );
 };
 
