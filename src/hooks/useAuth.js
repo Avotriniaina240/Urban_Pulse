@@ -13,8 +13,10 @@ const useAuth = () => {
   const login = async (email, password) => {
     setLoading(true);
     setError('');
+    
     try {
       const data = await loginService(email, password);
+      
       if (data.message) {
         setMessage(data.message);
       }
@@ -30,8 +32,6 @@ const useAuth = () => {
       localStorage.setItem('profilePictureUrl', data.profilePictureUrl);
       localStorage.setItem('token', data.token);
 
-      // Redirection basée sur le rôle
-      setTimeout(() => {
         switch(data.role) {
           case 'admin':
             navigate(ROUTES.ADMIN_DASHBOARD);
@@ -42,18 +42,22 @@ const useAuth = () => {
           default:
             navigate(ROUTES.CITIZEN_DASHBOARD);
         }
-      }, 2000);
 
-      return true; // Indique que la connexion a réussi
+      return true; 
+      
     } catch (error) {
-      setError(handleError(error)); // Gérer et afficher l'erreur
-      return false; // Indique que la connexion a échoué
-    } finally {
-      setLoading(false); // Réinitialiser l'état de chargement
+      setError(handleError(error));
+      setLoading(false); 
+      return false; 
     }
   };
 
-  return { login, error, loading, message };
+  return { 
+    login, 
+    error, 
+    loading, 
+    message 
+  };
 };
 
 export default useAuth;

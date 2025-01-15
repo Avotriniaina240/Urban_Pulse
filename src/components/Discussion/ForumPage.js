@@ -305,12 +305,12 @@ const ForumPage = () => {
               <div className="w-1/3 border-r border-gray-200 p-4">
                 <div className="flex justify-between items-center mb-6">
                   <h2 className="text-xl font-semibold text-gray-900">Messages</h2>
-                  <button
+                  <div
                     onClick={() => setShowMessagesPopup(false)}
                     className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
                   >
                     <X className="w-5 h-5 text-gray-500" />
-                  </button>
+                  </div>
                 </div>
                 <div className="space-y-2">
                   {onlineUsers.map(user => (
