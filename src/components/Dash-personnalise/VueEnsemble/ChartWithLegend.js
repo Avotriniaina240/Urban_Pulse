@@ -4,7 +4,7 @@ import ChartComponent from './ChartComponent';
 const Legend = ({ stats, chartType }) => {
   const legendItems = [
     { label: 'Citoyens', value: stats.citizenCount, color: '#4caf50' },
-    { label: 'Administrateurs', value: stats.adminCount, color: '#ff6384' },
+    { label: 'Admin', value: stats.adminCount, color: '#ff6384' },
     { label: 'Urbanistes', value: stats.urbanistCount, color: '#36a2eb' }
   ];
 
