@@ -5,7 +5,7 @@ import Sidebar from '../layouts/Sidebar/SidebarCarte';
 import { Link } from 'react-router-dom';
 import { 
   Cloud, Sun, Wind, Users, FileText, 
-  ChartBar, MapPin
+  BarChart3, MapPin
 } from 'lucide-react';
 
 const AdminDashboard = () => {
@@ -14,6 +14,12 @@ const AdminDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [progress, setProgress] = useState(0);
+  const [animationLoaded, setAnimationLoaded] = useState(false);
+
+  useEffect(() => {
+    // Animation séquentielle au chargement
+    setTimeout(() => setAnimationLoaded(true), 100);
+  }, []);
 
   useEffect(() => {
     const fetchWeather = (latitude, longitude) => {
@@ -87,115 +93,107 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-blue-50 to-purple-50">
       <Navbar />
       <Sidebar />
       
       <div className="pt-16 lg:ml-64">
         <div className="p-6 lg:p-8">
           {loading && (
-            <div className="w-full h-2 bg-gray-200 rounded-full mb-6">
-              <div className="h-2 bg-green-500 rounded-full transition-all duration-500" 
+            <div className="w-full h-2 bg-gray-200 rounded-full mb-6 overflow-hidden">
+              <div className="h-2 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-full transition-all duration-1000 ease-out animate-pulse" 
                    style={{ width: `${progress}%` }}></div>
             </div>
           )}
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className={`grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 transition-all duration-1000 ${animationLoaded ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'}`}>
             {/* Weather Card */}
-            <div className="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
-              <h3 className="text-lg font-semibold text-gray-800 mb-4">Météo</h3>
-              {weatherData ? (
-                <div className="flex items-center space-x-4">
-                  <img 
-                    src={`http://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`}
-                    alt={weatherData.weather[0].description}
-                    className="w-16 h-16"
-                  />
-                  <div>
-                    <p className="text-2xl font-bold text-gray-900">{weatherData.main.temp}°C</p>
-                    <p className="text-gray-600">{cityName}</p>
+            <div className="bg-white/70 backdrop-blur-sm rounded-2xl shadow-lg p-6 border border-white/20 hover:shadow-xl hover:scale-105 transition-all duration-500 hover:-translate-y-2 group">
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-400/10 to-purple-400/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <div className="relative z-10">
+                <h3 className="text-lg font-semibold text-gray-800 mb-4 flex items-center">
+                  <div className="w-8 h-8 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full flex items-center justify-center mr-3">
+                    <Sun className="w-4 h-4 text-white" />
                   </div>
-                </div>
-              ) : (
-                <div className="animate-pulse flex space-x-4">
-                  <div className="w-16 h-16 bg-gray-200 rounded-full"></div>
-                  <div className="flex-1 space-y-2">
-                    <div className="h-4 bg-gray-200 rounded"></div>
-                    <div className="h-4 bg-gray-200 rounded w-3/4"></div>
+                  Météo
+                </h3>
+                {weatherData ? (
+                  <div className="flex items-center space-x-4">
+                    <div className="relative">
+                      <img 
+                        src={`http://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`}
+                        alt={weatherData.weather[0].description}
+                        className="w-16 h-16 drop-shadow-lg"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 to-purple-400/20 rounded-full blur-xl animate-pulse"></div>
+                    </div>
+                    <div>
+                      <p className="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                        {weatherData.main.temp}°C
+                      </p>
+                      <p className="text-gray-600 font-medium">{cityName}</p>
+                    </div>
                   </div>
-                </div>
-              )}
+                ) : (
+                  <div className="animate-pulse flex space-x-4">
+                    <div className="w-16 h-16 bg-gradient-to-r from-gray-200 to-gray-300 rounded-full"></div>
+                    <div className="flex-1 space-y-2">
+                      <div className="h-4 bg-gradient-to-r from-gray-200 to-gray-300 rounded"></div>
+                      <div className="h-4 bg-gradient-to-r from-gray-200 to-gray-300 rounded w-3/4"></div>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Quick Stats */}
             <div className="grid grid-cols-2 gap-4 lg:col-span-2">
               {[
-                { title: 'Utilisateurs', icon: <Users className="w-6 h-6 text-green-500" />, value: '1,234' },
-                { title: 'Rapports', icon: <FileText className="w-6 h-6 text-blue-500" />, value: '56' },
-                { title: 'Projets', icon: <ChartBar className="w-6 h-6 text-green-500" />, value: '12' },
-                { title: 'Zones', icon: <MapPin className="w-6 h-6 text-blue-500" />, value: '8' },
+                { title: 'Utilisateurs', icon: <Users className="w-6 h-6" />, value: '1,234', gradient: 'from-green-400 to-emerald-500' },
+                { title: 'Rapports', icon: <FileText className="w-6 h-6" />, value: '56', gradient: 'from-blue-400 to-cyan-500' },
+                { title: 'Projets', icon: <BarChart3 className="w-6 h-6" />, value: '12', gradient: 'from-purple-400 to-pink-500' },
+                { title: 'Zones', icon: <MapPin className="w-6 h-6" />, value: '8', gradient: 'from-orange-400 to-red-500' },
               ].map((stat, index) => (
-                <div key={index} className="bg-white rounded-xl shadow-sm p-4 border border-gray-100">
-                  <div className="flex items-center justify-between">
-                    {stat.icon}
-                    <span className="text-2xl font-bold text-gray-900">{stat.value}</span>
+                <div key={index} className={`bg-white/70 backdrop-blur-sm rounded-2xl shadow-lg p-4 border border-white/20 hover:shadow-xl transition-all duration-500 hover:-translate-y-2 hover:scale-105 group`} style={{ animationDelay: `${index * 100}ms` }}>
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-400/5 to-purple-400/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                  <div className="relative z-10">
+                    <div className="flex items-center justify-between mb-3">
+                      <div className={`w-12 h-12 bg-gradient-to-r ${stat.gradient} rounded-xl flex items-center justify-center shadow-lg group-hover:rotate-12 transition-transform duration-300`}>
+                        <span className="text-white">{stat.icon}</span>
+                      </div>
+                      <span className="text-2xl font-bold bg-gradient-to-r from-gray-700 to-gray-900 bg-clip-text text-transparent">
+                        {stat.value}
+                      </span>
+                    </div>
+                    <p className="text-sm text-gray-600 font-medium">{stat.title}</p>
                   </div>
-                  <p className="mt-2 text-sm text-gray-600">{stat.title}</p>
                 </div>
               ))}
             </div>
           </div>
 
           {/* Projects Section */}
-          <div className="mt-6 bg-white rounded-xl shadow-sm p-6 border border-gray-100">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">Projets en Cours</h3>
-            <div className="grid gap-4">
-              {['Rénovation du quartier Nord', 'Aménagement des espaces verts', 'Réhabilitation des infrastructures de transport'].map((project, index) => (
-                <div key={index} className="flex items-center p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
-                  <div className="w-2 h-2 rounded-full bg-green-500 mr-4"></div>
-                  <span className="text-gray-700">{project}</span>
+          <div className={`mt-8 bg-white/70 backdrop-blur-sm rounded-2xl shadow-lg p-6 border border-white/20 hover:shadow-xl transition-all duration-700 delay-200 ${animationLoaded ? 'translate-y-0 opacity-100' : 'translate-y-8 opacity-0'} group`}>
+            <div className="absolute inset-0 bg-gradient-to-r from-blue-400/5 to-purple-400/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <div className="relative z-10">
+              <h3 className="text-lg font-semibold text-gray-800 mb-6 flex items-center">
+                <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center mr-3">
+                  <BarChart3 className="w-4 h-4 text-white" />
                 </div>
-              ))}
-            </div>
-            <Link to="/urban-analysis" className="mt-4 inline-flex items-center text-sm text-green-600 hover:text-green-700">
-              Voir l'analyse urbaine complète →
-            </Link>
-          </div>
-
-          {/* Quick Access */}
-          <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-            {[
-              { title: 'Gestion des Utilisateurs', path: '/gestion-user' },
-              { title: 'Gestion des Rapports', path: '/manage-reports' },
-              { title: 'Analyse des Projets', path: '/analyze-reports' }
-            ].map((link, index) => (
-              <Link
-                key={index}
-                to={link.path}
-                className="flex items-center justify-center px-6 py-3 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-50 transition-colors text-gray-700 font-medium"
-              >
-                {link.title}
+                Projets en Cours
+              </h3>
+              <div className="grid gap-4">
+                {['Rénovation du quartier Nord', 'Aménagement des espaces verts', 'Réhabilitation des infrastructures de transport'].map((project, index) => (
+                  <div key={index} className="flex items-center p-4 bg-gradient-to-r from-gray-50/80 to-white/80 rounded-xl hover:from-blue-50/80 hover:to-purple-50/80 transition-all duration-300 hover:shadow-md hover:scale-[1.02] group/item">
+                    <div className="w-3 h-3 rounded-full bg-gradient-to-r from-green-400 to-emerald-500 mr-4 group-hover/item:animate-pulse shadow-lg"></div>
+                    <span className="text-gray-700 font-medium group-hover/item:text-gray-900 transition-colors">{project}</span>
+                  </div>
+                ))}
+              </div>
+              <Link to="/urban-analysis" className="mt-6 inline-flex items-center text-sm bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent hover:from-green-700 hover:to-emerald-700 font-semibold transition-all duration-300 hover:scale-105">
+                Voir l'analyse urbaine complète →
               </Link>
-            ))}
-          </div>
-
-          {/* Latest Reports */}
-          <div className="mt-6 bg-white rounded-xl shadow-sm p-6 border border-gray-100">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">Derniers Rapports des Citoyens</h3>
-            <div className="space-y-4">
-              {[
-                'Dégradation de la chaussée - Quartier Sud',
-                'Problèmes de circulation - Centre-ville',
-                'Demande d\'aménagement d\'un parc - Quartier Est'
-              ].map((report, index) => (
-                <div key={index} className="p-4 bg-gray-50 rounded-lg">
-                  <p className="text-gray-700">{report}</p>
-                </div>
-              ))}
             </div>
-            <Link to="/reports-liste" className="mt-4 inline-flex items-center text-sm text-green-600 hover:text-green-700">
-              Voir tous les rapports →
-            </Link>
           </div>
         </div>
       </div>

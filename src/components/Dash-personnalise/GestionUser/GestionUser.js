@@ -162,127 +162,215 @@ const UserForm = ({ formData, setFormData, handleFormSubmit, setEditingUser }) =
     setFormData({ ...formData, [name]: value });
   };
 
+  const getRoleDisplayName = (role) => {
+    const roleNames = {
+      admin: 'Administrateur',
+      urbanist: 'Urbaniste',
+      citizen: 'Citoyen'
+    };
+    return roleNames[role] || role;
+  };
+
+  const getRoleColor = (role) => {
+    const roleColors = {
+      admin: 'from-purple-500 to-purple-600',
+      urbanist: 'from-green-500 to-green-600',
+      citizen: 'from-blue-500 to-blue-600'
+    };
+    return roleColors[role] || 'from-gray-500 to-gray-600';
+  };
+
   return (
-    <form onSubmit={handleFormSubmit} className="bg-white shadow-md rounded-lg px-6 py-5 mb-6">
-      <div className="flex items-center justify-between mb-6">
-        <h2 className="text-xl font-bold text-gray-900">Modifier Utilisateur</h2>
-        <button
-          type="button"
-          onClick={() => setEditingUser(null)}
-          className="text-gray-400 hover:text-gray-500"
-        >
-          <X className="h-5 w-5" />
-        </button>
-      </div>
-      
-      <div className="space-y-4">
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Utilisateur
-            <input
-              type="text"
-              name="username"
-              value={formData.username}
-              onChange={handleInputChange}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 text-sm"
-            />
-          </label>
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-hidden">
+        {/* Header avec gradient */}
+        <div className={`bg-gradient-to-r ${getRoleColor(formData.role)} px-8 py-6 text-white relative overflow-hidden`}>
+          <div className="absolute inset-0 bg-black bg-opacity-10"></div>
+          <div className="relative z-10">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-2xl font-bold mb-2">Modifier l'utilisateur</h2>
+                <p className="text-white/80 text-sm">
+                  Mettez à jour les informations de {formData.username}
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setEditingUser(null)}
+                className="p-2 hover:bg-white/20 rounded-full transition-colors duration-200"
+              >
+                <X className="h-6 w-6" />
+              </button>
+            </div>
+          </div>
+          {/* Décoration géométrique */}
+          <div className="absolute -top-10 -right-10 w-40 h-40 bg-white/10 rounded-full"></div>
+          <div className="absolute -bottom-8 -left-8 w-32 h-32 bg-white/10 rounded-full"></div>
         </div>
-        
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Email
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 text-sm"
-            />
-          </label>
-        </div>
-        
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Rôle
-            <select
-              name="role"
-              value={formData.role}
-              onChange={handleInputChange}
-              className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-green-500 focus:ring-green-500 text-sm"
+
+        {/* Formulaire */}
+        <form onSubmit={handleFormSubmit} className="p-8">
+          <div className="space-y-6">
+            {/* Nom d'utilisateur */}
+            <div className="group">
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                  <span>Nom d'utilisateur</span>
+                </div>
+              </label>
+              <div className="relative">
+                <input
+                  type="text"
+                  name="username"
+                  value={formData.username}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:ring-0 transition-colors duration-200 bg-gray-50 focus:bg-white group-hover:border-gray-300"
+                  placeholder="Entrez le nom d'utilisateur"
+                />
+                <div className="absolute inset-y-0 right-0 flex items-center pr-3">
+                  <div className="w-2 h-2 bg-blue-500 rounded-full opacity-0 group-focus-within:opacity-100 transition-opacity"></div>
+                </div>
+              </div>
+            </div>
+
+            {/* Email */}
+            <div className="group">
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                <div className="flex items-center space-x-2">
+                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                  <span>Adresse email</span>
+                </div>
+              </label>
+              <div className="relative">
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-green-500 focus:ring-0 transition-colors duration-200 bg-gray-50 focus:bg-white group-hover:border-gray-300"
+                  placeholder="utilisateur@exemple.com"
+                />
+                <div className="absolute inset-y-0 right-0 flex items-center pr-3">
+                  <div className="w-2 h-2 bg-green-500 rounded-full opacity-0 group-focus-within:opacity-100 transition-opacity"></div>
+                </div>
+              </div>
+            </div>
+
+            {/* Rôle */}
+            <div className="group">
+              <label className="block text-sm font-semibold text-gray-700 mb-2">
+                <div className="flex items-center space-x-2">
+                  <div className={`w-2 h-2 rounded-full ${
+                    formData.role === 'admin' ? 'bg-purple-500' : 
+                    formData.role === 'urbanist' ? 'bg-green-500' : 
+                    'bg-blue-500'
+                  }`}></div>
+                  <span>Rôle utilisateur</span>
+                </div>
+              </label>
+              <div className="relative">
+                <select
+                  name="role"
+                  value={formData.role}
+                  onChange={handleInputChange}
+                  className={`w-full px-4 py-3 border-2 border-gray-200 rounded-xl focus:border-${
+                    formData.role === 'admin' ? 'purple' : 
+                    formData.role === 'urbanist' ? 'green' : 'blue'
+                  }-500 focus:ring-0 transition-colors duration-200 bg-gray-50 focus:bg-white group-hover:border-gray-300 appearance-none cursor-pointer`}
+                >
+                  <option value="admin">Administrateur</option>
+                  <option value="urbanist">Urbaniste</option>
+                  <option value="citizen">Citoyen</option>
+                </select>
+                <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
+                  <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+              </div>
+              {/* Badge de rôle actuel */}
+              <div className="mt-2">
+                <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r ${getRoleColor(formData.role)} text-white shadow-sm`}>
+                  {getRoleDisplayName(formData.role)}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Actions */}
+          <div className="flex items-center justify-end space-x-4 mt-8 pt-6 border-t border-gray-100">
+            <button
+              type="button"
+              onClick={() => setEditingUser(null)}
+              className="px-6 py-3 border-2 border-gray-200 text-gray-600 rounded-xl font-medium hover:bg-gray-50 hover:border-gray-300 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2"
             >
-              <option value="admin">Admin</option>
-              <option value="urbanist">Urbanist</option>
-              <option value="citizen">Citizen</option>
-            </select>
-          </label>
-        </div>
+              Annuler
+            </button>
+            <button
+              type="submit"
+              className={`px-8 py-3 bg-gradient-to-r ${getRoleColor(formData.role)} text-white rounded-xl font-semibold hover:shadow-lg transform hover:scale-105 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 flex items-center space-x-2`}
+            >
+              <Save className="h-5 w-5" />
+              <span>Sauvegarder les modifications</span>
+            </button>
+          </div>
+        </form>
+
+        {/* Footer décoratif */}
+        <div className="h-2 bg-gradient-to-r from-blue-500 via-purple-500 to-green-500"></div>
       </div>
-      
-      <div className="flex justify-end gap-3 mt-6">
-        <button
-          type="button"
-          onClick={() => setEditingUser(null)}
-          className="inline-flex items-center px-3 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-        >
-          Annuler
-        </button>
-        <button
-          type="submit"
-          className="inline-flex items-center px-3 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
-        >
-          <Save className="h-4 w-4 mr-1.5" />
-          Sauvegarder
-        </button>
-      </div>
-    </form>
+    </div>
   );
 };
 
 const UserStats = ({ users }) => {
   const countUsersByRole = (role) => users.filter(user => user.role === role).length;
-
+  
   const stats = [
     {
       title: "Citoyen",
       count: countUsersByRole('citizen'),
-      bgColor: "bg-blue-50",
+      bgColor: "bg-gradient-to-br from-blue-50 to-blue-100",
       textColor: "text-blue-700",
-      borderColor: "border-blue-200"
+      borderColor: "border-blue-200",
+      iconBg: "bg-blue-500"
     },
     {
-      title: "Urbaniste",
+      title: "Urbaniste", 
       count: countUsersByRole('urbanist'),
-      bgColor: "bg-green-50",
+      bgColor: "bg-gradient-to-br from-green-50 to-green-100",
       textColor: "text-green-700",
-      borderColor: "border-green-200"
+      borderColor: "border-green-200",
+      iconBg: "bg-green-500"
     },
     {
       title: "Administrateur",
-      count: countUsersByRole('admin'),
-      bgColor: "bg-purple-50",
+      count: countUsersByRole('admin'), 
+      bgColor: "bg-gradient-to-br from-purple-50 to-purple-100",
       textColor: "text-purple-700",
-      borderColor: "border-purple-200"
+      borderColor: "border-purple-200",
+      iconBg: "bg-purple-500"
     }
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
       {stats.map((stat) => (
         <div
           key={stat.title}
-          className={`${stat.bgColor} rounded-lg border ${stat.borderColor}`}
+          className={`${stat.bgColor} rounded-xl border ${stat.borderColor} shadow-sm hover:shadow-md transition-shadow duration-200`}
         >
-          <div className="px-4 py-4">
+          <div className="px-6 py-5">
             <div className="flex items-center">
-              <div className="flex-shrink-0">
-                <Users className={`h-5 w-5 ${stat.textColor}`} />
+              <div className={`${stat.iconBg} p-3 rounded-lg shadow-sm`}>
+                <Users className="h-6 w-6 text-white" />
               </div>
               <div className="ml-4">
-                <dt className={`text-sm font-medium ${stat.textColor}`}>
+                <dt className={`text-sm font-semibold ${stat.textColor} uppercase tracking-wide`}>
                   {stat.title}
                 </dt>
-                <dd className={`text-2xl font-semibold ${stat.textColor} mt-1`}>
+                <dd className={`text-3xl font-bold ${stat.textColor} mt-2`}>
                   {stat.count}
                 </dd>
               </div>
@@ -296,73 +384,73 @@ const UserStats = ({ users }) => {
 
 const UserTable = ({ users, editUser, deleteUser, searchText, setSearchText }) => {
   return (
-    <div className="bg-white shadow-md rounded-lg overflow-hidden">
-      <div className="p-4 border-b border-gray-200">
-        <div className="relative rounded-md w-[30%]">
+    <div className="bg-white shadow-lg rounded-xl overflow-hidden border border-gray-100">
+      <div className="px-6 py-5 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white">
+        <div className="relative rounded-lg w-[30%]">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <Search className="h-4 w-4 text-gray-400" />
+            <Search className="h-5 w-5 text-gray-400" />
           </div>
           <input 
-            type="text" 
-            placeholder="Rechercher un utilisateur..." 
+            type="text"
+            placeholder="Rechercher un utilisateur..."
             value={searchText}
             onChange={(e) => setSearchText(e.target.value)}
-            className="block w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md text-sm leading-5 bg-white placeholder-gray-500 focus:outline-none focus:ring-green-500 focus:border-green-500"
+            className="block w-full pl-11 pr-4 py-3 border border-gray-200 rounded-lg text-sm bg-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200 shadow-sm"
           />
         </div>
       </div>
-      
+             
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
+        <table className="min-w-full">
+          <thead className="bg-gradient-to-r from-gray-50 to-gray-100">
             <tr>
-              <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
                 Nom d'utilisateur
               </th>
-              <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
                 Email
               </th>
-              <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
                 Rôle
               </th>
-              <th className="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="px-6 py-4 text-center text-xs font-semibold text-gray-600 uppercase tracking-wider">
                 Actions
               </th>
             </tr>
           </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="bg-white divide-y divide-gray-100">
             {users.map(user => (
-              <tr key={user.id} className="hover:bg-gray-50">
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 text-center">
+              <tr key={user.id} className="hover:bg-gradient-to-r hover:from-gray-50 hover:to-white transition-all duration-200">
+                <td className="px-6 py-5 whitespace-nowrap text-sm font-semibold text-gray-900 text-center">
                   {user.username}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 text-center">
+                <td className="px-6 py-5 whitespace-nowrap text-sm text-gray-600 text-center">
                   {user.email}
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-center">
-                  <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
-                    ${user.role === 'admin' ? 'bg-purple-100 text-purple-800' : 
-                      user.role === 'urbanist' ? 'bg-green-100 text-green-800' : 
-                      'bg-blue-100 text-blue-800'}`}>
+                <td className="px-6 py-5 whitespace-nowrap text-center">
+                  <span className={`inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-semibold
+                    ${user.role === 'admin' ? 'bg-gradient-to-r from-purple-100 to-purple-200 text-purple-800 border border-purple-200' :
+                       user.role === 'urbanist' ? 'bg-gradient-to-r from-green-100 to-green-200 text-green-800 border border-green-200' :
+                       'bg-gradient-to-r from-blue-100 to-blue-200 text-blue-800 border border-blue-200'}`}>
                     {user.role}
                   </span>
                 </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                  <div className="flex space-x-20 cursor-pointer">
-                    <div
+                <td className="px-6 py-5 whitespace-nowrap text-sm font-medium">
+                  <div className="flex justify-center space-x-4">
+                    <button
                       onClick={() => editUser(user)}
-                      className="text-green-600 hover:text-green-900 flex items-center"
+                      className="text-green-600 hover:text-green-700 hover:bg-green-50 flex items-center px-3 py-2 rounded-lg transition-all duration-200 border border-transparent hover:border-green-200"
                     >
-                      <Edit2 className="h-4 w-4 mr-1" />
+                      <Edit2 className="h-4 w-4 mr-2" />
                       Modifier
-                    </div>
-                    <div
+                    </button>
+                    <button
                       onClick={() => deleteUser(user.id)}
-                      className="text-red-600 hover:text-red-900 flex items-center"
+                      className="text-red-600 hover:text-red-700 hover:bg-red-50 flex items-center px-3 py-2 rounded-lg transition-all duration-200 border border-transparent hover:border-red-200"
                     >
-                      <Trash2 className="h-4 w-4 text-center" />
+                      <Trash2 className="h-4 w-4 mr-2" />
                       Supprimer
-                    </div>
+                    </button>
                   </div>
                 </td>
               </tr>

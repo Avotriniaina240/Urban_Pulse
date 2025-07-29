@@ -16,6 +16,7 @@ import 'leaflet.awesome-markers/dist/leaflet.awesome-markers.css';
 // Leaflet plugins
 import 'leaflet-draw';
 import 'leaflet-control-geocoder';
+import 'leaflet.heat';
 
 // Marker icons configuration
 const redIcon = new L.Icon({
@@ -224,6 +225,47 @@ const Map = () => {
             };
         }
     }, [map, airQualityData]);
+
+    // Heatmap effect
+    useEffect(() => {
+        if (map) {
+            fetch('http://localhost:5000/api/pollution-points')
+            .then(res => {
+              if (!res.ok) {
+                throw new Error(`HTTP error! status: ${res.status}`);
+              }
+              return res.json();
+            })
+            .then(data => {
+              if (!Array.isArray(data)) {
+                throw new Error('Data is not an array');
+              }
+              
+              // Format attendu par leaflet.heat : [lat, lon, intensity]
+              const heatData = data.map(point => [
+                point.latitude,
+                point.longitude,
+                point.valeur_pollution || 1 // Use 1 as default if valeur_pollution is not present
+              ]);
+              
+              // Ajoute la heatmap à la carte
+              const heat = L.heatLayer(heatData, {
+                radius: 25,
+                blur: 15,
+                maxZoom: 17,
+              }).addTo(map);
+      
+              // Nettoyage si le composant se démonte ou si la map change
+              return () => {
+                map.removeLayer(heat);
+              };
+            })
+            .catch(error => {
+              console.error('Error fetching or processing data:', error);
+              // Here you could set an error state or display a message to the user
+            });
+        }
+      }, [map]);
 
     return (
         <div className="min-h-screen bg-gray-50">
