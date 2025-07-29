@@ -67,7 +67,8 @@
     "serve": "serve -s build",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "postinstall": "npm install --legacy-peer-deps"
   },
   "eslintConfig": {
     "extends": [
